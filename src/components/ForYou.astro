@@ -1,0 +1,90 @@
+---
+import { Picture } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import { img } from '../lib/images';
+import { disciplines, loveIt, notForYou, tenWords, letter, links } from '../content/opencall';
+---
+<section class="section section--sand foryou" id="for-you" aria-labelledby="foryou-title">
+  <div class="container">
+    <SectionHead nr="03" kicker="Is it for you?" id="foryou-title"
+      title="Made for artists who want time, space and good company." />
+
+    <div class="foryou__disciplines" data-reveal>
+      <p class="label">Nocefresca is perfect for — but not limited to —</p>
+      <ul class="disc" role="list">
+        {disciplines.map((d) => <li>{d}</li>)}
+      </ul>
+      <p class="foryou__note">Solo artists, collectives and small groups. All ages can apply.</p>
+    </div>
+
+    <div class="foryou__cols">
+      <div class="fit fit--yes" data-reveal>
+        <h3>You’ll love it if you want to…</h3>
+        <ul class="fit__list" role="list">
+          {loveIt.map((l) => <li><strong>{l.title}.</strong> {l.text}</li>)}
+        </ul>
+      </div>
+      <div class="fit fit--no" data-reveal style="--d:80ms">
+        <h3>It might not be for you if…</h3>
+        <ul class="fit__list" role="list">
+          {notForYou.map((l) => <li><strong>{l.title}.</strong> {l.text}</li>)}
+        </ul>
+        <figure class="fit__quote">
+          <blockquote><p class="quote">{letter.quotes.honest}</p></blockquote>
+          <figcaption><a class="link" href={links.letterMakenzie} data-track="outbound_click" data-location="foryou_quote">{letter.author}</a>, {letter.role.toLowerCase()}</figcaption>
+        </figure>
+      </div>
+      <figure class="foryou__img" data-reveal style="--d:140ms">
+        <div class="media media--zoom">
+          <Picture src={img('life/camera-hands.jpg')} formats={['webp']} widths={[400, 640, 900]} sizes="(min-width: 60rem) 25vw, 100vw" quality={70} alt="Close-up of hands holding a twin-lens film camera against patched denim." />
+        </div>
+      </figure>
+    </div>
+
+    <div class="acc foryou__acc" data-reveal>
+      <details data-track="accordion_open" data-location="ten_words">
+        <summary>Ten words that describe Nocefresca <span class="pm" aria-hidden="true"></span></summary>
+        <div class="acc__body">
+          <dl class="words">
+            {tenWords.map((w) => <div><dt>{w.word}</dt><dd>{w.text}</dd></div>)}
+          </dl>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<style>
+  .foryou__disciplines { margin-bottom: clamp(2.5rem, 1.5rem + 4vw, 5rem); }
+  .disc { display: flex; flex-wrap: wrap; gap: 0 0.35em; margin-top: 0.75rem; font-family: var(--f-display); font-weight: 500; font-size: clamp(1.625rem, 1.05rem + 2.6vw, 3.5rem); line-height: 1.12; letter-spacing: -0.025em; color: var(--c-burgundy); }
+  .disc li:not(:last-child)::after { content: ' /'; color: var(--c-terracotta); font-weight: 400; }
+  .foryou__note { margin-top: 1rem; font-size: var(--fs-lead); color: var(--c-ink); }
+
+  .foryou__cols { display: grid; gap: var(--gap); }
+  .fit { padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); border-radius: var(--radius); }
+  .fit h3 { font-size: var(--fs-h3); margin-bottom: 1.25rem; }
+  .fit--yes { background: var(--c-paper); }
+  .fit--no { background: transparent; box-shadow: inset 0 0 0 1.5px var(--c-line-strong); }
+  .fit__list { display: grid; gap: 0.9rem; }
+  .fit__list li { position: relative; padding-left: 1.75rem; font-size: var(--fs-small); line-height: 1.5; }
+  .fit__list strong { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
+  .fit--yes .fit__list li::before { content: ''; position: absolute; left: 0.1rem; top: 0.35em; width: 0.85rem; height: 0.5rem; border-left: 2px solid var(--c-olive); border-bottom: 2px solid var(--c-olive); transform: rotate(-45deg); }
+  .fit--no .fit__list li::before, .fit--no .fit__list li::after { content: ''; position: absolute; left: 0.05rem; top: 0.72em; width: 0.95rem; height: 2px; background: var(--c-burgundy); transform: rotate(45deg); }
+  .fit--no .fit__list li::after { transform: rotate(-45deg); }
+  .fit__quote { margin: 1.75rem 0 0; padding-top: 1.25rem; border-top: 1px solid var(--c-line); }
+  .fit__quote .quote { font-size: 1.1875rem; }
+  .fit__quote figcaption { margin-top: 0.6rem; font-family: var(--f-display); font-size: 0.875rem; color: var(--c-muted); }
+  .foryou__img { margin: 0; }
+  .foryou__img .media { aspect-ratio: 4 / 3; height: 100%; }
+  .foryou__acc { margin-top: clamp(2.5rem, 1.5rem + 3vw, 4rem); }
+  .words { display: grid; gap: 1rem 2rem; }
+  .words dt { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
+  .words dd { margin: 0.15rem 0 0; font-size: var(--fs-small); }
+  @media (min-width: 40rem) { .words { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 60rem) {
+    .foryou__cols { grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr); align-items: stretch; }
+    .foryou__img .media { aspect-ratio: auto; min-height: 100%; }
+    .words { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .foryou__acc .acc__body { max-width: none; }
+  }
+</style>

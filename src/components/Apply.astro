@@ -1,0 +1,100 @@
+---
+import SectionHead from './SectionHead.astro';
+import ApplyButton from './ApplyButton.astro';
+import { prepareChecklist, selectionCriteria, formQuestions, payment, links } from '../content/opencall';
+import { euro } from '../lib/format';
+
+const steps = [
+  { t: 'Read the open call', d: 'You’re doing it. Check the dates, studios and fees above — the form asks about all three.' },
+  { t: 'Prepare your material', d: 'Use the checklist below. Drafting your answers first makes the form quick.' },
+  { t: 'Fill in the online form', d: 'Eight short steps on nocefresca.it. Allow at least 20 minutes. Nothing is sent until you press Submit on the summary page.' },
+  { t: 'Selection & confirmation', d: `We select a harmonious group. If you’re selected, you sign a confirmation letter and pay the ${euro(payment.confirmationFee)} confirmation fee within 2 weeks.` },
+];
+---
+<section class="section section--sand apply" id="apply" aria-labelledby="apply-title">
+  <div class="container">
+    <SectionHead nr="12" kicker="How to apply" id="apply-title" split
+      title="Four steps to your application."
+      lead="One online form in eight short sections. It takes at least 20 minutes — less if you prepare with the list below." />
+
+    <ol class="steps" role="list">
+      {steps.map((s, i) => (
+        <li class="step" data-reveal style={`--d:${i * 70}ms`}>
+          <span class="step__n num">0{i + 1}</span>
+          <h3 class="step__t">{s.t}</h3>
+          <p class="small">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+
+    <div class="prep">
+      <div class="prep__list" data-reveal>
+        <h3>Before you start, prepare:</h3>
+        <ul class="checklist" role="list">
+          {prepareChecklist.map((c) => <li><strong>{c.title}</strong><span>{c.text}</span></li>)}
+        </ul>
+      </div>
+      <aside class="prep__side" data-reveal style="--d:80ms" aria-label="Tools to prepare your application">
+        <div class="copybox">
+          <h3>Draft offline</h3>
+          <p class="small">Copy every question of the form, write your answers in your own notes, then paste them in.</p>
+          <button class="btn btn--paper" type="button" data-copy-questions data-track="copy_form_questions" data-location="apply">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="6.5" y="6.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M13.5 3.5h-8a2 2 0 0 0-2 2v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <span data-copy-label>Copy the form questions</span>
+          </button>
+          <p class="copybox__status small" role="status" aria-live="polite" data-copy-status></p>
+          <details class="copybox__preview" data-track="accordion_open" data-location="questions_preview">
+            <summary>Preview the questions</summary>
+            <pre data-copy-source tabindex="0" aria-label="Application form questions">{formQuestions}</pre>
+          </details>
+        </div>
+        <div class="criteria">
+          <h3>Selection criteria</h3>
+          <ol class="criteria__list" role="list">{selectionCriteria.map((c) => <li>{c}</li>)}</ol>
+          <p class="small muted">The selection aims to create a harmonious group.</p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="apply__cta" data-reveal>
+      <ApplyButton location="apply_section" size="lg" label="Start your application" />
+      <p class="small muted">Opens the application form on nocefresca.it · <a class="link" href={links.applyInfo} data-track="outbound_click" data-location="apply_info">original application page</a></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .steps { list-style: none; padding: 0; display: grid; gap: 1.75rem; margin-bottom: clamp(3rem, 2rem + 3vw, 4.5rem); }
+  .step { position: relative; padding-left: 3.5rem; }
+  .step__n { position: absolute; left: 0; top: -0.1rem; width: 2.5rem; height: 2.5rem; display: grid; place-items: center; border-radius: 50%; background: var(--c-burgundy); color: var(--c-paper); font-size: 0.875rem; }
+  .step:not(:last-child)::before { content: ''; position: absolute; left: 1.2rem; top: 2.9rem; bottom: -1.5rem; width: 2px; background-image: radial-gradient(circle, var(--c-terracotta) 1.4px, transparent 1.6px); background-size: 2px 9px; background-repeat: repeat-y; }
+  .step__t { font-size: 1.375rem; margin-bottom: 0.4rem; }
+  .prep { display: grid; gap: var(--gap); }
+  .prep__list { padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); background: var(--c-paper); border-radius: var(--radius); }
+  .prep__list h3 { margin-bottom: 1.25rem; }
+  .checklist { display: grid; gap: 1rem 2rem; }
+  .checklist li { position: relative; display: grid; align-content: start; gap: 0.15rem; padding-left: 2rem; font-size: var(--fs-small); line-height: 1.45; }
+  .checklist li::before { content: ''; position: absolute; left: 0; top: 0.15em; width: 1.1rem; height: 1.1rem; border-radius: 3px; box-shadow: inset 0 0 0 1.5px var(--c-burgundy); }
+  .checklist strong { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
+  .prep__side { display: grid; gap: var(--gap); align-content: start; }
+  .copybox { padding: clamp(1.5rem, 1rem + 2vw, 2rem); background: var(--c-burgundy); color: var(--c-paper); border-radius: var(--radius); display: grid; gap: 0.9rem; }
+  .copybox h3 { color: var(--c-paper); font-size: 1.375rem; }
+  .copybox .btn { justify-self: start; }
+  .copybox :focus-visible { outline-color: var(--c-ochre); }
+  .copybox__status { min-height: 1.4em; color: var(--c-ochre); font-family: var(--f-display); }
+  .copybox__preview summary { cursor: pointer; font-family: var(--f-display); font-size: 0.9375rem; color: var(--c-ochre); min-height: 2.75rem; display: flex; align-items: center; }
+  .copybox__preview pre { white-space: pre-wrap; font-family: var(--f-display); font-size: 0.8125rem; line-height: 1.5; max-height: 18rem; overflow: auto; padding: 1rem; margin-top: 0.5rem; background: rgb(0 0 0 / 0.18); border-radius: var(--radius); }
+  .criteria { padding: clamp(1.5rem, 1rem + 2vw, 2rem); box-shadow: inset 0 0 0 1.5px var(--c-line-strong); border-radius: var(--radius); }
+  .criteria h3 { font-size: 1.375rem; margin-bottom: 0.9rem; }
+  .criteria__list { padding-left: 1.25rem; display: grid; gap: 0.35rem; margin-bottom: 0.9rem; font-family: var(--f-display); color: var(--c-burgundy); }
+  .criteria__list li::marker { color: var(--c-terracotta-ink); font-variant-numeric: tabular-nums; }
+  .apply__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem); }
+  @media (min-width: 40rem) { .checklist { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 60rem) {
+    .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; }
+    .step { padding-left: 0; padding-top: 3.5rem; }
+    .step__n { top: 0; }
+    .step:not(:last-child)::before { left: 3.25rem; right: 0; top: 1.2rem; bottom: auto; width: auto; height: 2px; background-size: 9px 2px; background-repeat: repeat-x; }
+    .prep { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  }
+</style>

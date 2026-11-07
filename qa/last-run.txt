@@ -1,0 +1,16 @@
+mobile: overflow=0px h1=1 skips=0 brokenAnchors=0 missingAlt=0 notLoaded=0 smallTargets=1 axe=0 tabs=ok accordion=ok sticky=ok menu=ok consoleErrors=0
+desktop: overflow=0px h1=1 skips=0 brokenAnchors=0 missingAlt=0 notLoaded=0 smallTargets=1 axe=0 tabs=ok accordion=ok consoleErrors=0
+campaign: {
+  applyHref: 'https://www.nocefresca.it/?/apply_now&utm_source=instagram&utm_medium=paid_social&utm_campaign=oc27&fbclid=abc',
+  formUrlIntact: true,
+  utmForwarded: true
+}
+consent: {
+  bannerShown: true,
+  trackingRequestsBeforeConsent: 0,
+  afterReject: 0,
+  afterAccept: 2,
+  ok: true
+}
+[mobile] small targets: [ 'a "Anna Dreussi" 93×19' ]
+[desktop] small targets: [ 'a "Anna Dreussi" 93×19' ]

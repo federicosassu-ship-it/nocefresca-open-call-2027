@@ -1,0 +1,68 @@
+{
+  "url": "http://127.0.0.1:4321/",
+  "date": "2026-11-07T23:07:08.520Z",
+  "runs": {
+    "mobile": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "horizontalOverflow": 0,
+      "h1Count": 1,
+      "headingSkips": 0,
+      "brokenAnchors": [],
+      "images": 94,
+      "imagesMissingAlt": 0,
+      "imagesNotLoaded": [],
+      "smallTargets": [
+        "a \"Anna Dreussi\" 93×19"
+      ],
+      "applyLinks": 10,
+      "pageWeightHint": 332535,
+      "axeViolations": [],
+      "tabsKeyboard": "ok",
+      "accordion": "ok",
+      "dataLayerAfterAccordion": [
+        "faq_open",
+        "faq_open",
+        "studio_select"
+      ],
+      "stickyBar": "ok",
+      "mobileMenu": "ok"
+    },
+    "desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "horizontalOverflow": 0,
+      "h1Count": 1,
+      "headingSkips": 0,
+      "brokenAnchors": [],
+      "images": 94,
+      "imagesMissingAlt": 0,
+      "imagesNotLoaded": [],
+      "smallTargets": [
+        "a \"Anna Dreussi\" 93×19"
+      ],
+      "applyLinks": 10,
+      "pageWeightHint": 332528,
+      "axeViolations": [],
+      "tabsKeyboard": "ok",
+      "accordion": "ok",
+      "dataLayerAfterAccordion": [
+        "faq_open",
+        "faq_open",
+        "studio_select"
+      ]
+    }
+  },
+  "campaign": {
+    "applyHref": "https://www.nocefresca.it/?/apply_now&utm_source=instagram&utm_medium=paid_social&utm_campaign=oc27&fbclid=abc",
+    "formUrlIntact": true,
+    "utmForwarded": true
+  },
+  "consent": {
+    "bannerShown": true,
+    "trackingRequestsBeforeConsent": 0,
+    "afterReject": 0,
+    "afterAccept": 2,
+    "ok": true
+  }
+}

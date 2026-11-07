@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import Arrow from './Arrow.astro';
+import { img } from '../lib/images';
+import { faq, curator, links } from '../content/opencall';
+
+const groups = ['Applying', 'The residency', 'Practical'] as const;
+---
+<section class="section faq" id="faq" aria-labelledby="faq-title">
+  <div class="container faq__grid">
+    <div class="faq__aside">
+      <SectionHead nr="13" kicker="FAQ" id="faq-title" title="Questions, answered." />
+      <div class="talk" data-reveal>
+        <Image src={img('people/francesca-sassu.jpg')} alt="Portrait of Francesca Sassu" width={96} height={96} densities={[1, 2]} format="webp" class="talk__face" loading="lazy" />
+        <div>
+          <p class="talk__name">Still unsure? Talk to {curator.name.split(' ')[0]}.</p>
+          <p class="talk__role small">{curator.name} — {curator.role.toLowerCase()}</p>
+        </div>
+        <p class="talk__quote quote">{curator.quote}</p>
+        <div class="talk__actions">
+          <a class="btn btn--ghost" href={links.whatsapp} data-track="contact_click" data-location="faq_whatsapp" rel="noopener">WhatsApp <span class="visually-hidden">{links.whatsappDisplay}</span></a>
+          <a class="btn btn--ghost" href={`mailto:${links.email}?subject=Open%20Call%202027`} data-track="contact_click" data-location="faq_email">Email</a>
+        </div>
+      </div>
+    </div>
+    <div class="faq__list">
+      {groups.map((g) => (
+        <div class="faq__group">
+          <h3 class="faq__gtitle" data-reveal>{g}</h3>
+          <div class="acc" data-reveal>
+            {faq.filter((f) => f.group === g).map((f) => (
+              <details id={`faq-${f.id}`} data-track="faq_open" data-location={f.id}>
+                <summary>{f.q} <span class="pm" aria-hidden="true"></span></summary>
+                <div class="acc__body"><p>{f.a}</p></div>
+              </details>
+            ))}
+          </div>
+        </div>
+      ))}
+      <a class="text-link faq__all" href={links.faq} data-track="outbound_click" data-location="full_faq">Read the full FAQ on nocefresca.it<Arrow size={16} /></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__grid { display: grid; gap: clamp(2rem, 1.5rem + 3vw, 4rem); }
+  .faq__aside :global(.section-head) { margin-bottom: 2rem; }
+  .talk { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 1rem; align-items: center; padding: 1.5rem; background: var(--c-coral-soft); border-radius: var(--radius); }
+  .talk__face { width: 4.5rem; height: 4.5rem; border-radius: 50%; object-fit: cover; object-position: 50% 20%; }
+  .talk__name { font-family: var(--f-display); font-weight: 500; font-size: 1.125rem; color: var(--c-burgundy); line-height: 1.25; }
+  .talk__role { margin-top: 0.2rem; color: var(--c-muted); }
+  .talk__quote { grid-column: 1 / -1; font-size: 1.0625rem; }
+  .talk__actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .faq__group + .faq__group { margin-top: 2.5rem; }
+  .faq__gtitle { font-size: 0.875rem; font-weight: 500; color: var(--c-terracotta-ink); letter-spacing: 0.01em; margin-bottom: 0.5rem; }
+  .faq__all { margin-top: 2rem; }
+  @media (min-width: 60rem) {
+    .faq__grid { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); align-items: start; }
+    .faq__aside { position: sticky; top: calc(var(--header-h) + 2rem); }
+  }
+</style>

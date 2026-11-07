@@ -1,0 +1,110 @@
+---
+import '../styles/global.css';
+// Fonts: self-hosted variable woff2 (OFL), latin + latin-ext only — no third-party font CDN.
+import groteskLatin from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+import groteskLatinExt from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-ext-wght-normal.woff2?url';
+import vollkornLatin from '@fontsource-variable/vollkorn/files/vollkorn-latin-wght-normal.woff2?url';
+import vollkornLatinExt from '@fontsource-variable/vollkorn/files/vollkorn-latin-ext-wght-normal.woff2?url';
+import vollkornItalic from '@fontsource-variable/vollkorn/files/vollkorn-latin-wght-italic.woff2?url';
+import vollkornItalicExt from '@fontsource-variable/vollkorn/files/vollkorn-latin-ext-wght-italic.woff2?url';
+import { config } from '../config';
+import { address, links, faq, status } from '../content/opencall';
+
+const { title = config.title, description = config.description } = Astro.props;
+const ogImage = new URL(config.ogImage, config.pageUrl).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://www.nocefresca.it/#org',
+      name: 'Nocefresca',
+      alternateName: 'Nocefresca Artist Residency',
+      description: 'Artist residency programme in the rural village of Milis, Sardinia, Italy.',
+      url: 'https://www.nocefresca.it/',
+      logo: new URL('/favicon.ico', config.pageUrl).href,
+      email: links.email,
+      sameAs: [links.instagram, links.facebook],
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: address.street,
+        postalCode: address.postalCode,
+        addressLocality: address.city,
+        addressRegion: address.province,
+        addressCountry: 'IT',
+      },
+      location: { '@type': 'Place', geo: { '@type': 'GeoCoordinates', latitude: address.lat, longitude: address.lon } },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${config.pageUrl}#page`,
+      url: config.pageUrl,
+      name: title,
+      description,
+      inLanguage: 'en',
+      isPartOf: { '@id': 'https://www.nocefresca.it/#org' },
+      dateModified: status.lastVerified,
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ],
+};
+
+const LATIN = 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD';
+const LATIN_EXT = 'U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF';
+const face = (family: string, url: string, range: string, weight: string, style = 'normal') =>
+  `@font-face{font-family:'${family}';font-style:${style};font-display:swap;font-weight:${weight};src:url(${url}) format('woff2-variations');unicode-range:${range}}`;
+const fontCss = [
+  face('Space Grotesk Variable', groteskLatin, LATIN, '300 700'),
+  face('Space Grotesk Variable', groteskLatinExt, LATIN_EXT, '300 700'),
+  face('Vollkorn Variable', vollkornLatin, LATIN, '400 900'),
+  face('Vollkorn Variable', vollkornLatinExt, LATIN_EXT, '400 900'),
+  face('Vollkorn Variable', vollkornItalic, LATIN, '400 900', 'italic'),
+  face('Vollkorn Variable', vollkornItalicExt, LATIN_EXT, '400 900', 'italic'),
+].join('');
+
+// Consent Mode v2 defaults: everything denied until the visitor chooses.
+const consentDefaults = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={config.pageUrl} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#f6f1e7" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nocefresca" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:title" content="Open Call 2027 — Your rural artist’s studio in the heart of the Mediterranean" />
+    <meta property="og:description" content="One to three months in Milis, Sardinia: a private studio, a place to live, a guest curator and a small international group of artists." />
+    <meta property="og:url" content={config.pageUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Nocefresca Open Call 2027 — an artist gathering material on a Sardinian shoreline" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <style is:inline set:html={fontCss}></style>
+    <link rel="preload" href={groteskLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={vollkornLatin} as="font" type="font/woff2" crossorigin />
+    <slot name="head" />
+
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script is:inline set:html={consentDefaults} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot />
+  </body>
+</html>

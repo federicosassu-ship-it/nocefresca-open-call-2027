@@ -1,0 +1,135 @@
+---
+import { Picture, Image } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import Rail from './Rail.astro';
+import { img } from '../lib/images';
+import { hosts, links } from '../content/opencall';
+
+const homes = [
+  { src: 'living/housing-2.jpg', alt: 'A living room with a fireplace, vintage armchairs and a striped sofa.' },
+  { src: 'living/housing-3.jpg', alt: 'A long table under a pergola in a lush garden.' },
+  { src: 'living/housing-4.jpg', alt: 'A two-storey village house behind a garden of orange trees.' },
+  { src: 'living/housing-7.jpg', alt: 'A whitewashed room with terracotta floor, a fireplace and a small round table.' },
+  { src: 'living/housing-5.jpg', alt: 'A bright bedroom with a wooden double bed.' },
+  { src: 'living/housing-9.jpg', alt: 'A simple kitchen with wooden cabinets and a window onto greenery.' },
+];
+const facilities = [
+  ['Housing', 'Private bedroom in a shared home with a fully equipped kitchen, washing machine, heating and cooling, bed linen and towels. Private apartments on request.'],
+  ['Studio & meeting room', '24/7 access to studios and meeting/projection areas with Wi-Fi in the historic centre of Milis.'],
+  ['Curatorial assistance', 'Invitation letter, pre-departure plan, inspirational hints, meetings with the guest curator, help sourcing materials, permits and licences, and support with the local community.'],
+  ['Equipment', 'A budget for durable equipment on request (consumables not included).'],
+  ['Planned activities', 'Workshops by other residents and trips in the calendar are covered; some partner activities may have an extra fee.'],
+  ['Outdoors', 'Free access to the courtyard of Casa Bagnolo for work and rest.'],
+  ['Events', 'Show work in progress or finished pieces at open studios and public talks.'],
+  ['Bikes', 'A set of bicycles for daily use, best for short distances.'],
+  ['Archive', 'Your artist profile published in the Nocefresca online archive.'],
+  ['Insurance', 'Buildings carry liability insurance for accidental damage to third parties. Personal health insurance is not included: arrange your own cover for the whole stay.'],
+];
+---
+<section class="section section--sand living" id="living" aria-labelledby="living-title">
+  <div class="container">
+    <SectionHead nr="07" kicker="Living at Nocefresca" id="living-title" split
+      title="A home in the village, not a hotel room."
+      lead="Local families open their vacant homes to the residency in the quieter months. For a month or three, you become a temporary inhabitant of a Sardinian village." />
+
+    <div class="living__grid">
+      <div class="living__photos">
+        <figure class="living__p1 media media--zoom" data-reveal><Picture src={img('living/housing-1.jpg')} formats={['webp']} widths={[480, 800, 1200]} sizes="(min-width: 60rem) 36vw, 92vw" quality={70} alt="A vintage kitchen with blue cabinets, patterned tiles, copper pots and green glass demijohns." /></figure>
+        <figure class="living__p2 media media--zoom" data-reveal style="--d:90ms"><Picture src={img('living/housing-8.jpg')} formats={['webp']} widths={[400, 640, 960]} sizes="(min-width: 60rem) 22vw, 60vw" quality={70} alt="A whitewashed bedroom with a red bedspread and a striped Sardinian rug." /></figure>
+      </div>
+      <div class="living__text">
+        <blockquote class="living__quote" data-reveal>
+          <p class="quote">Two steps away from the studios building, they still bear the traces of who lived there before.</p>
+        </blockquote>
+        <p data-reveal>Family pictures, old wooden closets, record and film collections, quirky tools: peculiar houses with a bit of vintage, far from hotel standards and Airbnb neutrality.</p>
+        <ul class="ticks living__list" role="list" data-reveal>
+          <li>A private bedroom in a shared house (max 4 artists) — or a suite, en-suite room or cottage</li>
+          <li>Fully equipped kitchen, washing machine, Wi-Fi, heating and cooling</li>
+          <li>Bed linen, towels and kitchen basics provided</li>
+          <li>General cleaning at the start and end of your stay</li>
+          <li>Free street parking · you handle your own recycling</li>
+        </ul>
+        <div class="living__food" data-reveal>
+          <h3>How you’ll eat</h3>
+          <p>Cook in your kitchen with produce from the Wednesday farmers’ market, the two butchers and the bakery off the square — or book Sardinian and international meals cooked by Antonella, a local farmer, at Casa Bagnolo. Bigger supermarkets are in Oristano, 20 minutes away. You won’t go hungry.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hosts">
+      <h3 class="hosts__title" data-reveal>Your hosts</h3>
+      <ul class="hosts__list" role="list">
+        {hosts.map((h, i) => (
+          <li class="host" data-reveal style={`--d:${i * 70}ms`}>
+            <Image src={img(`living/${h.img}`)} alt={`Portrait of ${h.name}`} width={96} height={96} densities={[1, 2]} format="webp" class="host__face" />
+            <div>
+              <p class="host__name">{h.name} <span>{h.place}</span></p>
+              <p class="host__role small">{h.role}</p>
+              <p class="host__quote quote">{h.quote}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <Rail label="Some of the homes" id="rail-homes" track="homes">
+      {homes.map((p) => (
+        <div class="home__slide media"><Picture src={img(p.src)} formats={['webp']} widths={[400, 640, 960]} sizes="(min-width: 60rem) 30rem, 80vw" quality={68} alt={p.alt} loading="lazy" /></div>
+      ))}
+    </Rail>
+    <p class="caption">A glimpse of some homes — availability changes throughout the year.</p>
+
+    <div class="acc living__acc" data-reveal>
+      <details data-track="accordion_open" data-location="facilities">
+        <summary>Facilities included in the fee <span class="pm" aria-hidden="true"></span></summary>
+        <div class="acc__body">
+          <dl class="fac">{facilities.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+          <p class="small"><a class="link" href={links.facilities} data-track="outbound_click" data-location="facilities_source">Facilities on the original Open Call page</a></p>
+        </div>
+      </details>
+      <details data-track="accordion_open" data-location="accessibility">
+        <summary>Accessibility <span class="pm" aria-hidden="true"></span></summary>
+        <div class="acc__body">
+          <p>On the ground floor of Casa Bagnolo, two studios and two desk spaces are physically accessible to wheelchair users and people with limited mobility, as is the courtyard. The upper floor is not accessible at the moment. Each house is different: <a class="link" href={`mailto:${links.email}?subject=Accessibility`} data-track="contact_click" data-location="accessibility_email">write to us</a> and we’ll describe them in detail.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<style>
+  .living__grid { display: grid; gap: clamp(2rem, 1.5rem + 2vw, 4rem); margin-bottom: clamp(3rem, 2rem + 3vw, 5rem); }
+  .living__photos { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .living__p1 { grid-column: 1 / 11; grid-row: 1; aspect-ratio: 3 / 2; margin: 0; }
+  .living__p2 { grid-column: 7 / 13; grid-row: 1; aspect-ratio: 4 / 5; margin: 55% 0 0; box-shadow: 0 0 0 6px var(--c-sand); }
+  .living__text > * + * { margin-top: 1.25rem; }
+  .living__quote { margin: 0; }
+  .living__quote .quote { font-size: clamp(1.5rem, 1.15rem + 1.4vw, 2.25rem); }
+  .living__list { font-size: var(--fs-small); }
+  .living__food { padding: 1.4rem 1.5rem; background: var(--c-paper); border-radius: var(--radius); }
+  .living__food h3 { font-size: 1.375rem; margin-bottom: 0.5rem; }
+  .living__food p { font-size: var(--fs-small); }
+
+  .hosts { margin-bottom: clamp(3rem, 2rem + 3vw, 4.5rem); }
+  .hosts__title { margin-bottom: 1.5rem; }
+  .hosts__list { display: grid; gap: 1.5rem var(--gap); }
+  .host { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 1rem; align-items: start; }
+  .host__face { width: 4.5rem; height: 4.5rem; border-radius: 50%; object-fit: cover; }
+  .host__name { font-family: var(--f-display); font-weight: 500; font-size: 1.125rem; color: var(--c-burgundy); line-height: 1.2; }
+  .host__name span { display: block; font-size: 0.8125rem; color: var(--c-muted); margin-top: 0.15rem; }
+  .host__role { margin-top: 0.5rem; }
+  .host__quote { margin-top: 0.6rem; font-size: 1.0625rem; }
+  .home__slide { width: min(80vw, 30rem); aspect-ratio: 3 / 2; }
+  .living__acc { margin-top: clamp(2.5rem, 2rem + 2vw, 4rem); }
+  .fac { display: grid; gap: 1rem 2rem; }
+  .fac dt { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
+  .fac dd { margin: 0.15rem 0 0; font-size: var(--fs-small); }
+  .living__acc .acc__body { max-width: none; }
+  @media (min-width: 40rem) { .hosts__list, .fac { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 60rem) {
+    .living__grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: center; }
+    .hosts__list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .host { grid-template-columns: 1fr; }
+    .fac { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+</style>

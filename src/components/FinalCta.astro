@@ -1,0 +1,42 @@
+---
+import { Picture } from 'astro:assets';
+import ApplyButton from './ApplyButton.astro';
+import StatusBadge from './StatusBadge.astro';
+import { img } from '../lib/images';
+import { letter, links } from '../content/opencall';
+---
+<section class="final on-dark" id="final" aria-labelledby="final-title">
+  <div class="final__media">
+    <Picture src={img('studios/bagnolo-12.jpg')} formats={['avif', 'webp']} widths={[640, 1024, 1600, 2400]} sizes="100vw" quality={62} alt="" loading="lazy" />
+  </div>
+  <div class="container final__inner">
+    <figure class="final__kicker" data-reveal>
+      <blockquote><p class="quote">{letter.quotes.close}</p></blockquote>
+      <figcaption>{letter.author}, {letter.role.toLowerCase()}</figcaption>
+    </figure>
+    <h2 id="final-title" data-reveal style="--d:80ms">Looking for time and space to focus on your practice?</h2>
+    <p class="final__lead" data-reveal style="--d:140ms">Open Call 2027 · six four-week periods from March to December in Milis, Sardinia.</p>
+    <div class="final__status" data-reveal style="--d:180ms"><StatusBadge variant="chip" /></div>
+    <div class="final__ctas" data-reveal style="--d:220ms">
+      <ApplyButton location="final" variant="ochre" size="lg" label="Apply to Nocefresca" />
+      <a class="btn btn--ghost-light btn--lg" href="#faq" data-track="secondary_cta_click" data-location="final_faq">Read the FAQ</a>
+    </div>
+    <p class="final__contact small">Questions first? <a href={`mailto:${links.email}`} data-track="contact_click" data-location="final_email">{links.email}</a></p>
+  </div>
+</section>
+
+<style>
+  .final { position: relative; isolation: isolate; color: var(--c-paper); overflow: hidden; }
+  .final__media { position: absolute; inset: 0; z-index: -1; }
+  .final__media :global(picture), .final__media :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+  .final__media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(46 18 14 / 0.55) 0%, rgb(46 18 14 / 0.72) 55%, rgb(46 18 14 / 0.88) 100%); }
+  .final__inner { padding-block: clamp(5rem, 3rem + 10vw, 11rem); display: grid; gap: 1.25rem; justify-items: start; }
+  .final__kicker { margin: 0 0 0.5rem; }
+  .final__kicker .quote { color: var(--c-ochre); font-size: clamp(1.375rem, 1.1rem + 1.2vw, 2rem); }
+  .final__kicker figcaption { margin-top: 0.4rem; font-family: var(--f-display); font-size: 0.875rem; color: rgb(246 241 231 / 0.8); }
+  .final h2 { color: var(--c-paper); font-size: clamp(2.25rem, 1.4rem + 4vw, 5rem); max-width: 16ch; line-height: 1; }
+  .final__lead { font-size: var(--fs-lead); max-width: 40ch; color: rgb(246 241 231 / 0.92); }
+  .final__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+  .final__contact { color: rgb(246 241 231 / 0.85); font-family: var(--f-display); }
+  .final__contact a { color: var(--c-ochre); }
+</style>

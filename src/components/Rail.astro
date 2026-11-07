@@ -1,0 +1,30 @@
+---
+import Arrow from './Arrow.astro';
+interface Props { label: string; id: string; track?: string; controls?: 'top' | 'bottom'; class?: string }
+const { label, id, track = id, controls = 'bottom', class: cls = '' } = Astro.props;
+---
+<div class={`rail-wrap rail-wrap--${controls} ${cls}`} data-rail={track}>
+  <div class="rail" id={id} role="region" aria-label={label} tabindex="0" data-rail-track>
+    <slot />
+  </div>
+  <div class="rail-controls" data-rail-controls hidden>
+    <button class="icon-btn" type="button" aria-controls={id} aria-label="Previous" data-rail-prev><Arrow dir="left" /></button>
+    <span class="counter" data-rail-counter aria-hidden="true"></span>
+    <button class="icon-btn" type="button" aria-controls={id} aria-label="Next" data-rail-next><Arrow /></button>
+  </div>
+</div>
+
+<style>
+  .rail-wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; min-width: 0; }
+  .rail-wrap > .rail { min-width: 0; }
+  .rail-wrap--top { grid-template-areas: 'controls' 'rail'; }
+  .rail-wrap--top .rail-controls { grid-area: controls; justify-self: end; }
+  .rail-wrap--top .rail { grid-area: rail; }
+  .rail-controls[hidden] { display: none; }
+  .rail-controls { justify-self: start; }
+  .rail:focus-visible { outline-offset: 6px; }
+  /* bleed the rail to the screen edge on small screens */
+  @media (max-width: 59.99rem) {
+    .rail { margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); scroll-padding-inline: var(--gutter); }
+  }
+</style>

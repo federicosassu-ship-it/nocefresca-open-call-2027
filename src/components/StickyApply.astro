@@ -1,0 +1,24 @@
+---
+import ApplyButton from './ApplyButton.astro';
+import StatusBadge from './StatusBadge.astro';
+import { status } from '../content/opencall';
+---
+<div class="sticky-apply hide-desktop" data-sticky-apply aria-hidden="true">
+  <div class="sticky-apply__inner">
+    <div class="sticky-apply__info">
+      <span class="sticky-apply__title">Open Call {status.year}</span>
+      <StatusBadge variant="inline" />
+    </div>
+    <ApplyButton location="sticky_mobile" />
+  </div>
+</div>
+
+<style>
+  .sticky-apply { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: var(--c-paper); box-shadow: 0 -1px 0 var(--c-line), 0 -12px 28px -18px rgb(62 31 34 / 0.45); transform: translateY(110%); transition: transform 0.35s var(--ease); padding-bottom: env(safe-area-inset-bottom); }
+  .sticky-apply.is-visible { transform: none; }
+  .sticky-apply__inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.6rem var(--gutter); }
+  .sticky-apply__info { display: grid; gap: 0.1rem; min-width: 0; }
+  .sticky-apply__title { font-family: var(--f-display); font-weight: 600; font-size: 0.9375rem; color: var(--c-burgundy); }
+  .sticky-apply__info :global(.status--inline) { font-size: 0.8125rem; color: var(--c-ink); }
+  .sticky-apply :global(.btn) { min-height: 2.875rem; padding-inline: 1.15rem; }
+</style>

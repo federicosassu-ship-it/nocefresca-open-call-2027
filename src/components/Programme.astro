@@ -1,0 +1,126 @@
+---
+import { Picture } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import Arrow from './Arrow.astro';
+import { img } from '../lib/images';
+import { pastThemes, partners, links } from '../content/opencall';
+
+const arc = [
+  {
+    when: 'Before you arrive',
+    img: 'life/curator-session.jpg',
+    alt: 'Two artists review work together at a desk with a laptop and paint tubes.',
+    items: [
+      'An online pre-departure meeting with your group and the guest curator, to share interests and shape the residency',
+      'Practical needs sorted in advance: studio, housing, equipment',
+      'If you need one, an invitation letter and a residency plan with a personalised budget',
+    ],
+  },
+  {
+    when: 'During the month',
+    img: 'life/practice-presentation.jpg',
+    alt: 'A resident presents work pinned on a white wall to fellow artists.',
+    items: [
+      'Present your practice to the group',
+      'Two group meetings and three one-to-one sessions with the guest curator',
+      'Propose site-specific projects, talks and workshops',
+      'A walk and a trip to discover the area through the eyes of a local',
+      'Spontaneous extras: excursions, screenings, visiting artists, social life with the village',
+    ],
+  },
+  {
+    when: 'At the end',
+    img: 'life/open-studio.jpg',
+    alt: 'Visitors gather around framed photographs at an open studio event.',
+    items: [
+      'A final open studio, open to the public — often followed by drinks in the courtyard',
+      'A text by the curator on your practice',
+      'Your profile in the Nocefresca online archive',
+    ],
+  },
+];
+---
+<section class="section programme" id="programme" aria-labelledby="programme-title">
+  <div class="container">
+    <SectionHead nr="09" kicker="Programme" id="programme-title" split
+      title="Self-directed, never alone."
+      lead="The residency is primarily self-directed: you’re expected to be self-sufficient in your practice. Around your work, Nocefresca builds a light structure to feed it — and none of it is mandatory." />
+
+    <ol class="arc" role="list">
+      {arc.map((a, i) => (
+        <li class="arc__step" data-reveal style={`--d:${i * 90}ms`}>
+          <div class="arc__media media media--zoom"><Picture src={img(a.img)} formats={['webp']} widths={[400, 640, 900]} sizes="(min-width: 60rem) 30vw, 92vw" quality={68} alt={a.alt} loading="lazy" /></div>
+          <p class="arc__n num">0{i + 1}</p>
+          <h3 class="arc__when">{a.when}</h3>
+          <ul class="dashes small" role="list">{a.items.map((t) => <li>{t}</li>)}</ul>
+        </li>
+      ))}
+    </ol>
+
+    <div class="prog__grid">
+      <div class="gift" data-reveal>
+        <h3>The only thing we ask</h3>
+        <p>During your stay, the gift of your creative input, in any form: cooking your favourite recipe at a public dinner, a workshop for local artists, a public talk, a service built on your passions. It isn’t mandatory — but it’s how a lasting community of artists grows here.</p>
+      </div>
+      <div class="themes" data-reveal style="--d:80ms">
+        <h3>A theme each year — a lens, never a brief</h3>
+        <p class="small">You are free to develop your own project, with no restriction on topic or outcome. Each edition’s theme explores the relationship between humans, nature and the future — botany, food, landscape, community, history — and invites you to read the territory beyond a tourist’s perspective.</p>
+        <ol class="themes__list" role="list">
+          {pastThemes.map((t) => <li><span class="num">{t.year}</span> {t.title}</li>)}
+        </ol>
+        <div class="cluster">
+          <a class="text-link" href={links.pastTopic} data-track="outbound_click" data-location="past_topic">Read about a past theme<Arrow size={16} /></a>
+          <a class="text-link" href={links.calendarPdf} data-track="outbound_click" data-location="calendar_pdf">Example monthly calendar (PDF)<Arrow size={16} /></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc prog__acc" data-reveal>
+      <details data-track="programme_details_open" data-location="curator">
+        <summary>How curatorial support works <span class="pm" aria-hidden="true"></span></summary>
+        <div class="acc__body">
+          <p>Each residency group is followed by a guest curator throughout the month: two group meetings and three individual sessions with each artist, with ongoing feedback and critical exchange. The curator also writes texts on the participating artists, documenting and contextualising their practices.</p>
+          <p>The team is on site or on call for everything else — finding equipment or materials, talking to people who don’t speak English, connecting you with local collaborators, suggesting sites relevant to your research, scouting locations for site-specific work and handling permits.</p>
+        </div>
+      </details>
+      <details data-track="programme_details_open" data-location="partners">
+        <summary>Partners &amp; network <span class="pm" aria-hidden="true"></span></summary>
+        <div class="acc__body">
+          <p>Through a network of cultural associations, exhibition spaces and local art collectives, artists can expand their professional network and discover opportunities during and after their stay.</p>
+          <dl class="partners">{partners.map((p) => <div><dt>{p.name}</dt><dd>{p.text}</dd></div>)}</dl>
+          <p class="small"><a class="link" href={links.partners} data-track="outbound_click" data-location="partners_source">All partners</a></p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<style>
+  .arc { list-style: none; padding: 0; display: grid; gap: 2.5rem var(--gap); counter-reset: arc; position: relative; }
+  .arc__step { position: relative; }
+  .arc__media { aspect-ratio: 4 / 3; margin-bottom: 1.25rem; }
+  .arc__n { font-size: 0.875rem; color: var(--c-terracotta-ink); margin-bottom: 0.25rem; }
+  .arc__when { margin-bottom: 0.9rem; }
+  .prog__grid { display: grid; gap: var(--gap); margin-top: clamp(3rem, 2rem + 3vw, 5rem); }
+  .gift { padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); background: var(--c-coral); border-radius: var(--radius); }
+  .gift h3, .themes h3 { margin-bottom: 0.9rem; }
+  .gift p { font-size: var(--fs-lead); line-height: 1.45; }
+  .themes { padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); box-shadow: inset 0 0 0 1.5px var(--c-line-strong); border-radius: var(--radius); display: grid; gap: 1rem; align-content: start; }
+  .themes__list { list-style: none; padding: 0; display: grid; gap: 0.4rem; border-top: 1px solid var(--c-line); padding-top: 1rem; }
+  .themes__list li { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
+  .themes__list .num { display: inline-block; width: 3.25rem; color: var(--c-muted); font-weight: 400; }
+  .prog__acc { margin-top: clamp(2.5rem, 2rem + 2vw, 4rem); }
+  .partners { display: grid; gap: 0.9rem 2rem; }
+  .partners dt { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
+  .partners dd { margin: 0.1rem 0 0; font-size: var(--fs-small); }
+  .prog__acc .acc__body { max-width: 60rem; }
+  @media (min-width: 40rem) { .partners { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 60rem) {
+    .arc { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .arc::before { content: ''; position: absolute; left: 0; right: 0; top: calc((100% - 0px) * 0); height: 0; }
+    .arc__n { display: flex; align-items: center; gap: 0.75rem; }
+    .arc__n::after { content: ''; flex: 1; height: 2px; background-image: radial-gradient(circle, var(--c-terracotta) 1.4px, transparent 1.6px); background-size: 9px 2px; background-repeat: repeat-x; }
+    .arc__step:last-child .arc__n::after { display: none; }
+    .prog__grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  }
+</style>

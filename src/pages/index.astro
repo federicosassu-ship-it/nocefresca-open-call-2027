@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import InfoStrip from '../components/InfoStrip.astro';
+import Month from '../components/Month.astro';
+import ForYou from '../components/ForYou.astro';
+import Glance from '../components/Glance.astro';
+import Milis from '../components/Milis.astro';
+import Studios from '../components/Studios.astro';
+import Living from '../components/Living.astro';
+import Artists from '../components/Artists.astro';
+import Programme from '../components/Programme.astro';
+import Dates from '../components/Dates.astro';
+import Fees from '../components/Fees.astro';
+import Apply from '../components/Apply.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Footer from '../components/Footer.astro';
+import StickyApply from '../components/StickyApply.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
+import { config } from '../config';
+import { heroSources, MOBILE_MQ, DESKTOP_MQ } from '../lib/hero';
+const hero = await heroSources();
+
+const clientConfig = {
+  gtmId: config.analytics.gtmId,
+  metaPixelId: config.analytics.metaPixelId,
+  forwardCampaignParams: config.analytics.forwardCampaignParams,
+  consentMode: config.consent.mode,
+  storageKey: config.consent.storageKey,
+};
+---
+<Base>
+  <Fragment slot="head">
+    <link rel="preload" as="image" type="image/avif" media={MOBILE_MQ} imagesrcset={hero.mobile.avif} imagesizes={hero.mobile.sizes} fetchpriority="high" />
+    <link rel="preload" as="image" type="image/avif" media={DESKTOP_MQ} imagesrcset={hero.desktop.avif} imagesizes={hero.desktop.sizes} fetchpriority="high" />
+  </Fragment>
+  <Header />
+  <main id="main">
+    <Hero />
+    <InfoStrip />
+    <Month />
+    <ForYou />
+    <Glance />
+    <Milis />
+    <Studios />
+    <Living />
+    <Artists />
+    <Programme />
+    <Dates />
+    <Fees />
+    <Apply />
+    <Faq />
+    <FinalCta />
+  </main>
+  <Footer />
+  <StickyApply />
+  <ConsentBanner />
+  <script type="application/json" id="nf-config" set:html={JSON.stringify(clientConfig)} />
+  <script>
+    import '../scripts/main.ts';
+  </script>
+</Base>

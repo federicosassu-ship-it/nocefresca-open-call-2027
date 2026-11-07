@@ -1,0 +1,78 @@
+---
+import { Image } from 'astro:assets';
+import { img } from '../lib/images';
+import { links, address } from '../content/opencall';
+const supporters = [
+  { src: 'brand/sup-regione.png', alt: 'Regione Autonoma della Sardegna', h: 44 },
+  { src: 'brand/sup-psr.png', alt: 'PSR Sardegna', h: 40 },
+  { src: 'brand/sup-eu.png', alt: 'European Union', h: 40 },
+];
+---
+<footer class="footer" id="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <Image src={img('brand/logo-orbit.png')} alt="Nocefresca" width={132} densities={[1, 2]} format="webp" loading="lazy" />
+      <p class="small">Artist residency in the rural villages of Sardinia, Italy.</p>
+    </div>
+    <div>
+      <h2 class="footer__h">Headquarters</h2>
+      <address class="small">{address.street}<br />{address.postalCode} {address.city} ({address.province}), {address.country}<br /><span class="nowrap">40° 03′ 05″ N</span> · <span class="nowrap">8° 38′ 17″ E</span></address>
+    </div>
+    <div>
+      <h2 class="footer__h">Contact</h2>
+      <ul class="footer__list small" role="list">
+        <li><a href={`mailto:${links.email}`} data-track="contact_click" data-location="footer_email">{links.email}</a></li>
+        <li><a href={links.whatsapp} data-track="contact_click" data-location="footer_whatsapp" rel="noopener">WhatsApp {links.whatsappDisplay}</a></li>
+        <li><a href={links.instagram} data-track="outbound_click" data-location="footer_instagram" rel="noopener">Instagram @nocefresca</a></li>
+        <li><a href={links.facebook} data-track="outbound_click" data-location="footer_facebook" rel="noopener">Facebook</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="footer__h">More from Nocefresca</h2>
+      <ul class="footer__list small" role="list">
+        <li><a href={links.shortStays} data-track="outbound_click" data-location="footer_shortstays">Short stays (Nocefreschissima)</a></li>
+        <li><a href={links.artists} data-track="outbound_click" data-location="footer_artists">Past artists</a></li>
+        <li><a href={links.about} data-track="outbound_click" data-location="footer_about">About</a></li>
+        <li><a href={links.press} data-track="outbound_click" data-location="footer_press">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer__support">
+      <h2 class="footer__h">Supported by</h2>
+      <ul class="footer__logos" role="list">
+        {supporters.map((s) => <li><Image src={img(s.src)} alt={s.alt} height={s.h} densities={[1, 2]} format="webp" loading="lazy" /></li>)}
+      </ul>
+    </div>
+  </div>
+  <div class="footer__band">
+    <div class="container footer__band-inner small">
+      <p>© {new Date().getFullYear()} Nocefresca</p>
+      <p><a href={links.privacy} rel="noopener" data-track="outbound_click" data-location="privacy">Privacy policy</a> · <button type="button" class="footer__consent" data-consent-open>Cookie settings</button></p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--c-paper); border-top: 1px solid var(--c-line); font-family: var(--f-display); }
+  .footer__grid { display: grid; gap: 2rem 1.25rem; padding-block: clamp(3rem, 2rem + 3vw, 4.5rem); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .footer__list a { overflow-wrap: anywhere; }
+  .footer__brand { grid-column: 1 / -1; display: grid; gap: 1rem; justify-items: start; }
+  .footer__brand p { max-width: 26ch; color: var(--c-muted); }
+  .footer__h { font-size: 0.8125rem; font-weight: 500; color: var(--c-terracotta-ink); letter-spacing: 0.01em; margin-bottom: 0.75rem; }
+  .footer address { font-style: normal; line-height: 1.6; }
+  .footer__list { display: grid; gap: 0.15rem; }
+  .footer__list a, .footer__band a, .footer__consent { color: var(--c-ink); text-decoration: none; display: inline-flex; align-items: center; min-height: 2.25rem; }
+  .footer__list a:hover, .footer__band a:hover, .footer__consent:hover { color: var(--c-burgundy); text-decoration: underline; text-underline-offset: 0.2em; }
+  .footer__support { grid-column: 1 / -1; }
+  .footer__logos { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
+  .footer__logos img { width: auto; mix-blend-mode: multiply; }
+  .footer__band { background: var(--c-deep); color: var(--c-paper); }
+  .footer__band-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1.5rem; padding-block: 1rem; padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
+  .footer__band a, .footer__consent { color: var(--c-paper); font-size: inherit; }
+  .footer__band a:hover, .footer__consent:hover { color: var(--c-ochre); }
+  .footer__band :focus-visible { outline-color: var(--c-ochre); }
+  @media (min-width: 60rem) {
+    .footer__grid { grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 2rem; }
+    .footer__brand { grid-column: auto; grid-row: span 2; }
+    .footer__support { grid-column: 2 / -1; }
+  }
+</style>

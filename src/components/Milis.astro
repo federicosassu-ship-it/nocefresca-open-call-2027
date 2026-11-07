@@ -1,0 +1,89 @@
+---
+import { Picture } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import MapSardinia from './MapSardinia.astro';
+import Rail from './Rail.astro';
+import { img } from '../lib/images';
+import { links } from '../content/opencall';
+
+const facts = [
+  { n: '1,500', t: 'inhabitants — markets, cafés, a bakery, a pharmacy, an artisanal pasta factory and a Wednesday farmers’ market' },
+  { n: '19 km', t: 'to the beaches of Sardinia’s west coast' },
+  { n: '20 km', t: 'to Oristano, the nearest city, with art shops and hardware stores' },
+  { n: '100 km', t: 'to Cagliari, the island’s capital, and its airport' },
+  { n: '13th c.', t: 'when Camaldolese monks planted the citrus groves that still surround the town' },
+];
+const photos = [
+  { src: 'milis/location-1.jpg', alt: 'The main square of Milis with palm trees, coloured houses and the stone bell tower.', cap: 'The main square of Milis' },
+  { src: 'milis/location-6.jpg', alt: 'A person walks down a path between rows of orange trees heavy with fruit.', cap: 'Walking through the orange groves' },
+  { src: 'milis/location-11.jpg', alt: 'A flock of sheep crosses a country road, with a shepherd behind them.', cap: 'Rush hour, Sardinian style' },
+  { src: 'milis/location-8.jpg', alt: 'A narrow lane between old stone walls.', cap: 'Stone lanes' },
+  { src: 'milis/location-7.jpg', alt: 'A peach-coloured wall with a painted sundial under a deep blue sky.', cap: 'A painted sundial' },
+  { src: 'milis/location-10.jpg', alt: 'A country lane lined with dry-stone walls and dense greenery.', cap: 'Country lanes and dry-stone walls' },
+  { src: 'milis/location-9.jpg', alt: 'A red-and-white striped stone archway set in a stone wall.', cap: 'A striped stone gateway' },
+];
+---
+<section class="section section--soft milis" id="milis" aria-labelledby="milis-title">
+  <div class="container">
+    <SectionHead nr="05" kicker="Milis, Sardinia" id="milis-title" split
+      title="A citrus village at the foot of Montiferru."
+      lead="Milis is an ancient village in the western part of central Sardinia — far from the tourist coasts, close to everything that matters. In spring, the orange blossom scents the whole town." />
+
+    <div class="milis__grid">
+      <div data-reveal><MapSardinia /></div>
+      <div class="milis__side">
+        <ul class="facts" role="list">
+          {facts.map((f, i) => (
+            <li data-reveal style={`--d:${i * 60}ms`}><span class="facts__n num">{f.n}</span><span class="facts__t">{f.t}</span></li>
+          ))}
+        </ul>
+
+        <div class="acc" data-reveal>
+          <details data-track="accordion_open" data-location="getting_here">
+            <summary>Getting here <span class="pm" aria-hidden="true"></span></summary>
+            <div class="acc__body">
+              <p>Fly into <strong>Cagliari</strong>, take a frequent train to <strong>Oristano</strong>, then a bus (about 30 minutes) or a pre-booked taxi with the residency’s trusted drivers. You can also fly into Olbia, but public transport from there is more limited.</p>
+              <p>Once your place is confirmed you receive a pre-departure guide with detailed travel information.</p>
+            </div>
+          </details>
+          <details data-track="accordion_open" data-location="getting_around">
+            <summary>Getting around <span class="pm" aria-hidden="true"></span></summary>
+            <div class="acc__body">
+              <p>Many artists stayed two or three months without a car and enjoyed it. The residency’s bikes (three gears) are perfect for the village and the countryside. To explore the island, renting a car is strongly advised — residents often share one. Milis–Oristano–Cagliari is easy by public transport; Nuoro, Alghero and the beaches are much harder.</p>
+            </div>
+          </details>
+          <details data-track="accordion_open" data-location="why_sardinia">
+            <summary>Why Sardinia? <span class="pm" aria-hidden="true"></span></summary>
+            <div class="acc__body">
+              <p>Living in a rural village, close to local communities and far from tourists and chaotic cities, brings moments of authentic simplicity. Expect wide-open landscapes, centuries-old trees, rocks shaped by wind and sea, megalithic architecture and traces of prehistoric societies — on an island that hosts one of the world’s five Blue Zones.</p>
+              <p><a class="link" href={links.milisGuide} data-track="outbound_click" data-location="milis_guide">10 things to do in Milis</a> · <a class="link" href={links.westSardiniaGuide} data-track="outbound_click" data-location="west_sardinia_guide">10 things to do in Western Sardinia</a></p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+
+    <Rail label="Photos of Milis" id="milis-rail" track="milis">
+      {photos.map((p) => (
+        <figure class="mphoto">
+          <div class="media"><Picture src={img(p.src)} formats={['webp']} widths={[360, 560, 840]} sizes="(min-width: 60rem) 26rem, 78vw" quality={68} alt={p.alt} loading="lazy" /></div>
+          <figcaption>{p.cap}</figcaption>
+        </figure>
+      ))}
+    </Rail>
+  </div>
+</section>
+
+<style>
+  .milis__grid { display: grid; gap: clamp(2rem, 1.5rem + 2vw, 3.5rem); margin-bottom: clamp(3rem, 2rem + 3vw, 5rem); }
+  .facts { display: grid; border-top: 1px solid var(--c-line-strong); margin-bottom: 2rem; }
+  .facts li { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 1rem; align-items: baseline; padding: 1rem 0; border-bottom: 1px solid var(--c-line-strong); }
+  .facts__n { font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem); font-weight: 500; color: var(--c-burgundy); letter-spacing: -0.02em; line-height: 1; }
+  .facts__t { font-size: var(--fs-small); line-height: 1.45; }
+  .mphoto { margin: 0; width: min(78vw, 26rem); }
+  .mphoto .media { aspect-ratio: 4 / 3; }
+  @media (min-width: 60rem) {
+    .milis__grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; }
+    .facts li { grid-template-columns: 8.5rem minmax(0, 1fr); }
+  }
+</style>

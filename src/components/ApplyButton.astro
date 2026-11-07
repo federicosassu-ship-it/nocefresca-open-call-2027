@@ -1,0 +1,15 @@
+---
+import Arrow from './Arrow.astro';
+import { links, status, statusCopy } from '../content/opencall';
+
+interface Props { location: string; variant?: 'primary' | 'ochre' | 'paper' | 'ghost'; size?: 'lg'; label?: string; block?: boolean; class?: string }
+const { location, variant = 'primary', size, label, block = false, class: cls = '' } = Astro.props;
+
+const state = status.state;
+const href = state === 'closed' ? links.shortStays : state === 'upcoming' ? `mailto:${links.email}?subject=Next%20open%20call` : links.apply;
+const text = label ?? statusCopy[state].cta;
+const classes = ['btn', variant !== 'primary' && `btn--${variant}`, size && `btn--${size}`, block && 'btn--block', cls].filter(Boolean).join(' ');
+---
+<a class={classes} href={href} data-apply={state === 'open' || state === 'rolling' ? '' : undefined} data-track="apply_click" data-location={location}>
+  <span>{text}</span><Arrow />
+</a>

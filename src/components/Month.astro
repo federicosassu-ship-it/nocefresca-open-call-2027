@@ -1,0 +1,94 @@
+---
+import { Picture } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import Arrow from './Arrow.astro';
+import { img } from '../lib/images';
+import { diary, links } from '../content/opencall';
+import contoursLight from '../generated/contours-light-b.svg?url';
+
+const moments = [
+  { area: 'a', src: 'life/headphones-basalt-bench.jpg', alt: 'A smiling artist in headphones sits barefoot on a sunlit basalt bench next to a basket of dried wheat.', title: 'Time that belongs to your work', text: 'No timetable to follow: the residency is self-directed and your studio is open 24/7.', ratio: '4/3', pos: '60% 35%' },
+  { area: 'b', src: 'life/residents-horse.jpg', alt: 'Three residents stop at a dry-stone wall to stroke a horse in the countryside.', title: 'Five minutes from your studio', text: '…you can chat with sheep, horses and chickens.', ratio: '4/5', pos: '50% 50%' },
+  { area: 'c', src: 'life/courtyard-working.jpg', alt: 'Artists work on large sheets laid out on the stone floor of a sunny courtyard.', title: 'Work outdoors', text: 'Casa Bagnolo’s courtyard has shaded tables, and armchairs under the palms.', ratio: '21/9', pos: '50% 60%' },
+  { area: 'e', src: 'life/painter-mural.jpg', alt: 'A tattooed artist paints a large, vividly coloured mural in purple, green and orange.', title: 'Experiment', text: 'Process based: no final outcome required.', ratio: '4/5', pos: '50% 40%' },
+  { area: 'f', src: 'life/cooking-together.jpg', alt: 'Two residents smile while preparing plates of pasta and rocket salad together in a kitchen.', title: 'Dinners, pieced together', text: 'Shared kitchens and long evenings with artists from everywhere.', ratio: '4/5', pos: '50% 40%' },
+  { area: 'g', src: 'life/open-studio.jpg', alt: 'Visitors look at framed photographs during an open studio.', title: 'Show your process', text: 'The month closes with an open studio — locals are always curious, and genuinely interested.', ratio: '4/5', pos: '55% 50%' },
+  { area: 'h', src: 'life/coast-arch.jpg', alt: 'A small figure stands on pale coastal rocks beside a natural stone arch over the sea.', title: 'The sea, 19 km away', text: 'The beaches of the west coast are quieter outside July and August.', ratio: '3/4', pos: '50% 50%' },
+];
+---
+<section class="section month" id="month" aria-labelledby="month-title">
+  <div class="container">
+    <SectionHead nr="02" kicker="A month here" id="month-title" split
+      title="Picture your month in Milis."
+      lead="Your days are yours to shape. The village is small, the landscape is wide, and everyone around you is making something too." />
+
+    <div class="month__grid">
+      {moments.map((m, i) => (
+        <figure class={`moment moment--${m.area}`} data-reveal style={`--d:${(i % 3) * 70}ms`}>
+          <div class="media media--zoom" style={`aspect-ratio:${m.ratio}`}>
+            <Picture src={img(m.src)} formats={['avif', 'webp']} widths={[480, 720, 1080, 1440]} sizes={m.area === 'a' || m.area === 'c' ? '(min-width: 60rem) 58vw, 100vw' : '(min-width: 60rem) 30vw, 100vw'} quality={66} alt={m.alt} style={`object-position:${m.pos}`} />
+          </div>
+          <figcaption class="moment__cap">
+            <span class="moment__n num">{String(i + 1).padStart(2, '0')}</span>
+            <span><strong>{m.title}</strong> {m.text}</span>
+          </figcaption>
+        </figure>
+      ))}
+
+      <div class="month__statement" data-reveal>
+        <p>Four weeks. Up to seven artists. One village of 1,500 people.</p>
+        <a class="text-link" href="#for-you" data-track="secondary_cta_click" data-location="month_statement">Is it for you?<Arrow dir="down" /></a>
+      </div>
+
+      <blockquote class="moment moment--d month__quote" data-reveal>
+        <span class="contours" style={`background-image:url(${contoursLight})`} aria-hidden="true"></span>
+        <p class="quote">{diary.quote}</p>
+        <footer><a class="link" href={links.diaryAnna} data-track="outbound_click" data-location="month_quote">{diary.author}</a>, {diary.role.toLowerCase()}</footer>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<style>
+  .month__grid { display: grid; gap: 2.25rem var(--gap); }
+  .moment { margin: 0; }
+  .moment__cap { display: flex; gap: 0.75rem; margin-top: 0.85rem; font-family: var(--f-text); font-size: var(--fs-small); line-height: 1.45; color: var(--c-ink); max-width: 46ch; }
+  .moment__cap strong { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
+  .moment__n { flex: none; font-size: 0.8125rem; color: var(--c-terracotta-ink); padding-top: 0.2em; }
+  .month__quote { position: relative; overflow: hidden; margin: 0; padding: clamp(1.75rem, 1rem + 3vw, 3rem); background: var(--c-coral); border-radius: var(--radius); display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; min-height: 16rem; }
+  .month__quote .contours { opacity: 0.7; }
+  .month__quote .quote { position: relative; font-size: clamp(1.5rem, 1.15rem + 1.5vw, 2.25rem); color: var(--c-ink); }
+  .month__quote footer { position: relative; font-family: var(--f-display); font-size: 0.9375rem; color: var(--c-ink); }
+  .month__quote .link { color: var(--c-ink); }
+
+  @media (max-width: 59.99rem) {
+    .moment--b .media, .moment--e .media, .moment--f .media, .moment--g .media { aspect-ratio: 4 / 3.4 !important; }
+    .moment--c .media { aspect-ratio: 16 / 10 !important; }
+  }
+  @media (min-width: 40rem) and (max-width: 59.99rem) {
+    .month__grid { grid-template-columns: 1fr 1fr; }
+    .moment--a, .moment--c, .month__quote, .month__statement { grid-column: 1 / -1; }
+  }
+  .month__statement { display: grid; align-content: center; gap: 1.25rem; padding-block: 1rem; }
+  .month__statement p { font-family: var(--f-display); font-weight: 500; font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3.25rem); line-height: 1.06; letter-spacing: -0.025em; color: var(--c-burgundy); text-wrap: balance; max-width: 16ch; }
+  @media (min-width: 60rem) {
+    .month__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-template-areas:
+        'a a a a a a a b b b b b'
+        'c c c c c c c c d d d d'
+        'e e e e f f f f g g g g'
+        'h h h h . i i i i i i i';
+      row-gap: 3.5rem;
+    }
+    .moment--a { grid-area: a; }
+    .moment--b { grid-area: b; align-self: end; }
+    .moment--c { grid-area: c; }
+    .moment--d { grid-area: d; }
+    .moment--e { grid-area: e; }
+    .moment--f { grid-area: f; margin-top: 4rem; }
+    .moment--g { grid-area: g; }
+    .moment--h { grid-area: h; }
+    .month__statement { grid-area: i; }
+  }
+</style>

@@ -1,0 +1,123 @@
+---
+import { Picture } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import ApplyButton from './ApplyButton.astro';
+import Arrow from './Arrow.astro';
+import { img } from '../lib/images';
+import { fees } from '../content/opencall';
+import { euro } from '../lib/format';
+import contoursLight from '../generated/contours-light.svg?url';
+import contoursLightB from '../generated/contours-light-b.svg?url';
+
+const minFee = Math.min(...fees.map((f) => f.price));
+type Card = { id: string; kicker: string; title: string; text: string; cta: string; href: string; photo?: string; alt?: string; tone?: 'ochre' | 'coral' | 'deep'; big?: string };
+const cards: Card[] = [
+  { id: 'studio', kicker: 'Studio', title: 'Your own studio, open 24/7', text: 'Seven private studios across three houses, plus an 80 m² outdoor studio garden.', cta: 'See the studios', href: '#studios', photo: 'studios/ramiro-1.jpg', alt: 'A bright studio with a long wooden table, an anglepoise lamp and a large board for hanging work.' },
+  { id: 'dates', kicker: 'Dates', title: 'Six periods in 2027', text: 'Four-week periods between 17 March and 14 December. Stay one, two or three months.', cta: 'See the dates', href: '#dates', tone: 'ochre' },
+  { id: 'home', kicker: 'Home', title: 'A home in the village', text: 'A private bedroom in a shared house, a suite with en-suite bathroom, or a cottage in a citrus orchard.', cta: 'Discover the homes', href: '#living', photo: 'living/housing-1.jpg', alt: 'A vintage kitchen with blue cabinets, patterned tiles and green glass demijohns.' },
+  { id: 'curator', kicker: 'Curator', title: 'A guest curator', text: 'Two group meetings, three one-to-one sessions and a written text on your practice.', cta: 'Explore the programme', href: '#programme', photo: 'life/curator-session.jpg', alt: 'Two artists talk through work on a laptop at a desk covered in paint tubes.' },
+  { id: 'fee', kicker: 'Fee', title: 'per month, from', big: euro(minFee), text: 'Studio, housing, curatorial support, activities and shared equipment included. Five studio + housing options, up to €1,880.', cta: 'View the fees', href: '#fees', tone: 'deep' },
+  { id: 'group', kicker: 'Group', title: 'Up to 7 artists at a time', text: 'A small international group of different ages, disciplines and countries.', cta: 'Meet past residents', href: '#artists', photo: 'life/practice-presentation.jpg', alt: 'A resident presents her work, pinned to the wall, to a small group of artists.' },
+  { id: 'programme', kicker: 'Programme', title: 'Self-directed, never alone', text: 'Practice presentations, a walk and a trip with a local, workshops and a final open studio.', cta: 'Explore the programme', href: '#programme', tone: 'coral' },
+  { id: 'milis', kicker: 'Place', title: 'Milis, Sardinia', text: 'A village of citrus groves at the foot of Montiferru, 19 km from the west coast.', cta: 'Discover Milis', href: '#milis', photo: 'milis/location-2.jpg', alt: 'Orange trees frame the stone bell tower of Milis against a blue sky.' },
+];
+---
+<section class="section glance" id="glance" aria-labelledby="glance-title">
+  <div class="container">
+    <SectionHead nr="04" kicker="At a glance" id="glance-title" split title="The essentials, on one page."
+      lead="Everything you need to decide — each card opens the full details further down." />
+
+    <ul class="bento" role="list">
+      {cards.map((c, i) => (
+        <li class={`gcard gcard--${c.id} ${c.tone ? `gcard--${c.tone}` : 'gcard--photo'}`} data-reveal style={`--d:${(i % 4) * 60}ms`}>
+          {c.photo && (
+            <div class="gcard__media media media--zoom">
+              <Picture src={img(c.photo)} formats={['webp']} widths={[320, 560, 900]} sizes={c.id === 'studio' || c.id === 'milis' ? '(min-width: 60rem) 45vw, 6rem' : '(min-width: 60rem) 22vw, 6rem'} quality={68} alt={c.alt ?? ''} />
+            </div>
+          )}
+          {c.tone && c.tone !== 'deep' && <span class="contours" style={`background-image:url(${c.tone === 'ochre' ? contoursLight : contoursLightB})`} aria-hidden="true"></span>}
+          <div class="gcard__body">
+            <p class="gcard__kicker">{c.kicker}</p>
+            {c.big ? (
+              <h3 class="gcard__title"><span class="gcard__big num">{c.big}</span> <span class="gcard__per">{c.title}</span></h3>
+            ) : (
+              <h3 class="gcard__title">{c.title}</h3>
+            )}
+            <p class="gcard__text">{c.text}</p>
+            <a class="gcard__cta" href={c.href} data-track="glance_click" data-location={c.id}>{c.cta}<Arrow size={16} /></a>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <div class="glance__cta" data-reveal>
+      <ApplyButton location="glance" size="lg" />
+      <p class="small muted">The form takes at least 20 minutes · <a class="link" href="#apply">see what to prepare</a></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bento { display: grid; gap: 0.75rem; }
+  .gcard { position: relative; overflow: hidden; border-radius: var(--radius); display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 1rem; padding: 0.9rem; background: var(--c-white); box-shadow: inset 0 0 0 1px var(--c-line); transition: box-shadow 0.25s var(--ease); }
+  .gcard:hover { box-shadow: inset 0 0 0 1.5px var(--c-burgundy); }
+  .gcard__media { aspect-ratio: 1; align-self: start; }
+  .gcard__body { position: relative; display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
+  .gcard__kicker { font-family: var(--f-display); font-size: 0.8125rem; font-weight: 500; color: var(--c-terracotta-ink); }
+  .gcard__title { font-size: 1.25rem; line-height: 1.15; }
+  .gcard__text { font-size: 0.975rem; line-height: 1.45; color: var(--c-ink); }
+  .gcard__cta { margin-top: auto; padding-top: 0.4rem; display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--f-display); font-size: 0.9375rem; font-weight: 500; color: var(--c-burgundy); text-decoration: none; min-height: 2.25rem; }
+  .gcard__cta::after { content: ''; position: absolute; inset: 0; z-index: 1; } /* stretched link: whole card is clickable */
+  .gcard { isolation: isolate; }
+  .gcard__cta { position: static; }
+  .gcard__body { position: static; }
+  .gcard__cta :global(.arrow) { transition: transform 0.25s var(--ease); }
+  .gcard:hover .gcard__cta :global(.arrow) { transform: translateX(3px); }
+
+  .gcard--ochre, .gcard--coral, .gcard--deep { grid-template-columns: 1fr; padding: 1.4rem; box-shadow: none; }
+  .gcard--ochre { background: var(--c-ochre); }
+  .gcard--coral { background: var(--c-coral); }
+  .gcard--deep { background: var(--c-burgundy); color: var(--c-paper); }
+  .gcard--ochre .gcard__kicker, .gcard--coral .gcard__kicker { color: var(--c-burgundy); }
+  .gcard--deep .gcard__kicker { color: var(--c-ochre); }
+  .gcard--deep .gcard__title, .gcard--deep .gcard__text, .gcard--deep .gcard__cta { color: var(--c-paper); }
+  .gcard--ochre:hover, .gcard--coral:hover { box-shadow: inset 0 0 0 1.5px var(--c-burgundy); }
+  .gcard--deep:hover { box-shadow: inset 0 0 0 1.5px var(--c-ochre); }
+  .gcard .contours { opacity: 0.75; z-index: -1; }
+  .gcard__big { display: block; font-size: clamp(2.75rem, 2rem + 3vw, 4.25rem); line-height: 0.95; letter-spacing: -0.035em; color: var(--c-ochre); }
+  .gcard__per { font-size: 1rem; font-weight: 400; }
+
+  .glance__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: clamp(2rem, 1.5rem + 2vw, 3rem); }
+
+  @media (min-width: 40rem) and (max-width: 59.99rem) {
+    .bento { grid-template-columns: 1fr 1fr; }
+    .gcard--photo { grid-template-columns: 1fr; padding: 0; }
+    .gcard--photo .gcard__media { aspect-ratio: 16 / 10; }
+    .gcard--photo .gcard__body { padding: 0 1.1rem 1.1rem; }
+  }
+  @media (min-width: 60rem) {
+    .bento {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-areas:
+        'studio studio dates home'
+        'studio studio curator fee'
+        'group programme milis milis';
+      gap: var(--gap);
+    }
+    .gcard { grid-area: var(--area); }
+    .gcard--studio { grid-area: studio; } .gcard--dates { grid-area: dates; } .gcard--home { grid-area: home; }
+    .gcard--curator { grid-area: curator; } .gcard--fee { grid-area: fee; } .gcard--group { grid-area: group; }
+    .gcard--programme { grid-area: programme; } .gcard--milis { grid-area: milis; }
+    .gcard--photo { grid-template-columns: 1fr; grid-template-rows: auto 1fr; padding: 0; gap: 0; }
+    .gcard--photo .gcard__media { aspect-ratio: 4 / 3; border-radius: 0; }
+    .gcard--photo .gcard__body { padding: 1.1rem 1.25rem 1rem; }
+    .gcard--studio { grid-template-rows: minmax(0, 1fr) auto; }
+    .gcard--studio .gcard__media { aspect-ratio: auto; height: 100%; min-height: 20rem; }
+    .gcard--milis { grid-template-columns: 1.1fr 1fr; grid-template-rows: 1fr; }
+    .gcard--milis .gcard__media { aspect-ratio: auto; height: 100%; }
+    .gcard--milis .gcard__body { padding: 1.4rem; }
+    .gcard--ochre, .gcard--coral, .gcard--deep { padding: 1.5rem; min-height: 15rem; }
+    .gcard__title { font-size: 1.375rem; }
+    .gcard--studio .gcard__title { font-size: var(--fs-h3); }
+  }
+</style>

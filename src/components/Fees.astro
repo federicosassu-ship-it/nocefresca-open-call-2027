@@ -1,0 +1,147 @@
+---
+import SectionHead from './SectionHead.astro';
+import ApplyButton from './ApplyButton.astro';
+import { fees, feeIncludes, feeExcludes, feeExtras, payment, links } from '../content/opencall';
+import { euro } from '../lib/format';
+
+const timeline = [
+  { t: 'You’re selected', d: 'You receive a confirmation letter and documents to sign.' },
+  { t: `${euro(payment.confirmationFee)} confirmation fee`, d: `Due ${payment.confirmationWindow}. Non-refundable — it books your housing and services and confirms your place.` },
+  { t: 'The balance', d: `Due ${payment.balanceDue}.` },
+  { t: 'Arrive in Milis', d: 'With a pre-departure guide and a plan shaped with your group and curator.' },
+];
+---
+<section class="section fees" id="fees" aria-labelledby="fees-title">
+  <div class="container">
+    <SectionHead nr="11" kicker="Fees & what’s included" id="fees-title" split
+      title="One monthly fee. Studio and home included."
+      lead="Prices are per artist, per month. Pick the studio and housing combination that suits your practice — everything else in the programme is the same." />
+
+    <ul class="options" role="list">
+      {fees.map((f, i) => (
+        <li class="option" data-reveal style={`--d:${i * 60}ms`}>
+          <p class="option__id">Option {f.id}</p>
+          <p class="option__price"><span class="num">{euro(f.price)}</span><span class="option__per">per month</span></p>
+          <h3 class="option__title">{f.title}</h3>
+          <dl class="option__specs">
+            <div><dt>Studio</dt><dd>{f.studio}</dd></div>
+            <div><dt>Sleep</dt><dd>{f.sleep}</dd></div>
+            <div><dt>Bathroom</dt><dd>{f.bath}</dd></div>
+          </dl>
+          <p class="option__best"><span>Best for</span> {f.bestFor}</p>
+          <details class="option__more" data-track="fees_details_open" data-location={`option_${f.id}`}>
+            <summary>More about option {f.id}</summary>
+            <p class="small">{f.detail}</p>
+          </details>
+        </li>
+      ))}
+    </ul>
+    <p class="fees__guest small" data-reveal>All options include 24/7 access to your studio and to Casa Bagnolo’s communal spaces, plus the full programme. A guest can share your room for {feeExtras[1].price.replace(', min. 7 nights', '')} (minimum 7 nights).</p>
+
+    <div class="incl">
+      <div class="incl__col incl__col--yes" data-reveal>
+        <h3>Included</h3>
+        <ul class="ticks small" role="list">{feeIncludes.map((x) => <li>{x}</li>)}</ul>
+      </div>
+      <div class="incl__col" data-reveal style="--d:70ms">
+        <h3>Not included</h3>
+        <ul class="dashes small" role="list">{feeExcludes.map((x) => <li>{x}</li>)}</ul>
+        <h3 class="incl__h-extras">Optional extras</h3>
+        <dl class="extras">
+          {feeExtras.map((e) => <div><dt>{e.name} <span class="num">{e.price}</span></dt><dd class="small">{e.detail}</dd></div>)}
+        </dl>
+      </div>
+    </div>
+
+    <div class="pay" data-reveal>
+      <h3>How payment works</h3>
+      <ol class="pay__steps" role="list">
+        {timeline.map((s, i) => (
+          <li><span class="pay__n num">{String(i + 1).padStart(2, '0')}</span><strong>{s.t}</strong><span class="small">{s.d}</span></li>
+        ))}
+      </ol>
+      <p class="small muted">{payment.methods}.</p>
+    </div>
+
+    <div class="acc fees__acc" data-reveal>
+      <details data-track="fees_details_open" data-location="cancellation">
+        <summary>Cancellation &amp; rescheduling <span class="pm" aria-hidden="true"></span></summary>
+        <div class="acc__body">
+          <table class="cancel">
+            <caption class="visually-hidden">Refunds if you cancel</caption>
+            <thead><tr><th scope="col">If you cancel…</th><th scope="col">Refund</th></tr></thead>
+            <tbody>{payment.cancellation.map((c) => <tr><th scope="row">{c.when}</th><td>{c.refund}</td></tr>)}</tbody>
+          </table>
+          <p><strong>Rescheduling:</strong> {payment.rescheduling}</p>
+        </div>
+      </details>
+      <details data-track="fees_details_open" data-location="funding">
+        <summary>Funding your stay <span class="pm" aria-hidden="true"></span></summary>
+        <div class="acc__body">
+          <p>Nocefresca can’t provide fellowships at the moment. If you are selected, you receive a <strong>formal invitation letter</strong> and, if needed, an <strong>official residency plan with a personalised budget</strong> to support applications to grants, foundations or employers.</p>
+          <p>That’s also why the open call is published a year ahead: to give you time to find funding. In the form, you’ll say whether you are self-funded, already have a grant, or are applying for one.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="fees__cta" data-reveal>
+      <ApplyButton location="fees" size="lg" />
+      <p class="small muted">Full details on the <a class="link" href={links.fees} data-track="outbound_click" data-location="fees_source">original fees page</a>.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .options { display: grid; gap: 0.75rem; }
+  .option { display: flex; flex-direction: column; gap: 0.6rem; padding: 1.4rem; background: var(--c-white); border-radius: var(--radius); box-shadow: inset 0 0 0 1px var(--c-line); }
+  .option__id { font-family: var(--f-display); font-size: 0.875rem; font-weight: 500; color: var(--c-terracotta-ink); }
+  .option__price { display: grid; gap: 0.2rem; }
+  .option__price .num { font-size: clamp(2.25rem, 1.8rem + 1.6vw, 3rem); font-weight: 500; letter-spacing: -0.035em; line-height: 1; color: var(--c-burgundy); }
+  .option__per { font-family: var(--f-display); font-size: 0.9375rem; color: var(--c-muted); }
+  .option__title { font-size: 1.1875rem; line-height: 1.2; }
+  .option__specs { display: grid; gap: 0.45rem; padding-block: 0.75rem; border-block: 1px solid var(--c-line); }
+  .option__specs div { display: grid; grid-template-columns: 4.75rem minmax(0, 1fr); gap: 0.5rem; }
+  .option__specs dt { font-family: var(--f-display); font-size: 0.8125rem; color: var(--c-muted); padding-top: 0.15em; }
+  .option__specs dd { margin: 0; font-size: 0.9375rem; line-height: 1.4; }
+  .option__best { font-size: 0.9375rem; line-height: 1.4; }
+  .option__best span { display: block; font-family: var(--f-display); font-size: 0.8125rem; color: var(--c-muted); }
+  .option__more { margin-top: auto; }
+  .option__more summary { cursor: pointer; font-family: var(--f-display); font-size: 0.9375rem; font-weight: 500; color: var(--c-burgundy); min-height: 2.75rem; display: flex; align-items: center; gap: 0.4rem; list-style: none; }
+  .option__more summary::-webkit-details-marker { display: none; }
+  .option__more summary::after { content: '+'; font-size: 1.25rem; line-height: 1; }
+  .option__more[open] summary::after { content: '–'; }
+  .fees__guest { margin-top: 1.25rem; max-width: 60ch; color: var(--c-muted); }
+
+  .incl { display: grid; gap: var(--gap); margin-top: clamp(3rem, 2rem + 3vw, 4.5rem); }
+  .incl__col { padding: clamp(1.5rem, 1rem + 2vw, 2.25rem); border-radius: var(--radius); box-shadow: inset 0 0 0 1.5px var(--c-line-strong); }
+  .incl__col--yes { background: var(--c-ochre-soft); box-shadow: none; }
+  .incl h3 { font-size: 1.375rem; margin-bottom: 1rem; }
+  .incl__h-extras { margin-top: 1.75rem; }
+  .extras { display: grid; gap: 0.9rem; }
+  .extras dt { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; }
+  .extras dt .num { font-weight: 400; color: var(--c-ink); font-size: 0.9375rem; }
+  .extras dd { margin: 0.15rem 0 0; }
+
+  .pay { margin-top: clamp(3rem, 2rem + 3vw, 4.5rem); }
+  .pay h3 { margin-bottom: 1.25rem; }
+  .pay__steps { list-style: none; padding: 0; display: grid; gap: 1.25rem; margin-bottom: 1rem; }
+  .pay__steps li { display: grid; gap: 0.25rem; position: relative; padding-left: 3rem; }
+  .pay__n { position: absolute; left: 0; top: 0; width: 2.25rem; height: 2.25rem; display: grid; place-items: center; border-radius: 50%; background: var(--c-burgundy); color: var(--c-paper); font-size: 0.8125rem; }
+  .pay__steps strong { font-family: var(--f-display); font-weight: 500; font-size: 1.125rem; color: var(--c-burgundy); }
+  .fees__acc { margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem); }
+  .cancel { width: 100%; border-collapse: collapse; font-size: var(--fs-small); }
+  .cancel th, .cancel td { text-align: left; padding: 0.7rem 0.75rem 0.7rem 0; border-bottom: 1px solid var(--c-line); vertical-align: top; }
+  .cancel thead th { font-family: var(--f-display); font-size: 0.8125rem; font-weight: 500; color: var(--c-muted); }
+  .cancel tbody th { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); width: 40%; }
+  .fees__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: clamp(2rem, 1.5rem + 2vw, 3rem); }
+
+  @media (min-width: 40rem) and (max-width: 74.99rem) { .options { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 60rem) {
+    .incl { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .pay__steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
+    .pay__steps li { padding-left: 0; padding-top: 3.25rem; }
+    .pay__steps li::before { content: ''; position: absolute; left: 3rem; right: 0.5rem; top: 1.05rem; height: 2px; background-image: radial-gradient(circle, var(--c-terracotta) 1.4px, transparent 1.6px); background-size: 9px 2px; background-repeat: repeat-x; }
+    .pay__steps li:last-child::before { display: none; }
+  }
+  @media (min-width: 75rem) { .options { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+</style>

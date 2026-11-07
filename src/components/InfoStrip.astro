@@ -1,0 +1,54 @@
+---
+import StatusBadge from './StatusBadge.astro';
+import { status, statusCopy, fees } from '../content/opencall';
+import { euro } from '../lib/format';
+import contoursLight from '../generated/contours-light-b.svg?url';
+
+const minFee = Math.min(...fees.map((f) => f.price));
+const items = [
+  { k: 'When', v: 'Mar–Jun & Sep–Dec 2027', s: 'Six four-week periods', html: '<span class="nowrap">Mar–Jun</span> &amp; <span class="nowrap">Sep–Dec 2027</span>' },
+  { k: 'How long', v: '1, 2 or 3 months', s: 'Up to 7 artists at a time' },
+  { k: 'Fee', v: `From ${euro(minFee)} a month`, s: 'Private studio + housing included', href: '#fees' },
+  { k: 'Where', v: 'Milis, Sardinia', s: '19 km from the west coast', href: '#milis' },
+];
+---
+<section class="strip" aria-label="Open Call 2027 at a glance">
+  <span class="contours" style={`background-image:url(${contoursLight})`} aria-hidden="true"></span>
+  <div class="container strip__inner">
+    <div class="strip__status">
+      <span class="strip__k">Application status</span>
+      <StatusBadge variant="inline" />
+      <a class="strip__more link" href="#dates" data-track="secondary_cta_click" data-location="strip_status">{statusCopy[status.state].line}</a>
+    </div>
+    <dl class="strip__facts">
+      {items.map((i) => (
+        <div class="strip__item">
+          <dt class="strip__k">{i.k}</dt>
+          {i.html ? <dd class="strip__v num" set:html={i.html} /> : <dd class="strip__v num">{i.v}</dd>}
+          <dd class="strip__s">{i.s}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .strip { position: relative; background: var(--c-ochre); color: var(--c-ink); overflow: hidden; }
+  .strip .contours { opacity: 0.8; }
+  .strip__inner { position: relative; display: grid; gap: 1.25rem; padding-block: 1.5rem 1.75rem; }
+  .strip__k { display: block; font-family: var(--f-display); font-size: 0.8125rem; font-weight: 500; color: var(--c-burgundy); margin-bottom: 0.3rem; }
+  .strip__status { display: grid; gap: 0.15rem; padding-bottom: 1.1rem; border-bottom: 1px solid var(--c-line-strong); }
+  .strip__status :global(.status--inline) { font-size: 1.0625rem; color: var(--c-ink); }
+  .strip__status :global(.status .dot) { color: var(--c-olive); }
+  .strip__more { font-family: var(--f-display); font-size: 0.9375rem; color: var(--c-ink); text-decoration-color: rgb(62 31 34 / 0.4); width: fit-content; }
+  .strip__facts { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 1.25rem; }
+  .strip__item { min-width: 0; }
+  .strip__v { margin: 0; font-size: 1.125rem; font-weight: 500; line-height: 1.2; color: var(--c-ink); letter-spacing: -0.01em; }
+  .strip__s { margin: 0.2rem 0 0; font-size: 0.9375rem; line-height: 1.35; color: var(--c-ink); }
+  @media (min-width: 60rem) {
+    .strip__inner { grid-template-columns: minmax(0, 1.25fr) minmax(0, 4fr); gap: 2rem; padding-block: 1.75rem; align-items: start; }
+    .strip__status { padding: 0 2rem 0 0; border-bottom: 0; border-right: 1px solid var(--c-line-strong); }
+    .strip__facts { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; }
+    .strip__v { font-size: 1.25rem; }
+  }
+</style>

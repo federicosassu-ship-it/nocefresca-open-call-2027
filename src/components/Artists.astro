@@ -1,0 +1,148 @@
+---
+import { Picture, Image } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import Rail from './Rail.astro';
+import ApplyButton from './ApplyButton.astro';
+import Arrow from './Arrow.astro';
+import { img } from '../lib/images';
+import { testimonials, letter, residents2026, stats, press, links } from '../content/opencall';
+import contoursLight from '../generated/contours-light.svg?url';
+
+const network = [
+  { src: 'brand/net-alliance.png', alt: 'Alliance of Artists Communities', href: 'https://artistcommunities.org/', w: 150 },
+  { src: 'brand/net-resartis.png', alt: 'Res Artis', href: 'https://resartis.org/', w: 140 },
+  { src: 'brand/net-air.png', alt: 'AiR — Art in Residence Italy', href: 'https://www.artinresidence.it/it/', w: 132 },
+];
+---
+<section class="section artists" id="artists" aria-labelledby="artists-title">
+  <div class="container">
+    <SectionHead nr="08" kicker="Artists" id="artists-title" split
+      title="In the words of past residents."
+      lead="Writers, painters, composers, filmmakers, designers — from 30+ countries. Here is what they say, in their own words." />
+
+    <figure class="letter" data-reveal>
+      <div class="letter__media media">
+        <Picture src={img('life/writer-wall.jpg')} formats={['webp']} widths={[480, 800, 1100]} sizes="(min-width: 60rem) 40vw, 92vw" quality={70} alt="A resident in overalls stands in her studio in front of a wall covered with pinned notes." loading="lazy" />
+      </div>
+      <div class="letter__body">
+        <span class="contours" style={`background-image:url(${contoursLight})`} aria-hidden="true"></span>
+        <p class="letter__kicker">Letter to inquiring artists</p>
+        <blockquote>
+          <p class="quote letter__lead">{letter.quotes.lead}</p>
+          <p class="quote letter__more">{letter.quotes.middle}</p>
+          <p class="quote letter__more">{letter.quotes.group}</p>
+        </blockquote>
+        <figcaption>
+          <span class="letter__who"><strong>{letter.author}</strong> {letter.role}</span>
+          <a class="text-link" href={links.letterMakenzie} data-track="outbound_click" data-location="letter_full">Read the full letter<Arrow size={16} /></a>
+        </figcaption>
+      </div>
+    </figure>
+
+    <Rail label="Testimonials" id="rail-voices" track="voices" class="voices">
+      {testimonials.map((t) => (
+        <figure class="voice">
+          <div class="voice__head">
+            <Image src={img(`people/${t.portrait}`)} alt="" width={64} height={64} densities={[1, 2]} format="webp" class="voice__face" loading="lazy" />
+            <figcaption><strong>{t.name}</strong><span>{t.role} · {t.country}</span></figcaption>
+          </div>
+          <blockquote><p class="voice__quote">“{t.quote}”</p></blockquote>
+          <a class="voice__link small link" href={t.url} data-track="outbound_click" data-location={`voice_${t.id}`} rel="noopener">See {t.name.split(' ')[0]}’s work<span class="visually-hidden"> (external site)</span></a>
+        </figure>
+      ))}
+    </Rail>
+
+    <ul class="stats" role="list" data-reveal>
+      {stats.map((s) => <li><span class="stats__v num">{s.value}</span><span class="stats__l">{s.label}</span></li>)}
+    </ul>
+
+    <div class="residents">
+      <div class="residents__head" data-reveal>
+        <h3>Artists in residence, 2026</h3>
+        <a class="text-link" href={links.artists} data-track="outbound_click" data-location="all_artists">See all past residents<Arrow size={16} /></a>
+      </div>
+      <Rail label="Artists in residence in 2026" id="rail-residents" track="residents">
+        {residents2026.map((r) => (
+          <figure class="resident">
+            <div class="media resident__media"><Picture src={img(`residents/${r.img}`)} formats={['webp']} widths={[240, 400]} sizes="12rem" quality={68} alt={`Portrait of ${r.name}`} loading="lazy" /></div>
+            <figcaption><strong>{r.name}</strong><span>{r.role}</span><span class="muted">{r.country}</span></figcaption>
+          </figure>
+        ))}
+      </Rail>
+    </div>
+
+    <div class="trust" data-reveal>
+      <div class="trust__col">
+        <p class="label">Network</p>
+        <ul class="trust__logos" role="list">
+          {network.map((n) => (
+            <li><a href={n.href} data-track="outbound_click" data-location="network" rel="noopener"><Image src={img(n.src)} alt={n.alt} width={n.w} densities={[1, 2]} format="webp" loading="lazy" /></a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="trust__col">
+        <p class="label">Written about in</p>
+        <ul class="trust__press" role="list">
+          {press.map((p) => <li><a class="link" href={p.url} data-track="outbound_click" data-location="press" rel="noopener"><strong>{p.outlet}</strong></a> <span class="small muted" lang="it">{p.title}</span></li>)}
+        </ul>
+      </div>
+    </div>
+
+    <div class="artists__cta" data-reveal>
+      <ApplyButton location="artists" size="lg" label="Apply for 2027" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .letter { display: grid; margin: 0 0 clamp(2.5rem, 2rem + 2vw, 4rem); border-radius: var(--radius); overflow: hidden; background: var(--c-ochre); }
+  .letter__media { aspect-ratio: 4 / 3; border-radius: 0; }
+  .letter__body { position: relative; padding: clamp(1.75rem, 1.2rem + 2.5vw, 3.5rem); display: flex; flex-direction: column; gap: 1.25rem; }
+  .letter__body .contours { opacity: 0.6; }
+  .letter__body > * { position: relative; }
+  .letter__kicker { font-family: var(--f-display); font-size: 0.875rem; font-weight: 500; color: var(--c-burgundy); }
+  .letter blockquote { margin: 0; display: grid; gap: 1rem; }
+  .letter__lead { font-size: clamp(1.875rem, 1.3rem + 2.4vw, 3.25rem); line-height: 1.08; color: var(--c-burgundy); }
+  .letter__more { font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); color: var(--c-ink); line-height: 1.4; }
+  .letter figcaption { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1.5rem; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--c-line-strong); }
+  .letter__who { font-family: var(--f-display); font-size: 0.9375rem; display: grid; color: var(--c-ink); }
+  .letter__who strong { font-weight: 600; color: var(--c-burgundy); }
+
+  :global(.voices .rail) { grid-auto-columns: min(84vw, 24rem); }
+  @media (min-width: 60rem) { :global(.voices .rail) { grid-auto-columns: minmax(0, 1fr); } }
+  .voice { margin: 0; display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem; background: var(--c-white); border-radius: var(--radius); box-shadow: inset 0 0 0 1px var(--c-line); height: 100%; }
+  .voice__head { display: flex; align-items: center; gap: 0.9rem; }
+  .voice__face { width: 3.5rem; height: 3.5rem; border-radius: 50%; object-fit: cover; flex: none; }
+  .voice figcaption { display: grid; font-family: var(--f-display); line-height: 1.25; }
+  .voice figcaption strong { font-weight: 600; color: var(--c-burgundy); font-size: 1.0625rem; }
+  .voice figcaption span { font-size: 0.875rem; color: var(--c-muted); }
+  .voice blockquote { margin: 0; flex: 1; }
+  .voice__quote { font-size: 1.0625rem; line-height: 1.5; }
+  .voice__link { font-family: var(--f-display); }
+
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: clamp(2.5rem, 2rem + 2vw, 4rem) 0; padding: 1.75rem 0; border-block: 1px solid var(--c-line-strong); }
+  .stats li { display: grid; gap: 0.25rem; }
+  .stats__v { font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.75rem); font-weight: 500; line-height: 1; letter-spacing: -0.035em; color: var(--c-burgundy); }
+  .stats__l { font-family: var(--f-display); font-size: 0.9375rem; color: var(--c-ink); }
+
+  .residents__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem; margin-bottom: 1.25rem; }
+  .residents :global(.rail) { grid-auto-columns: 11rem; }
+  .resident { margin: 0; }
+  .resident__media { aspect-ratio: 1; }
+  .resident figcaption { display: grid; gap: 0.1rem; margin-top: 0.6rem; font-family: var(--f-display); font-size: 0.875rem; line-height: 1.3; color: var(--c-ink); }
+  .resident figcaption strong { font-weight: 600; color: var(--c-burgundy); font-size: 0.9375rem; }
+
+  .trust { display: grid; gap: 2rem; margin-top: clamp(3rem, 2rem + 3vw, 4.5rem); }
+  .trust__logos { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 2.25rem; margin-top: 0.75rem; }
+  .trust__logos img { height: auto; max-height: 2.75rem; width: auto; mix-blend-mode: multiply; }
+  .trust__logos a { display: block; padding: 0.25rem 0; }
+  .trust__press { display: grid; gap: 0.6rem; margin-top: 0.75rem; }
+  .trust__press strong { font-family: var(--f-display); font-weight: 500; }
+  .artists__cta { margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem); }
+  @media (min-width: 40rem) { .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  @media (min-width: 60rem) {
+    .letter { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+    .letter__media { aspect-ratio: auto; min-height: 100%; }
+    .trust { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; }
+  }
+</style>

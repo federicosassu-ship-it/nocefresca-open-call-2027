@@ -1,0 +1,96 @@
+---
+// Pre-projected Natural Earth geometry (scripts/build-map.mjs) — zero runtime JS.
+import map from '../generated/map.json';
+const { ctx, detail } = map;
+const p = detail.points as Record<string, [number, number]>;
+const plane = 'M0 -4.2 L1 -1.2 L4.2 0.6 L4.2 1.5 L1 0.6 L0.7 3 L1.8 3.9 L1.8 4.6 L0 4 L-1.8 4.6 L-1.8 3.9 L-0.7 3 L-1 0.6 L-4.2 1.5 L-4.2 0.6 L-1 -1.2 Z';
+---
+<figure class="map" aria-labelledby="map-cap">
+  <div class="map__frame">
+    <svg class="map__detail" viewBox={`0 0 ${detail.w} ${detail.h}`} role="img" aria-labelledby="map-title map-desc">
+      <title id="map-title">Map of Sardinia showing Milis</title>
+      <desc id="map-desc">Milis lies in central-western Sardinia, at the foot of the Montiferru range, about 20 km north of Oristano and 19 km from the west coast. Cagliari airport is about 100 km south; Olbia airport is in the north-east.</desc>
+      <path d={detail.sardinia} class="map__island" />
+      <!-- route: Cagliari → (train) → Oristano → (bus, ~30 min) → Milis -->
+      <path d={`M${p.cagliari[0]} ${p.cagliari[1]} Q ${p.cagliari[0] - 30} ${(p.cagliari[1] + p.oristano[1]) / 2 + 6} ${p.oristano[0]} ${p.oristano[1]} L ${p.milis[0]} ${p.milis[1]}`} class="map__route" />
+      <path d={`M${p.milis[0] - 6} ${p.milis[1] - 1} L ${p.coast[0] + 4} ${p.coast[1] - 1}`} class="map__sea" marker-end="url(#arrowhead)" />
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="#682b33" />
+        </marker>
+      </defs>
+
+      <g class="map__pt">
+        <circle cx={p.oristano[0]} cy={p.oristano[1]} r="3.2" />
+        <text x={p.oristano[0] + 9} y={p.oristano[1] + 5}>Oristano</text>
+      </g>
+      <g class="map__pt map__pt--air">
+        <path d={plane} transform={`translate(${p.cagliari[0]} ${p.cagliari[1]}) scale(1.6) rotate(135)`} />
+        <text x={p.cagliari[0] + 14} y={p.cagliari[1] + 9}>Cagliari</text>
+      </g>
+      <g class="map__pt map__pt--air">
+        <path d={plane} transform={`translate(${p.olbia[0]} ${p.olbia[1]}) scale(1.6) rotate(45)`} />
+        <text x={p.olbia[0] - 10} y={p.olbia[1] - 9} text-anchor="end">Olbia</text>
+      </g>
+      <text class="map__area" x={p.montiferru[0] + 6} y={p.montiferru[1] - 10}>Montiferru</text>
+      <text class="map__small" x={p.coast[0] - 8} y={p.coast[1] + 20} text-anchor="end">sea · 19 km</text>
+      <text class="map__small" x={(p.cagliari[0] + p.oristano[0]) / 2 - 18} y={(p.cagliari[1] + p.oristano[1]) / 2 + 4} text-anchor="end">train</text>
+      <!-- inset: where Sardinia sits in Europe -->
+      <svg x="424" y="28" width="136" height="119" viewBox={`0 0 ${ctx.w} ${ctx.h}`} aria-hidden="true" class="map__ctx">
+        <rect width={ctx.w} height={ctx.h} class="map__ctx-sea" />
+        <path d={ctx.land} class="map__ctx-land" />
+        <path d={ctx.sardinia} class="map__ctx-sard" />
+        <circle cx={ctx.focus[0]} cy={ctx.focus[1]} r="48" class="map__ctx-ring" />
+      </svg>
+      <rect x="424" y="28" width="136" height="119" class="map__ctx-frame" />
+      <text x="424" y="166" class="map__legend-t">Europe</text>
+      <g class="map__legend" transform="translate(424 200)">
+        <path d="M0 0 H34" class="map__route" />
+        <text x="44" y="4">train + bus</text>
+        <path d={plane} transform="translate(17 26) scale(1.5) rotate(90)" class="map__plane" />
+        <text x="44" y="30">airport</text>
+      </g>
+      <g class="map__milis">
+        <circle cx={p.milis[0]} cy={p.milis[1]} r="11" class="map__halo" />
+        <circle cx={p.milis[0]} cy={p.milis[1]} r="5.2" />
+        <text x={p.milis[0] + 13} y={p.milis[1] - 4}>Milis</text>
+        <text x={p.milis[0] + 13} y={p.milis[1] + 14} class="map__sub">Nocefresca</text>
+      </g>
+    </svg>
+
+  </div>
+  <figcaption id="map-cap" class="caption">Europe → Sardinia → Milis. 40° 03′ N, 8° 38′ E.</figcaption>
+</figure>
+
+<style>
+  .map { margin: 0; }
+  .map__frame { position: relative; background: var(--c-ochre-soft); border-radius: var(--radius); padding: 0.75rem; aspect-ratio: 580 / 600; }
+  .map__detail { width: 100%; height: 100%; overflow: visible; }
+  .map__island { fill: var(--c-paper); stroke: var(--c-burgundy); stroke-width: 1; stroke-linejoin: round; }
+  .map__route { fill: none; stroke: var(--c-terracotta); stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 0.1 6; }
+  .map__sea { fill: none; stroke: var(--c-burgundy); stroke-width: 1.2; }
+  .map__pt circle, .map__pt path { fill: var(--c-burgundy); }
+  .map__pt text, .map__small, .map__area, .map__milis text { font-family: var(--f-display); fill: var(--c-ink); }
+  .map__pt text { font-size: 13px; font-weight: 500; }
+  .map__small { font-size: 11px; fill: var(--c-muted); }
+  .map__area { font-size: 12px; font-style: italic; font-family: var(--f-text); fill: var(--c-muted); }
+  .map__milis circle { fill: var(--c-burgundy); }
+  .map__milis .map__halo { fill: var(--c-burgundy); opacity: 0.18; }
+  .map__milis text { font-size: 17px; font-weight: 600; fill: var(--c-burgundy); }
+  .map__milis .map__sub { font-size: 11px; font-weight: 500; fill: var(--c-muted); }
+  .map__ctx-frame { fill: none; stroke: var(--c-line-strong); stroke-width: 1; }
+  .map__legend text, .map__legend-t { font-family: var(--f-display); font-size: 12px; fill: var(--c-muted); }
+  .map__plane { fill: var(--c-burgundy); }
+  /* on narrow screens the SVG scales down ~0.6×: enlarge labels in user units so they stay ≥12px */
+  @media (max-width: 40rem) {
+    .map__pt text { font-size: 21px; }
+    .map__milis text { font-size: 27px; }
+    .map__milis .map__sub { font-size: 16px; }
+    .map__small, .map__legend text, .map__legend-t { font-size: 17px; }
+    .map__area { font-size: 18px; }
+  }
+  .map__ctx-sea { fill: var(--c-ochre); }
+  .map__ctx-land { fill: var(--c-paper); }
+  .map__ctx-sard { fill: var(--c-burgundy); }
+  .map__ctx-ring { fill: none; stroke: var(--c-burgundy); stroke-width: 2.5; }
+</style>

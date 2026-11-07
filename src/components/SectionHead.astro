@@ -1,0 +1,10 @@
+---
+interface Props { nr: string; kicker: string; title: string; lead?: string; split?: boolean; id?: string; align?: 'left' | 'center' }
+const { nr, kicker, title, lead, split = false, id } = Astro.props;
+---
+<header class:list={['section-head', { 'section-head--split': split }]}>
+  <p class="nr" data-reveal><b>Nr. {nr}</b><span>{kicker}</span></p>
+  <h2 id={id} data-reveal style="--d:60ms" set:html={title} />
+  {lead && <p class="lead" data-reveal style="--d:120ms" set:html={lead} />}
+  <slot />
+</header>

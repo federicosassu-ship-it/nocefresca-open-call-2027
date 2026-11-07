@@ -1,0 +1,76 @@
+---
+import SectionHead from './SectionHead.astro';
+import StatusBadge from './StatusBadge.astro';
+import ApplyButton from './ApplyButton.astro';
+import Arrow from './Arrow.astro';
+import { periods, links } from '../content/opencall';
+import { shortDate, nights } from '../lib/format';
+import contoursLight from '../generated/contours-light.svg?url';
+
+const availabilityLabel = { available: 'Places available', few: 'Few places left', full: 'Full', unknown: '' } as const;
+const spring = periods.filter((p) => p.arrive < '2027-07-01');
+const autumn = periods.filter((p) => p.arrive >= '2027-07-01');
+---
+<section class="section section--ochre dates" id="dates" aria-labelledby="dates-title">
+  <span class="contours" style={`background-image:url(${contoursLight})`} aria-hidden="true"></span>
+  <div class="container dates__inner">
+    <SectionHead nr="10" kicker="Dates & availability" id="dates-title" split
+      title="Six periods in 2027. Stay one, two or three months."
+      lead="Each period lasts four weeks. The residency follows the seasons and closes in January, February, July and August." />
+
+    <div class="dates__status" data-reveal><StatusBadge variant="block" /></div>
+
+    {[{ name: 'Spring', list: spring }, { name: 'Autumn', list: autumn }].map((season) => (
+      <div class="season">
+        <h3 class="season__name" data-reveal>{season.name} 2027</h3>
+        <ul class="periods" role="list">
+          {season.list.map((p, i) => (
+            <li class="period" data-reveal style={`--d:${i * 70}ms`}>
+              <p class="period__label">{p.label}</p>
+              <p class="period__dates num"><time datetime={p.arrive}>{shortDate(p.arrive)}</time> <Arrow size={16} /> <time datetime={p.depart}>{shortDate(p.depart)}</time></p>
+              <p class="period__meta">{nights(p.arrive, p.depart)} nights · {p.weather}</p>
+              <p class="period__hl">{p.highlights}</p>
+              {p.availability !== 'unknown' && <p class={`period__avail period__avail--${p.availability}`}>{availabilityLabel[p.availability]}</p>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+
+    <div class="dates__foot">
+      <ul class="dashes small dates__notes" role="list" data-reveal>
+        <li>In the form you say how many months you’d like (one, two or three) and choose up to three preferred starting months. If selected, we’ll do our best to meet your request — periods may occasionally change, with notice, to design a balanced group.</li>
+        <li>Can’t come for a month? <a class="link" href={links.shortStays} data-track="outbound_click" data-location="dates_shortstays">Nocefreschissima</a> offers two-week short stays alongside the residents.</li>
+      </ul>
+      <div class="dates__cta" data-reveal>
+        <ApplyButton location="dates" size="lg" />
+        <a class="text-link" href={links.whichMonth} data-track="outbound_click" data-location="which_month">Which month should I choose?<Arrow size={16} /></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dates { overflow: hidden; }
+  .dates > .contours { opacity: 0.55; }
+  .dates__inner { position: relative; }
+  .dates .nr span, .dates .section-head .lead { color: var(--c-ink); }
+  .dates__status { margin-bottom: clamp(2rem, 1.5rem + 2vw, 3rem); max-width: 46rem; }
+  .season + .season { margin-top: 2rem; }
+  .season__name { font-size: 1.25rem; margin-bottom: 0.9rem; }
+  .periods { display: grid; gap: 0.75rem; }
+  .period { background: var(--c-paper); border-radius: var(--radius); padding: 1.25rem 1.35rem 1.4rem; display: grid; gap: 0.35rem; align-content: start; }
+  .period__label { font-family: var(--f-display); font-size: 0.875rem; font-weight: 500; color: var(--c-terracotta-ink); }
+  .period__dates { display: flex; align-items: center; gap: 0.5rem; font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem); font-weight: 500; color: var(--c-burgundy); letter-spacing: -0.02em; line-height: 1.1; }
+  .period__dates :global(.arrow) { color: var(--c-terracotta); }
+  .period__meta { font-family: var(--f-display); font-size: 0.875rem; color: var(--c-muted); }
+  .period__hl { font-size: var(--fs-small); line-height: 1.45; margin-top: 0.35rem; }
+  .period__avail { justify-self: start; margin-top: 0.5rem; font-family: var(--f-display); font-size: 0.8125rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--c-ochre-soft); color: var(--c-ink); }
+  .period__avail--full { background: var(--c-sand); text-decoration: line-through; }
+  .dates__foot { display: grid; gap: 2rem; margin-top: clamp(2rem, 1.5rem + 2vw, 3rem); }
+  .dates__notes { max-width: 46rem; }
+  .dates__notes li::before { background: var(--c-burgundy); }
+  .dates__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+  @media (min-width: 40rem) { .periods { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 60rem) { .dates__foot { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: end; } .dates__cta { justify-content: flex-end; } }
+</style>

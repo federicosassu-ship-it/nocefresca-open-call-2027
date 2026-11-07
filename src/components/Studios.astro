@@ -1,0 +1,137 @@
+---
+import { Picture } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import Rail from './Rail.astro';
+import { img } from '../lib/images';
+import { studios, equipment, links } from '../content/opencall';
+
+const bagnolo = [
+  { src: 'studios/bagnolo-12.jpg', alt: 'The stone courtyard of Casa Bagnolo with a large tree, tables and chairs in the shade.' },
+  { src: 'studios/bagnolo-4.jpg', alt: 'Ochre-yellow communal rooms connected by basalt stone arches.' },
+  { src: 'studios/bagnolo-6.jpg', alt: 'A communal lounge with a fireplace, armchairs and a projection screen.' },
+  { src: 'studios/bagnolo-1.jpg', alt: 'A shared desk area with a yellow chair, a basalt arch and framed prints.' },
+  { src: 'studios/bagnolo-5.jpg', alt: 'The refreshment point against a textured stone wall, with a kettle and lamps.' },
+  { src: 'studios/bagnolo-13.jpg', alt: 'Bicycles parked by a wooden gate in the courtyard.' },
+];
+---
+<section class="section studios" id="studios" aria-labelledby="studios-title">
+  <div class="container">
+    <SectionHead nr="06" kicker="Studios" id="studios-title" split
+      title="Your space to create."
+      lead="Every resident gets a private studio with 24/7 access. Studios are spread across three houses and allocated according to your medium: larger walls for big canvases, quieter rooms for composers, desks for writers." />
+
+    <div class="tabs" data-tabs="studios">
+      <div class="tabs__list" role="tablist" aria-label="Choose a studio" hidden data-tablist>
+        {studios.map((s, i) => (
+          <button class="tab" role="tab" type="button" id={`tab-${s.id}`} aria-controls={`panel-${s.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-tab={s.id}>
+            <span class="tab__name">{s.name}</span>
+            <span class="tab__meta">{s.house === 'Orchard' ? 'Countryside' : s.house} · {s.size}</span>
+          </button>
+        ))}
+      </div>
+
+      {studios.map((s) => (
+        <div class="studio" role="tabpanel" id={`panel-${s.id}`} aria-labelledby={`tab-${s.id}`} tabindex="-1" data-panel={s.id}>
+          <div class="studio__gallery">
+            <Rail label={`Photos of ${s.name}`} id={`rail-${s.id}`} track={`studio_${s.id}`}>
+              {s.images.map((file, j) => (
+                <div class="studio__slide media">
+                  <Picture src={img(`studios/${file}`)} formats={['webp']} widths={[480, 800, 1200]} sizes="(min-width: 60rem) 52vw, 92vw" quality={70} alt={`${s.name}, ${s.house === 'Orchard' ? 'Orchard Studio Cottage' : s.house} — photo ${j + 1} of ${s.images.length}`} loading="lazy" />
+                </div>
+              ))}
+            </Rail>
+          </div>
+          <div class="studio__info">
+            <p class="label">{s.house === 'Orchard' ? 'In the countryside, 20 min walk' : s.house}</p>
+            <h3>{s.name}</h3>
+            <ul class="chips" role="list">
+              <li class="chip chip--strong">{s.size}</li>
+              {s.specs.map((x) => <li class="chip">{x}</li>)}
+            </ul>
+            <p class="studio__best"><span>Best for</span> {s.bestFor}</p>
+            <p class="studio__text">{s.text}</p>
+            {s.note && <p class="studio__note"><strong>Good to know:</strong> {s.note}</p>}
+            <p class="studio__opts small">Fee option{s.options.length > 1 ? 's' : ''}: <a class="link" href="#fees" data-track="secondary_cta_click" data-location={`studio_${s.id}_fees`}>{s.options.join(', ')}</a></p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="hub">
+      <div class="hub__text" data-reveal>
+        <p class="nr"><b>Casa Bagnolo</b><span>the heart of the residency</span></p>
+        <h3>A shared house in the historic centre.</h3>
+        <p>Studios Ramiro, Marco and Nick, a library, a refreshment point for coffee, two reading and writing desks, and a sofa corner for chats and film screenings. Outside, a courtyard with tables in the shade and armchairs under the palms — and a small workshop shed on request. It’s also where Antonella runs the meal service.</p>
+      </div>
+      <Rail label="Photos of Casa Bagnolo" id="rail-bagnolo" track="bagnolo" class="hub__rail">
+        {bagnolo.map((p) => (
+          <div class="hub__slide media"><Picture src={img(p.src)} formats={['webp']} widths={[480, 800, 1200]} sizes="(min-width: 60rem) 40vw, 85vw" quality={68} alt={p.alt} loading="lazy" /></div>
+        ))}
+      </Rail>
+    </div>
+
+    <div class="acc equip" data-reveal>
+      <details data-track="accordion_open" data-location="equipment">
+        <summary>Shared equipment &amp; tools — the full list <span class="pm" aria-hidden="true"></span></summary>
+        <div class="acc__body">
+          <div class="equip__grid">
+            {equipment.map((g) => (
+              <div class="equip__group"><h4>{g.group}</h4><ul class="dashes small" role="list">{g.items.map((it) => <li>{it}</li>)}</ul></div>
+            ))}
+          </div>
+          <p class="equip__note"><strong>Need something else?</strong> In these early years Nocefresca sets aside a budget for durable equipment — tell us what you need and we’ll evaluate it. Consumable materials are not included. <a class="link" href={links.equipment} data-track="outbound_click" data-location="equipment_source">Original list</a></p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tabs__list { display: flex; gap: 0.5rem; overflow-x: auto; scrollbar-width: none; margin: 0 calc(var(--gutter) * -1) 1.5rem; padding: 0.25rem var(--gutter); scroll-snap-type: x proximity; }
+  .tabs__list::-webkit-scrollbar { display: none; }
+  .tabs__list[hidden] { display: none; }
+  .tab { flex: none; scroll-snap-align: start; display: grid; gap: 0.15rem; text-align: left; padding: 0.6rem 0.85rem; min-height: 3.5rem; border-radius: var(--radius); box-shadow: inset 0 0 0 1px var(--c-line-strong); background: transparent; transition: background-color 0.2s, box-shadow 0.2s, color 0.2s; }
+  .tab__name { font-family: var(--f-display); font-weight: 500; font-size: 0.9375rem; color: var(--c-burgundy); white-space: nowrap; }
+  .tab__meta { font-family: var(--f-display); font-size: 0.75rem; color: var(--c-muted); white-space: nowrap; }
+  .tab:hover { box-shadow: inset 0 0 0 1.5px var(--c-burgundy); }
+  .tab[aria-selected='true'] { background: var(--c-burgundy); box-shadow: none; }
+  .tab[aria-selected='true'] .tab__name { color: var(--c-paper); }
+  .tab[aria-selected='true'] .tab__meta { color: rgb(246 241 231 / 0.8); }
+
+  .studio { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding-bottom: 2.5rem; }
+  .studio + .studio { border-top: 1px solid var(--c-line); padding-top: 2.5rem; } /* no-JS stacked view */
+  .js-tabs .studio + .studio { border-top: 0; padding-top: 0; }
+  .studio[hidden] { display: none; }
+  .studio:focus-visible { outline-offset: 8px; }
+  .studio__slide { width: min(88vw, 52rem); aspect-ratio: 3 / 2; }
+  .studio__info h3 { font-size: var(--fs-h2); line-height: 1; margin: 0.35rem 0 1rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; }
+  .chip { font-family: var(--f-display); font-size: 0.8125rem; font-weight: 500; padding: 0.35rem 0.65rem; border-radius: 999px; background: var(--c-sand); color: var(--c-ink); }
+  .chip--strong { background: var(--c-ochre); }
+  .studio__best { font-family: var(--f-display); font-weight: 500; font-size: 1.0625rem; color: var(--c-burgundy); margin-bottom: 0.75rem; }
+  .studio__best span { display: block; font-size: 0.8125rem; color: var(--c-muted); font-weight: 500; margin-bottom: 0.15rem; }
+  .studio__text { max-width: 44ch; }
+  .studio__note { margin-top: 1rem; padding: 0.8rem 1rem; background: var(--c-ochre-soft); border-radius: var(--radius); font-size: var(--fs-small); max-width: 46ch; }
+  .studio__note strong { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
+  .studio__opts { margin-top: 1rem; font-family: var(--f-display); color: var(--c-muted); }
+
+  .hub { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; margin-top: clamp(3rem, 2rem + 4vw, 6rem); padding-top: clamp(2.5rem, 2rem + 2vw, 4rem); border-top: 1px solid var(--c-line-strong); }
+  .hub__text h3 { margin: 0.5rem 0 1rem; }
+  .hub__text p:not(.nr) { max-width: 44ch; }
+  .hub__slide { width: min(85vw, 40rem); aspect-ratio: 3 / 2; }
+
+  .equip { margin-top: clamp(3rem, 2rem + 3vw, 5rem); }
+  .equip__grid { display: grid; gap: 1.5rem 2rem; }
+  .equip__group h4 { font-size: 1rem; margin-bottom: 0.5rem; }
+  .equip .acc__body { max-width: none; }
+  .equip__note { margin-top: 1.5rem !important; padding-top: 1.25rem; border-top: 1px solid var(--c-line); max-width: 60ch; font-size: var(--fs-small); }
+  @media (min-width: 40rem) { .equip__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 60rem) {
+    .tabs__list { flex-wrap: wrap; overflow: visible; margin: 0 0 2rem; padding: 0; gap: 0.4rem; }
+    .studio { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(2rem, 3vw, 4rem); align-items: start; padding-bottom: 0; }
+    .studio__slide { width: min(52vw, 48rem); }
+    .hub { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: start; gap: clamp(2rem, 3vw, 4rem); }
+    .hub__slide { width: min(40vw, 36rem); }
+    .equip__grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  }
+</style>

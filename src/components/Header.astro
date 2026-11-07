@@ -1,0 +1,81 @@
+---
+import { Image } from 'astro:assets';
+import ApplyButton from './ApplyButton.astro';
+import StatusBadge from './StatusBadge.astro';
+import { img } from '../lib/images';
+
+const nav = [
+  { href: '#glance', label: 'The residency' },
+  { href: '#milis', label: 'Milis' },
+  { href: '#studios', label: 'Studios' },
+  { href: '#dates', label: 'Dates' },
+  { href: '#fees', label: 'Fees' },
+  { href: '#faq', label: 'FAQ' },
+];
+---
+<header class="site-header" data-header>
+  <div class="container site-header__inner">
+    <a class="brand" href="#top" data-track="nav_click" data-location="logo">
+      <Image src={img('brand/logo.png')} alt="Nocefresca — artist residency in Sardinia" width={176} densities={[1, 2]} format="webp" loading="eager" />
+    </a>
+
+    <nav class="site-nav" aria-label="Page sections">
+      <ul role="list">
+        {nav.map((n) => <li><a href={n.href} data-track="nav_click" data-location={n.href.slice(1)}>{n.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <span class="hide-mobile"><ApplyButton location="header" /></span>
+      <button class="menu-btn hide-desktop" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+        <span class="menu-btn__label">Menu</span>
+        <span class="menu-btn__icon" aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" hidden data-menu>
+    <nav class="container" aria-label="Page sections (mobile)">
+      <ul role="list">
+        {nav.map((n) => <li><a href={n.href} data-menu-link data-track="nav_click" data-location={n.href.slice(1)}>{n.label}</a></li>)}
+      </ul>
+      <StatusBadge variant="chip" />
+      <ApplyButton location="mobile_menu" block size="lg" />
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header { position: absolute; inset: 0 0 auto 0; z-index: 50; }
+  .site-header__inner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: var(--header-h); }
+  .brand { display: block; flex: none; padding-block: 0.5rem; }
+  .brand img { width: 9.25rem; height: auto; }
+  .site-nav { display: none; }
+  .site-header__actions { display: flex; align-items: center; gap: 0.75rem; }
+
+  .menu-btn { display: inline-flex; align-items: center; gap: 0.6rem; min-height: 2.75rem; padding: 0 0.9rem; border-radius: 999px; background: rgb(246 241 231 / 0.9); color: var(--c-burgundy); font-family: var(--f-display); font-weight: 500; font-size: 0.9375rem; box-shadow: inset 0 0 0 1px var(--c-line); }
+  .menu-btn__icon { position: relative; width: 1.1rem; height: 0.7rem; }
+  .menu-btn__icon i { position: absolute; left: 0; right: 0; height: 1.5px; background: currentColor; transition: transform 0.3s var(--ease), top 0.3s var(--ease); }
+  .menu-btn__icon i:first-child { top: 0; }
+  .menu-btn__icon i:last-child { top: calc(100% - 1.5px); }
+  .menu-btn[aria-expanded='true'] .menu-btn__icon i:first-child { top: 50%; transform: rotate(45deg); }
+  .menu-btn[aria-expanded='true'] .menu-btn__icon i:last-child { top: 50%; transform: rotate(-45deg); }
+
+  .mobile-menu { background: var(--c-paper); border-bottom: 1px solid var(--c-line); box-shadow: 0 24px 40px -24px rgb(62 31 34 / 0.35); }
+  .mobile-menu nav { display: grid; gap: 1.25rem; padding-block: 0.5rem 1.5rem; }
+  .mobile-menu ul { display: grid; }
+  .mobile-menu li a { display: flex; align-items: center; min-height: 3.25rem; border-bottom: 1px solid var(--c-line); font-family: var(--f-display); font-size: 1.375rem; font-weight: 500; color: var(--c-burgundy); text-decoration: none; letter-spacing: -0.01em; }
+
+  @media (min-width: 60rem) {
+    .site-header { position: sticky; top: 0; background: var(--c-paper); transition: box-shadow 0.3s var(--ease); }
+    .site-header.is-scrolled { box-shadow: 0 1px 0 var(--c-line); }
+    .brand img { width: 11rem; }
+    .site-nav { display: block; }
+    .site-nav ul { display: flex; gap: clamp(0.75rem, 1.6vw, 2rem); }
+    .site-nav a { position: relative; display: inline-flex; align-items: center; min-height: 2.75rem; font-family: var(--f-display); font-size: 0.9375rem; font-weight: 500; color: var(--c-ink); text-decoration: none; }
+    .site-nav a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0.55rem; height: 1.5px; background: var(--c-burgundy); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease); }
+    .site-nav a:hover::after, .site-nav a[aria-current='true']::after { transform: scaleX(1); }
+    .site-nav a[aria-current='true'] { color: var(--c-burgundy); }
+    .mobile-menu { display: none !important; }
+  }
+</style>
