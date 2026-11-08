@@ -2,13 +2,14 @@
 import StatusBadge from './StatusBadge.astro';
 import { status, statusCopy, fees } from '../content/opencall';
 import { euro } from '../lib/format';
+import { page } from '../lib/paths';
 import contoursLight from '../generated/contours-light-b.svg?url';
 
 const minFee = Math.min(...fees.map((f) => f.price));
 const items = [
   { k: 'When', v: 'Mar–Jun & Sep–Dec 2027', s: 'Six four-week periods', html: '<span class="nowrap">Mar–Jun</span> &amp; <span class="nowrap">Sep–Dec 2027</span>' },
   { k: 'How long', v: '1, 2 or 3 months', s: 'Up to 7 artists at a time' },
-  { k: 'Fee', v: `From ${euro(minFee)} a month`, s: 'Private studio + housing included', href: '#fees' },
+  { k: 'Fee', v: `From ${euro(minFee)} a month`, s: 'Private studio + housing included', href: page('datesFees', 'fees') },
   { k: 'Where', v: 'Milis, Sardinia', s: '19 km from the west coast', href: '#milis' },
 ];
 ---
@@ -18,7 +19,7 @@ const items = [
     <div class="strip__status">
       <span class="strip__k">Application status</span>
       <StatusBadge variant="inline" />
-      <a class="strip__more link" href="#dates" data-track="secondary_cta_click" data-location="strip_status">{statusCopy[status.state].line}</a>
+      <a class="strip__more link" href={page('datesFees')} data-track="secondary_cta_click" data-location="strip_status">{statusCopy[status.state].line}</a>
     </div>
     <dl class="strip__facts">
       {items.map((i) => (

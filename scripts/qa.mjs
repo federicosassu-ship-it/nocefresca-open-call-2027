@@ -83,11 +83,11 @@ for (const [name, ctxOpts] of Object.entries({
     return sel && panelVisible && otherHidden && document.activeElement === tabs[1] ? 'ok' : `fail sel=${sel} vis=${panelVisible} hid=${otherHidden}`;
   });
   r.tabsKeyboard = tabsOk;
-  r.accordion = await page.evaluate(() => { const s = document.querySelector('#faq details summary'); s.click(); const ok = s.parentElement.open; s.click(); return ok ? 'ok' : 'fail'; });
+  r.accordion = await page.evaluate(() => { const s = document.querySelector('#faq details summary, .acc details summary'); s.click(); const ok = s.parentElement.open; s.click(); return ok ? 'ok' : 'fail'; });
   r.dataLayerAfterAccordion = await page.evaluate(() => window.dataLayer.filter((e) => e.event).slice(-3).map((e) => e.event));
 
   if (name === 'mobile') {
-    await page.evaluate(() => window.scrollTo(0, document.getElementById('glance').offsetTop));
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight * 0.4));
     await page.waitForTimeout(500);
     const midVisible = await page.evaluate(() => document.querySelector('[data-sticky-apply]').classList.contains('is-visible'));
     await page.evaluate(() => document.getElementById('final').scrollIntoView());
@@ -118,7 +118,7 @@ for (const [name, ctxOpts] of Object.entries({
   const tracking = [];
   page.on('request', (q) => { if (/googletagmanager|facebook\.net|connect\.facebook/.test(q.url())) tracking.push(q.url()); });
   // simulate a configured site: inject test IDs into the page config
-  await page.route((u) => u.href.startsWith(URL) && new globalThis.URL(u.href).pathname === '/', async (route) => {
+  await page.route((u) => u.href.startsWith(URL) && new globalThis.URL(u.href).pathname === new globalThis.URL(URL).pathname, async (route) => {
     const res = await route.fetch(); let body = await res.text();
     body = body.replace('"gtmId":null', '"gtmId":"GTM-TEST000"').replace('"metaPixelId":null', '"metaPixelId":"000000000000000"');
     route.fulfill({ response: res, body });

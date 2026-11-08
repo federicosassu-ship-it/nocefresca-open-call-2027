@@ -10,7 +10,8 @@ import vollkornItalicExt from '@fontsource-variable/vollkorn/files/vollkorn-lati
 import { config } from '../config';
 import { address, links, faq, status } from '../content/opencall';
 
-const { title = config.title, description = config.description } = Astro.props;
+const { title = config.title, description = config.description, path = '', faqSchema = true } = Astro.props;
+const canonical = new URL(path, config.pageUrl).href;
 const ogImage = new URL(config.ogImage, config.pageUrl).href;
 
 const jsonLd = {
@@ -38,18 +39,18 @@ const jsonLd = {
     },
     {
       '@type': 'WebPage',
-      '@id': `${config.pageUrl}#page`,
-      url: config.pageUrl,
+      '@id': `${canonical}#page`,
+      url: canonical,
       name: title,
       description,
       inLanguage: 'en',
       isPartOf: { '@id': 'https://www.nocefresca.it/#org' },
       dateModified: status.lastVerified,
     },
-    {
+    ...(faqSchema ? [{
       '@type': 'FAQPage',
       mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
-    },
+    }] : []),
   ],
 };
 
@@ -77,7 +78,7 @@ const consentDefaults = `window.dataLayer=window.dataLayer||[];function gtag(){d
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={config.pageUrl} />
+    <link rel="canonical" href={canonical} />
     <meta name="robots" content={import.meta.env.PUBLIC_NOINDEX ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
     <meta name="theme-color" content="#f6f1e7" />
     <link rel="icon" href={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}favicon.ico`} sizes="any" />
@@ -87,7 +88,7 @@ const consentDefaults = `window.dataLayer=window.dataLayer||[];function gtag(){d
     <meta property="og:locale" content="en_GB" />
     <meta property="og:title" content="Open Call 2027 — Your rural artist’s studio in the heart of the Mediterranean" />
     <meta property="og:description" content="One to three months in Milis, Sardinia: a private studio, a place to live, a guest curator and a small international group of artists." />
-    <meta property="og:url" content={config.pageUrl} />
+    <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />

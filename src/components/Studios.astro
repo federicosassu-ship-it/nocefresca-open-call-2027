@@ -1,9 +1,11 @@
 ---
+const { nr = '01', hideHead = false } = Astro.props;
 import { Picture } from 'astro:assets';
 import SectionHead from './SectionHead.astro';
 import Rail from './Rail.astro';
 import { img } from '../lib/images';
 import { studios, equipment, links } from '../content/opencall';
+import { page } from '../lib/paths';
 
 const bagnolo = [
   { src: 'studios/bagnolo-12.jpg', alt: 'The stone courtyard of Casa Bagnolo with a large tree, tables and chairs in the shade.' },
@@ -14,11 +16,11 @@ const bagnolo = [
   { src: 'studios/bagnolo-13.jpg', alt: 'Bicycles parked by a wooden gate in the courtyard.' },
 ];
 ---
-<section class="section studios" id="studios" aria-labelledby="studios-title">
+<section class:list={["section studios", { "section--flush": hideHead }]} id="studios" aria-labelledby="studios-title">
   <div class="container">
-    <SectionHead nr="06" kicker="Studios" id="studios-title" split
+    {hideHead ? <h2 class="visually-hidden" id="studios-title">The studios in detail</h2> : (<SectionHead nr={nr} kicker="Studios" id="studios-title" split
       title="Your space to create."
-      lead="Every resident gets a private studio with 24/7 access. Studios are spread across three houses and allocated according to your medium: larger walls for big canvases, quieter rooms for composers, desks for writers." />
+      lead="Every resident gets a private studio with 24/7 access. Studios are spread across three houses and allocated according to your medium: larger walls for big canvases, quieter rooms for composers, desks for writers." />)}
 
     <div class="tabs" data-tabs="studios">
       <div class="tabs__list" role="tablist" aria-label="Choose a studio" hidden data-tablist>
@@ -51,7 +53,7 @@ const bagnolo = [
             <p class="studio__best"><span>Best for</span> {s.bestFor}</p>
             <p class="studio__text">{s.text}</p>
             {s.note && <p class="studio__note"><strong>Good to know:</strong> {s.note}</p>}
-            <p class="studio__opts small">Fee option{s.options.length > 1 ? 's' : ''}: <a class="link" href="#fees" data-track="secondary_cta_click" data-location={`studio_${s.id}_fees`}>{s.options.join(', ')}</a></p>
+            <p class="studio__opts small">Fee option{s.options.length > 1 ? 's' : ''}: <a class="link" href={page('datesFees', 'fees')} data-track="secondary_cta_click" data-location={`studio_${s.id}_fees`}>{s.options.join(', ')}</a></p>
           </div>
         </div>
       ))}

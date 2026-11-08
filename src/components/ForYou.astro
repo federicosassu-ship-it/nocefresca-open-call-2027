@@ -1,4 +1,5 @@
 ---
+const { nr = '03' } = Astro.props;
 import { Picture } from 'astro:assets';
 import SectionHead from './SectionHead.astro';
 import { img } from '../lib/images';
@@ -6,7 +7,7 @@ import { disciplines, loveIt, notForYou, tenWords, letter, links } from '../cont
 ---
 <section class="section section--sand foryou" id="for-you" aria-labelledby="foryou-title">
   <div class="container">
-    <SectionHead nr="03" kicker="Is it for you?" id="foryou-title"
+    <SectionHead nr={nr} kicker="Is it for you?" id="foryou-title"
       title="Made for artists who want time, space and good company." />
 
     <div class="foryou__disciplines" data-reveal>

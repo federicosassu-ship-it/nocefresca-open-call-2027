@@ -283,3 +283,4 @@ figcaption, .caption { font-family: var(--f-display); font-size: 0.8125rem; line
 .nowrap { white-space: nowrap; }
 .hide-mobile { display: none; }
 @media (min-width: 60rem) { .hide-mobile { display: revert; } .hide-desktop { display: none !important; } }
+.section--flush { padding-top: clamp(2.5rem, 2rem + 2vw, 4rem); }

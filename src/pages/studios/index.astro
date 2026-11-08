@@ -1,0 +1,12 @@
+---
+import Page from '../../layouts/Page.astro';
+import PageHead from '../../components/PageHead.astro';
+import Studios from '../../components/Studios.astro';
+---
+<Page pageKey="studios" title="Studios — Nocefresca Artist Residency, Open Call 2027" description="Seven private studios across three houses in Milis, Sardinia, plus an 80 m² outdoor studio garden: sizes, light, equipment and which studio suits your practice.">
+  <PageHead kicker="Studios" title="Your space to create."
+    lead="Every resident gets a private studio with 24/7 access, allocated according to your medium: larger walls for big canvases, quieter rooms for composers, desks for writers."
+    facts={['7 private studios', '3 houses', '80 m² studio garden', 'Open 24/7']}
+    photo="studios/bagnolo-4.jpg" alt="Ochre-yellow communal rooms of Casa Bagnolo connected by basalt stone arches." />
+  <Studios hideHead />
+</Page>

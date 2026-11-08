@@ -1,0 +1,12 @@
+---
+import Page from '../../layouts/Page.astro';
+import PageHead from '../../components/PageHead.astro';
+import Living from '../../components/Living.astro';
+---
+<Page pageKey="homes" title="Living at Nocefresca — homes, hosts and daily life in Milis" description="Where Nocefresca residents live: village homes opened by local families, private rooms, suites and an orchard cottage, food, hosts and practical facilities.">
+  <PageHead kicker="Homes" title="A home in the village, not a hotel room."
+    lead="Local families open their vacant homes to the residency in the quieter months. For a month or three, you become a temporary inhabitant of a Sardinian village."
+    facts={['Private bedroom or suite', 'Kitchen & Wi-Fi', 'Linen included', '4 local hosts']}
+    photo="living/housing-4.jpg" alt="A two-storey village house behind a garden of orange trees." />
+  <Living hideHead />
+</Page>

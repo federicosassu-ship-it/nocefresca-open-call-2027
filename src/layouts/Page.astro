@@ -1,0 +1,27 @@
+---
+// Layout for the deep-dive pages (studios, homes, dates & fees).
+import Base from './Base.astro';
+import Header from '../components/Header.astro';
+import ExploreMore from '../components/ExploreMore.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Footer from '../components/Footer.astro';
+import StickyApply from '../components/StickyApply.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
+import ClientScripts from '../components/ClientScripts.astro';
+import { pages, type PageKey } from '../lib/paths';
+
+interface Props { pageKey: PageKey; title: string; description: string }
+const { pageKey, title, description } = Astro.props;
+---
+<Base title={title} description={description} path={`${pages[pageKey].slug}/`} faqSchema={false}>
+  <Header current={pageKey} />
+  <main id="main">
+    <slot />
+    <ExploreMore current={pageKey} />
+    <FinalCta />
+  </main>
+  <Footer />
+  <StickyApply />
+  <ConsentBanner />
+  <ClientScripts />
+</Base>

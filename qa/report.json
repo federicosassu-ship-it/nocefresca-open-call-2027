@@ -1,6 +1,6 @@
 {
-  "url": "http://127.0.0.1:4321/",
-  "date": "2026-11-07T23:07:08.520Z",
+  "url": "http://127.0.0.1:4321/homes/",
+  "date": "2026-11-08T17:04:50.371Z",
   "runs": {
     "mobile": {
       "consoleErrors": [],
@@ -9,21 +9,19 @@
       "h1Count": 1,
       "headingSkips": 0,
       "brokenAnchors": [],
-      "images": 94,
+      "images": 19,
       "imagesMissingAlt": 0,
       "imagesNotLoaded": [],
-      "smallTargets": [
-        "a \"Anna Dreussi\" 93×19"
-      ],
-      "applyLinks": 10,
-      "pageWeightHint": 332535,
+      "smallTargets": [],
+      "applyLinks": 6,
+      "pageWeightHint": 74876,
       "axeViolations": [],
-      "tabsKeyboard": "ok",
+      "tabsKeyboard": "no tabs",
       "accordion": "ok",
       "dataLayerAfterAccordion": [
-        "faq_open",
-        "faq_open",
-        "studio_select"
+        "scroll_depth",
+        "accordion_open",
+        "accordion_open"
       ],
       "stickyBar": "ok",
       "mobileMenu": "ok"
@@ -35,21 +33,19 @@
       "h1Count": 1,
       "headingSkips": 0,
       "brokenAnchors": [],
-      "images": 94,
+      "images": 19,
       "imagesMissingAlt": 0,
       "imagesNotLoaded": [],
-      "smallTargets": [
-        "a \"Anna Dreussi\" 93×19"
-      ],
-      "applyLinks": 10,
-      "pageWeightHint": 332528,
+      "smallTargets": [],
+      "applyLinks": 6,
+      "pageWeightHint": 74864,
       "axeViolations": [],
-      "tabsKeyboard": "ok",
+      "tabsKeyboard": "no tabs",
       "accordion": "ok",
       "dataLayerAfterAccordion": [
-        "faq_open",
-        "faq_open",
-        "studio_select"
+        "scroll_depth",
+        "accordion_open",
+        "accordion_open"
       ]
     }
   },

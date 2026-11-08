@@ -4,6 +4,7 @@ import ApplyButton from './ApplyButton.astro';
 import StatusBadge from './StatusBadge.astro';
 import { img } from '../lib/images';
 import { letter, links } from '../content/opencall';
+import { anchor } from '../lib/paths';
 ---
 <section class="final on-dark" id="final" aria-labelledby="final-title">
   <div class="final__media">
@@ -19,7 +20,7 @@ import { letter, links } from '../content/opencall';
     <div class="final__status" data-reveal style="--d:180ms"><StatusBadge variant="chip" /></div>
     <div class="final__ctas" data-reveal style="--d:220ms">
       <ApplyButton location="final" variant="ochre" size="lg" label="Apply to Nocefresca" />
-      <a class="btn btn--ghost-light btn--lg" href="#faq" data-track="secondary_cta_click" data-location="final_faq">Read the FAQ</a>
+      <a class="btn btn--ghost-light btn--lg" href={anchor('faq')} data-track="secondary_cta_click" data-location="final_faq">Read the FAQ</a>
     </div>
     <p class="final__contact small">Questions first? <a href={`mailto:${links.email}`} data-track="contact_click" data-location="final_email">{links.email}</a></p>
   </div>

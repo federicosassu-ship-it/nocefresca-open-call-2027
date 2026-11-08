@@ -163,7 +163,7 @@ function applyConsent(c: Consent, persist = true) {
   const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
-  const links = $$<HTMLAnchorElement>('.site-nav a');
+  const links = $$<HTMLAnchorElement>('.site-nav a').filter((a) => a.hash && a.pathname === window.location.pathname);
   const targets = links.map((a) => document.querySelector<HTMLElement>(a.hash)).filter(Boolean) as HTMLElement[];
   if ('IntersectionObserver' in window && targets.length) {
     const io = new IntersectionObserver((entries) => {
