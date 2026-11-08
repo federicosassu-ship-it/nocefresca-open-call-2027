@@ -1,0 +1,141 @@
+---
+// Landing intro: the Nocefresca wordmark (official SVG) assembles letter by letter over drawn topographic lines,
+// then, at the first scroll gesture (or after ~5 s), flies into the header while a paper curtain lifts to reveal the hero.
+// Shown once per session; skipped for prefers-reduced-motion, deep links (#hash) and pages loaded already scrolled.
+import wordmarkSvg from '../assets/img/brand/nocefresca-wordmark.svg?raw';
+import contours from '../generated/contours.json';
+import { status } from '../content/opencall';
+
+const d = wordmarkSvg.match(/ d="([^"]+)"/)![1];
+const fill = wordmarkSvg.match(/fill="(#[0-9a-fA-F]{3,6})"/)?.[1] ?? '#572400';
+const subpaths = d.split('M').map((s) => s.trim()).filter(Boolean).map((s) => `M${s}`);
+const starts = [17, 55, 95, 134, 172, 198, 220, 259, 294, 333]; // left edge of each letter: n o c e f r e s c a
+const letters: string[] = starts.map(() => '');
+for (const sp of subpaths) {
+  const minX = Math.min(...[...sp.matchAll(/(-?\d+),/g)].map((m) => Number(m[1])));
+  let i = 0;
+  starts.forEach((x, k) => { if (x <= minX + 1) i = k; });
+  letters[i] += sp;
+}
+---
+<div class="intro" data-intro aria-hidden="true">
+  <svg class="intro__lines" viewBox={contours.viewBox} preserveAspectRatio="xMidYMid slice">
+    <path d={contours.b} pathLength="1" />
+  </svg>
+  <div class="intro__center">
+    <svg class="intro__mark" data-intro-mark viewBox="0 0 386 68" role="img">
+      <defs>
+        <clipPath id="intro-clip"><rect x="0" y="0" width="386" height="64" /></clipPath>
+      </defs>
+      <g clip-path="url(#intro-clip)" fill={fill} fill-rule="evenodd">
+        {letters.map((p) => <path class="intro__letter" d={p} />)}
+      </g>
+    </svg>
+    <p class="intro__tag" data-intro-tag><b>Artist residency in Milis, Sardinia</b> <span>·</span> <b>Open Call {status.year}</b></p>
+  </div>
+  <button class="intro__cue" type="button" data-intro-cue tabindex="-1" aria-label="Enter">
+    <span>Scroll</span><i aria-hidden="true"></i>
+  </button>
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const root = document.documentElement;
+  const intro = document.querySelector<HTMLElement>('[data-intro]');
+  const headerLogo = document.querySelector<HTMLElement>('.site-header .brand img');
+
+  const cleanup = () => {
+    root.classList.remove('has-intro', 'intro-ready');
+    intro?.remove();
+    if (headerLogo) headerLogo.style.opacity = '';
+  };
+
+  if (!intro || !headerLogo || !root.classList.contains('has-intro')) {
+    cleanup();
+  } else {
+    try { sessionStorage.setItem('nf-intro-seen', '1'); } catch { /* storage blocked */ }
+    const mark = intro.querySelector<SVGSVGElement>('[data-intro-mark]')!;
+    const letters = intro.querySelectorAll('.intro__letter');
+    const lines = intro.querySelector<SVGPathElement>('.intro__lines path')!;
+    const tag = intro.querySelector('[data-intro-tag]')!;
+    const cue = intro.querySelector<HTMLElement>('[data-intro-cue]')!;
+    headerLogo.style.opacity = '0';
+    root.classList.add('intro-ready');
+
+    // ---- 1 · arrival ----
+    gsap.set(letters, { yPercent: 118 });
+    gsap.set(lines, { strokeDasharray: 1, strokeDashoffset: 1 });
+    const arrive = gsap.timeline({ defaults: { ease: 'expo.out' } })
+      .to(lines, { strokeDashoffset: 0, duration: 2.8, ease: 'power2.inOut' }, 0)
+      .to(letters, { yPercent: 0, duration: 1.35, stagger: 0.06 }, 0.2)
+      .fromTo(tag, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 1.1 }, 0.95)
+      .fromTo(cue, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.8 }, 1.6);
+
+    // ---- 2 · exit: the wordmark flies into the header logo, the paper curtain lifts ----
+    let leaving = false;
+    const leave = () => {
+      if (leaving) return;
+      leaving = true;
+      arrive.progress(1);
+      // FLIP into the header: letters span x 17–367 / y 11–61 of the 386×68 viewBox;
+      // the header PNG's wordmark spans its full width from its top edge.
+      const m = mark.getBoundingClientRect();
+      const h = headerLogo.getBoundingClientRect();
+      const L = m.left + m.width * (17 / 386), T = m.top + m.height * (11 / 68), W = m.width * (350 / 386);
+      const s = (h.width * 0.985) / W;
+      const x = h.left - m.left - (L - m.left) * s;
+      const y = h.top + h.height * 0.02 - m.top - (T - m.top) * s;
+      gsap.timeline({ defaults: { ease: 'expo.inOut' }, onComplete: cleanup })
+        .to([cue, tag], { autoAlpha: 0, y: -12, duration: 0.45, ease: 'power2.in' }, 0)
+        .to(lines, { opacity: 0, duration: 0.7, ease: 'power1.out' }, 0)
+        .to(mark, { transformOrigin: '0 0', x, y, scale: s, duration: 1.25 }, 0.05)
+        .to(intro, { '--curtain': '100%', duration: 1.15 }, 0.28)
+        .set(headerLogo, { opacity: 1 }, 1.22)
+        .to(mark, { autoAlpha: 0, duration: 0.12, ease: 'none' }, 1.24);
+    };
+
+    // any intent to scroll starts the exit (the page itself stays put underneath)
+    const onWheel = (e: WheelEvent) => { e.preventDefault(); if (e.deltaY > 2) leave(); };
+    const onKey = (e: KeyboardEvent) => { if ([' ', 'ArrowDown', 'PageDown', 'End', 'Enter', 'Escape', 'Tab'].includes(e.key)) { if (e.key !== 'Tab') e.preventDefault(); leave(); } };
+    let y0 = 0;
+    const onTouchStart = (e: TouchEvent) => { y0 = e.touches[0].clientY; };
+    const onTouchMove = (e: TouchEvent) => { e.preventDefault(); if (y0 - e.touches[0].clientY > 8) leave(); };
+    window.addEventListener('wheel', onWheel, { passive: false });
+    window.addEventListener('keydown', onKey);
+    intro.addEventListener('touchstart', onTouchStart, { passive: true });
+    intro.addEventListener('touchmove', onTouchMove, { passive: false });
+    intro.addEventListener('click', leave);
+    const auto = window.setTimeout(leave, 5200); // never hold ad traffic back
+    const unbind = () => {
+      clearTimeout(auto);
+      window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('keydown', onKey);
+    };
+    // release listeners once gone
+    new MutationObserver((_, obs) => { if (!document.contains(intro)) { unbind(); obs.disconnect(); } }).observe(document.body, { childList: true });
+  }
+</script>
+
+<style>
+  .intro { display: none; }
+  :global(.has-intro) .intro {
+    --curtain: 0%;
+    display: grid; place-items: center; position: fixed; inset: 0; z-index: 70;
+    background: var(--c-paper); overflow: hidden;
+    clip-path: inset(0 0 var(--curtain) 0);
+    will-change: clip-path;
+  }
+  .intro__lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .intro__lines path { fill: none; stroke: var(--c-burgundy); stroke-opacity: 0.16; stroke-width: 1.1; vector-effect: non-scaling-stroke; }
+  .intro__center { position: relative; display: grid; justify-items: center; gap: clamp(1rem, 2vw, 1.75rem); width: min(78vw, 46rem); }
+  .intro__mark { width: 100%; height: auto; overflow: visible; will-change: transform; }
+  .intro__tag { font-family: var(--f-display); font-weight: 500; font-size: clamp(0.9375rem, 0.85rem + 0.4vw, 1.125rem); color: var(--c-burgundy); letter-spacing: 0.01em; text-align: center; visibility: hidden; }
+  .intro__tag b { font-weight: inherit; white-space: nowrap; }
+  .intro__tag span { color: var(--c-terracotta); margin: 0 0.35em; }
+  .intro__cue { position: absolute; left: 50%; bottom: max(1.5rem, env(safe-area-inset-bottom)); transform: translateX(-50%); display: grid; justify-items: center; gap: 0.6rem; font-family: var(--f-display); font-size: 0.8125rem; color: var(--c-muted); letter-spacing: 0.08em; text-transform: uppercase; visibility: hidden; }
+  .intro__cue i { display: block; width: 1px; height: 2.75rem; background: linear-gradient(var(--c-burgundy), transparent); transform-origin: top; animation: cue 1.8s cubic-bezier(.6,0,.2,1) infinite; }
+  @keyframes cue { 0% { transform: scaleY(0); opacity: 1; } 60% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+  :global(html.has-intro), :global(html.has-intro body) { overflow: hidden; }
+  :global(.has-intro .sticky-apply) { visibility: hidden; }
+</style>

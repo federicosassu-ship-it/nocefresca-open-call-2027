@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
+import Intro from '../components/Intro.astro';
 import Hero from '../components/Hero.astro';
 import InfoStrip from '../components/InfoStrip.astro';
 import ForYou from '../components/ForYou.astro';
@@ -31,9 +32,11 @@ const clientConfig = {
 ---
 <Base>
   <Fragment slot="head">
+    <meta name="nf-intro" content="1" />
     <link rel="preload" as="image" type="image/avif" media={MOBILE_MQ} imagesrcset={hero.mobile.avif} imagesizes={hero.mobile.sizes} fetchpriority="high" />
     <link rel="preload" as="image" type="image/avif" media={DESKTOP_MQ} imagesrcset={hero.desktop.avif} imagesizes={hero.desktop.sizes} fetchpriority="high" />
   </Fragment>
+  <Intro />
   <Header />
   <main id="main">
     <Hero />
