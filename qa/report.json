@@ -1,6 +1,6 @@
 {
   "url": "http://127.0.0.1:4321/",
-  "date": "2026-11-08T20:27:43.258Z",
+  "date": "2026-11-08T21:07:05.766Z",
   "runs": {
     "mobile": {
       "consoleErrors": [],
@@ -20,7 +20,7 @@
         "input \"\" 1×1"
       ],
       "applyLinks": 10,
-      "pageWeightHint": 312653,
+      "pageWeightHint": 312981,
       "axeViolations": [],
       "tabsKeyboard": "ok",
       "accordion": "ok",
@@ -35,7 +35,7 @@
     "desktop": {
       "consoleErrors": [],
       "failedRequests": [],
-      "horizontalOverflow": 0,
+      "horizontalOverflow": -15,
       "h1Count": 1,
       "headingSkips": 0,
       "brokenAnchors": [],
@@ -50,7 +50,7 @@
         "input \"\" 1×1"
       ],
       "applyLinks": 10,
-      "pageWeightHint": 312646,
+      "pageWeightHint": 312974,
       "axeViolations": [],
       "tabsKeyboard": "ok",
       "accordion": "ok",

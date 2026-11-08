@@ -21,9 +21,11 @@ for (const sp of subpaths) {
 }
 ---
 <div class="intro" data-intro aria-hidden="true">
-  <svg class="intro__lines" viewBox={contours.viewBox} preserveAspectRatio="xMidYMid slice">
-    <path d={contours.b} pathLength="1" />
-  </svg>
+  <div class="intro__curtain" data-intro-curtain>
+    <svg class="intro__lines" viewBox={contours.viewBox} preserveAspectRatio="xMidYMid slice">
+      <path d={contours.b} pathLength="1" />
+    </svg>
+  </div>
   <div class="intro__center">
     <svg class="intro__mark" data-intro-mark viewBox="0 0 386 68" role="img" shape-rendering="geometricPrecision">
       <defs>
@@ -49,6 +51,8 @@ for (const sp of subpaths) {
 
   const cleanup = () => {
     root.classList.remove('has-intro', 'intro-ready');
+    // inline styles are cleared only after the class is gone, so nothing falls back to the hidden intro state
+    document.querySelectorAll<HTMLElement>('#top .hero__top, #top .hero__bottom').forEach((el) => { el.style.removeProperty('opacity'); el.style.removeProperty('visibility'); el.style.removeProperty('transform'); });
     intro?.remove();
     if (headerLogo) headerLogo.style.opacity = '';
   };
@@ -59,28 +63,31 @@ for (const sp of subpaths) {
     try { sessionStorage.setItem('nf-intro-seen', '1'); } catch { /* storage blocked */ }
     const mark = intro.querySelector<SVGSVGElement>('[data-intro-mark]')!;
     const letters = intro.querySelectorAll('.intro__letter');
+    const curtain = intro.querySelector<HTMLElement>('[data-intro-curtain]')!;
     const lines = intro.querySelector<SVGPathElement>('.intro__lines path')!;
     const tag = intro.querySelector('[data-intro-tag]')!;
     const cue = intro.querySelector<HTMLElement>('[data-intro-cue]')!;
+    const heroImg = document.querySelector<HTMLElement>('#top .hero__media img');
+    const heroText = document.querySelectorAll<HTMLElement>('#top .hero__top, #top .hero__bottom');
     headerLogo.style.opacity = '0';
     root.classList.add('intro-ready');
 
-    // ---- 1 · arrival ----
-    gsap.set(letters, { yPercent: 118 });
-    gsap.set(lines, { strokeDasharray: 1, strokeDashoffset: 1 });
-    const arrive = gsap.timeline({ defaults: { ease: 'expo.out' } })
-      .to(lines, { strokeDashoffset: 0, duration: 2.8, ease: 'power2.inOut' }, 0)
-      .to(letters, { yPercent: 0, duration: 1.35, stagger: 0.06 }, 0.2)
+    // ---- 1 · arrival (starts once the display font is ready, so the tagline never reflows mid-animation) ----
+    const arrive = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } })
+      .fromTo(lines, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.8, ease: 'power2.inOut' }, 0)
+      .fromTo(letters, { y: 72 }, { y: 0, duration: 1.35, stagger: 0.06 }, 0.2)
       .fromTo(tag, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 1.1 }, 0.95)
       .fromTo(cue, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.8 }, 1.6);
+    Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 600))]).then(() => requestAnimationFrame(() => arrive.play()));
 
-    // ---- 2 · exit: the wordmark flies into the header logo, the paper curtain lifts ----
+    // ---- 2 · exit: the wordmark flies into the header logo while the paper curtain slides away ----
     let leaving = false;
     const leave = () => {
       if (leaving) return;
       leaving = true;
-      // let the letters finish arriving first (sped up), then leave
-      if (arrive.progress() < 1) { arrive.timeScale(2.2); arrive.eventCallback('onComplete', go); } else go();
+      clearTimeout(auto);
+      // let the letters finish landing first (sped up), then leave
+      if (arrive.progress() < 1) { arrive.play(); arrive.timeScale(2.4); arrive.eventCallback('onComplete', go); } else go();
     };
     const go = () => {
       // FLIP into the header: letters span x 17–367 / y 11–61 of the 386×68 viewBox;
@@ -88,25 +95,36 @@ for (const sp of subpaths) {
       const m = mark.getBoundingClientRect();
       const h = headerLogo.getBoundingClientRect();
       const L = m.left + m.width * (17 / 386), T = m.top + m.height * (11 / 68), W = m.width * (350 / 386);
-      const s = (h.width * 0.985) / W;
-      const x = h.left - m.left - (L - m.left) * s;
-      const y = h.top + h.height * 0.02 - m.top - (T - m.top) * s;
-      gsap.timeline({ defaults: { ease: 'expo.inOut' }, onComplete: cleanup })
-        .to([cue, tag], { autoAlpha: 0, y: -12, duration: 0.6, ease: 'power2.in' }, 0)
-        .to(lines, { opacity: 0, duration: 1.1, ease: 'power1.out' }, 0)
-        .to(mark, { transformOrigin: '0 0', x, y, scale: s, duration: 1.9 }, 0.15)
-        .to(intro, { '--curtain': '100%', duration: 1.7, ease: 'power3.inOut' }, 0.45)
-        .set(headerLogo, { opacity: 1 }, 2.0)
-        .to(mark, { autoAlpha: 0, duration: 0.15, ease: 'none' }, 2.02);
+      const s = (h.width * WORD_W) / W;
+      const x = h.left + h.width * WORD_X - m.left - (L - m.left) * s;
+      const y = h.top + h.height * WORD_Y - m.top - (T - m.top) * s;
+      const tl = gsap.timeline({ onComplete: cleanup });
+      tl.to([cue, tag], { autoAlpha: 0, y: -12, duration: 0.55, ease: 'power2.in' }, 0)
+        .to(mark, { transformOrigin: '0 0', x, y, scale: s, duration: 1.8, ease: 'power3.inOut' }, 0.1)
+        .to(curtain, { yPercent: -100, duration: 1.6, ease: 'power3.inOut' }, 0.35)
+        // the page wakes up as it is revealed
+        .fromTo(heroText, { y: 32, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.3, ease: 'power3.out', stagger: 0.12 }, 0.85);
+      if (heroImg) tl.fromTo(heroImg, { scale: 1.08 }, { scale: 1, duration: 2.2, ease: 'power2.out', clearProps: 'transform' }, 0.45);
+      // seamless hand-off: cross-fade exactly as the wordmark lands on the header logo
+      tl.to(headerLogo, { opacity: 1, duration: 0.35, ease: 'none' }, 1.72)
+        .to(mark, { opacity: 0, duration: 0.35, ease: 'none' }, 1.78);
     };
+    // where the wordmark sits inside the header PNG (fractions of its box) — calibrated in QA
+    const WORD_X = 0.002, WORD_Y = 0.008, WORD_W = 0.994;
 
-    // any intent to scroll starts the exit (the page itself stays put underneath)
-    let acc = 0, accT = 0;
+    // a deliberate scroll gesture starts the exit; the page never scrolls underneath
+    let acc = 0, accT = 0, done = false;
     const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
       const now = performance.now();
-      if (now - accT > 400) acc = 0; // gestures more than 0.4 s apart don't add up
+      const gap = now - accT;
       accT = now;
+      if (done) {
+        // swallow the tail of a trackpad's momentum after the intro is gone, so the page doesn't lurch
+        if (gap < 180) e.preventDefault(); else window.removeEventListener('wheel', onWheel);
+        return;
+      }
+      e.preventDefault();
+      if (gap > 400) acc = 0;
       acc += Math.max(0, e.deltaY);
       if (acc > 160) leave();
     };
@@ -120,35 +138,36 @@ for (const sp of subpaths) {
     intro.addEventListener('touchmove', onTouchMove, { passive: false });
     intro.addEventListener('click', leave);
     const auto = window.setTimeout(leave, 6500); // never hold ad traffic back
-    const unbind = () => {
-      clearTimeout(auto);
-      window.removeEventListener('wheel', onWheel);
+    new MutationObserver((_, obs) => {
+      if (document.contains(intro)) return;
+      done = true;
       window.removeEventListener('keydown', onKey);
-    };
-    // release listeners once gone
-    new MutationObserver((_, obs) => { if (!document.contains(intro)) { unbind(); obs.disconnect(); } }).observe(document.body, { childList: true });
+      obs.disconnect();
+    }).observe(document.body, { childList: true });
   }
 </script>
 
 <style>
   .intro { display: none; }
-  :global(.has-intro) .intro {
-    --curtain: 0%;
-    display: grid; place-items: center; position: fixed; inset: 0; z-index: 70;
-    background: var(--c-paper); overflow: hidden;
-    clip-path: inset(0 0 var(--curtain) 0);
-    will-change: clip-path;
-  }
+  :global(.has-intro) .intro { display: grid; place-items: center; position: fixed; inset: 0; z-index: 70; pointer-events: auto; }
+  /* the paper slides away on the compositor (transform), the wordmark flies on its own layer above it */
+  .intro__curtain { position: absolute; inset: 0; background: var(--c-paper); overflow: hidden; will-change: transform; }
   .intro__lines { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .intro__lines path { fill: none; stroke: var(--c-burgundy); stroke-opacity: 0.16; stroke-width: 1.1; vector-effect: non-scaling-stroke; }
+  .intro__lines path { fill: none; stroke: var(--c-burgundy); stroke-opacity: 0.16; stroke-width: 1.1; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; }
   .intro__center { position: relative; display: grid; justify-items: center; gap: clamp(1rem, 2vw, 1.75rem); width: min(78vw, 46rem); }
-  .intro__mark { width: 100%; height: auto; overflow: visible; will-change: transform; }
+  .intro__mark { width: 100%; height: auto; overflow: visible; will-change: transform, opacity; backface-visibility: hidden; }
+  /* initial state in CSS so nothing flashes before the script runs */
+  .intro__letter { transform: translateY(72px); }
   .intro__tag { font-family: var(--f-display); font-weight: 500; font-size: clamp(0.9375rem, 0.85rem + 0.4vw, 1.125rem); color: var(--c-burgundy); letter-spacing: 0.01em; text-align: center; visibility: hidden; }
   .intro__tag b { font-weight: inherit; white-space: nowrap; }
   .intro__tag span { color: var(--c-terracotta); margin: 0 0.35em; }
   .intro__cue { position: absolute; left: 50%; bottom: max(1.5rem, env(safe-area-inset-bottom)); transform: translateX(-50%); display: grid; justify-items: center; gap: 0.6rem; font-family: var(--f-display); font-size: 0.8125rem; color: var(--c-muted); letter-spacing: 0.08em; text-transform: uppercase; visibility: hidden; }
   .intro__cue i { display: block; width: 1px; height: 2.75rem; background: linear-gradient(var(--c-burgundy), transparent); transform-origin: top; animation: cue 1.8s cubic-bezier(.6,0,.2,1) infinite; }
   @keyframes cue { 0% { transform: scaleY(0); opacity: 1; } 60% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
-  :global(html.has-intro), :global(html.has-intro body) { overflow: hidden; }
+  /* lock scrolling without the layout jump of a disappearing scrollbar */
+  :global(html.has-intro) { overflow: hidden; scrollbar-gutter: stable; }
   :global(.has-intro .sticky-apply) { visibility: hidden; }
+  /* hero's own load animation would already be over behind the intro: the intro replays it on reveal */
+  :global(.has-intro #top .hero__media img) { animation: none; }
+  :global(.has-intro #top .hero__top), :global(.has-intro #top .hero__bottom) { opacity: 0; }
 </style>
