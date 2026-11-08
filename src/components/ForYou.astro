@@ -11,19 +11,15 @@ import { disciplines, loveIt, notForYou, tenWords, letter, links } from '../cont
 
     <div class="foryou__disciplines" data-reveal>
       <p class="label">Nocefresca is perfect for — but not limited to —</p>
-      <div class="marquee-wrap">
-        <div class="marquee" data-marquee tabindex="0" role="region" aria-label="Profiles Nocefresca is perfect for — scroll sideways">
-          <div class="marquee__track">
-            <ul class="disc" role="list">
-              {disciplines.map((d) => <li>{d}</li>)}
-            </ul>
-            <ul class="disc" role="list" aria-hidden="true">
-              {disciplines.map((d) => <li>{d}</li>)}
-            </ul>
-          </div>
+      <div class="marquee">
+        <div class="marquee__track">
+          <ul class="disc" role="list">
+            {disciplines.map((d) => <li>{d}</li>)}
+          </ul>
+          <ul class="disc" role="list" aria-hidden="true">
+            {disciplines.map((d) => <li>{d}</li>)}
+          </ul>
         </div>
-        <button class="marquee__btn marquee__btn--prev" type="button" data-marquee-step="-1" aria-label="Previous profiles" tabindex="-1">←</button>
-        <button class="marquee__btn marquee__btn--next" type="button" data-marquee-step="1" aria-label="Next profiles" tabindex="-1">→</button>
       </div>
       <p class="foryou__note">Solo artists, collectives and small groups. All ages can apply.</p>
     </div>
@@ -67,20 +63,20 @@ import { disciplines, loveIt, notForYou, tenWords, letter, links } from '../cont
 
 <style>
   .foryou__disciplines { margin-bottom: clamp(2.5rem, 1.5rem + 4vw, 5rem); }
-  /* one-line marquee: auto-scrolls, and can be scrolled by hand (drag, trackpad, wheel, arrows, keyboard) */
+  /* one-line marquee: automatic only (no manual scrolling); two identical lists loop seamlessly */
   .foryou__disciplines { overflow: hidden; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); }
-  .marquee-wrap { position: relative; margin: 0.75rem calc(var(--gutter) * -1) 0; }
-  .marquee { overflow-x: auto; scrollbar-width: none; cursor: grab; overscroll-behavior-x: contain; }
-  .marquee::-webkit-scrollbar { display: none; }
-  .marquee.is-dragging { cursor: grabbing; user-select: none; }
-  .marquee:focus-visible { outline-offset: -3px; }
-  .marquee__track { display: flex; width: max-content; padding-inline: var(--gutter); }
+  .marquee { margin: 0.75rem calc(var(--gutter) * -1) 0; overflow: hidden; pointer-events: none; user-select: none; }
+  .marquee__track { display: flex; width: max-content; animation: marquee var(--marquee-dur, 50s) linear infinite; will-change: transform; backface-visibility: hidden; }
   .disc { display: flex; flex: none; white-space: nowrap; font-family: var(--f-display); font-weight: 500; font-size: clamp(2rem, 1.3rem + 3vw, 4.25rem); line-height: 1.15; letter-spacing: -0.025em; color: var(--c-burgundy); }
   .disc li::after { content: '/'; margin: 0 0.4em; color: var(--c-terracotta); font-weight: 400; }
-  .marquee__btn { position: absolute; top: 50%; transform: translateY(-50%); width: 3rem; height: 3rem; border-radius: 50%; background: var(--c-paper); color: var(--c-burgundy); box-shadow: 0 0 0 1px var(--c-line-strong), 0 8px 20px -10px rgb(62 31 34 / 0.4); font-size: 1.25rem; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
-  .marquee__btn--prev { left: var(--gutter); } .marquee__btn--next { right: var(--gutter); }
-  @media (hover: hover) { .marquee-wrap:hover .marquee__btn { opacity: 1; pointer-events: auto; } }
-  .marquee__btn:hover { background: var(--c-white); }
+  @keyframes marquee { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { margin-inline: 0; }
+    .marquee__track { width: auto; animation: none; }
+    .marquee .disc { white-space: normal; flex-wrap: wrap; flex: 1; }
+    .marquee .disc[aria-hidden] { display: none; }
+    .disc li:last-child::after { content: none; }
+  }
   .foryou__note { margin-top: 1rem; font-size: var(--fs-lead); color: var(--c-ink); }
 
   .foryou__cols { display: grid; gap: var(--gap); }
@@ -113,51 +109,10 @@ import { disciplines, loveIt, notForYou, tenWords, letter, links } from '../cont
 </style>
 
 <script>
-  // Auto-scroll that loops seamlessly; pauses while hovered/focused/touched so people can browse by hand.
-  document.querySelectorAll<HTMLElement>('[data-marquee]').forEach((el) => {
-    const track = el.firstElementChild as HTMLElement;
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const half = () => track.scrollWidth / 2;
-    let paused = false, dragging = false, startX = 0, startLeft = 0, last = 0, offset = 0, halfW = half();
-    const SPEED = 0.075; // px per ms ≈ 75 px/s
-    const wrap = () => { const h = half(); if (el.scrollLeft >= h) el.scrollLeft -= h; else if (el.scrollLeft <= 0) el.scrollLeft += h; };
-    // Auto-scroll moves the track with a sub-pixel GPU transform (smooth everywhere, Safari included);
-    // when someone takes over, the offset is folded into the real scroll position.
-    const fold = () => {
-      if (!offset) return;
-      const h = half();
-      track.style.transform = '';
-      el.scrollLeft = (((el.scrollLeft + offset) % h) + h) % h;
-      offset = 0;
-    };
-    const tick = (t: number) => {
-      const dt = last ? Math.min(t - last, 50) : 16; last = t;
-      if (!paused && !dragging && !reduce) {
-        offset += dt * SPEED;
-        if (el.scrollLeft + offset >= halfW) offset -= halfW;
-        track.style.transform = `translate3d(${-offset}px,0,0)`;
-      }
-      requestAnimationFrame(tick);
-    };
-    track.style.willChange = 'transform';
-    new ResizeObserver(() => (halfW = half())).observe(track);
-    requestAnimationFrame(tick);
-    const pause = () => { paused = true; fold(); }, resume = () => (paused = false);
-    el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') pause(); });
-    el.parentElement!.addEventListener('mouseleave', () => { if (!dragging) resume(); });
-    el.addEventListener('focus', pause); el.addEventListener('blur', resume);
-    el.addEventListener('touchstart', pause, { passive: true });
-    el.addEventListener('touchend', () => setTimeout(resume, 2500), { passive: true });
-    el.addEventListener('scroll', () => { if (paused || dragging) wrap(); }, { passive: true });
-    // trackpads and Shift+wheel scroll the row natively; vertical wheel keeps scrolling the page
-    // drag to scroll
-    el.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') return; fold(); dragging = true; startX = e.clientX; startLeft = el.scrollLeft; el.classList.add('is-dragging'); el.setPointerCapture(e.pointerId); });
-    el.addEventListener('pointermove', (e) => { if (!dragging) return; el.scrollLeft = startLeft - (e.clientX - startX); wrap(); startLeft = el.scrollLeft + (e.clientX - startX); });
-    const end = () => { dragging = false; el.classList.remove('is-dragging'); };
-    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
-    el.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); el.scrollBy({ left: (e.key === 'ArrowRight' ? 1 : -1) * el.clientWidth * 0.5, behavior: 'smooth' }); } });
-    el.parentElement!.querySelectorAll<HTMLButtonElement>('[data-marquee-step]').forEach((b) =>
-      b.addEventListener('click', () => (fold(), el.scrollBy({ left: Number(b.dataset.marqueeStep) * el.clientWidth * 0.5, behavior: 'smooth' }))),
-    );
+  // constant speed (~80 px/s) whatever the screen width: duration = half track width / speed
+  document.querySelectorAll<HTMLElement>('.marquee__track').forEach((t) => {
+    const set = () => t.style.setProperty('--marquee-dur', `${Math.max(20, t.scrollWidth / 2 / 80)}s`);
+    set();
+    new ResizeObserver(set).observe(t);
   });
 </script>
