@@ -1,6 +1,6 @@
 {
   "url": "http://127.0.0.1:4321/",
-  "date": "2026-11-08T18:04:08.398Z",
+  "date": "2026-11-08T18:12:23.495Z",
   "runs": {
     "mobile": {
       "consoleErrors": [],
@@ -20,12 +20,10 @@
         "input \"\" 1×1",
         "input \"\" 1×1",
         "input \"\" 1×1",
-        "input \"\" 1×1",
-        "input \"\" 19×19",
-        "input \"\" 19×19"
+        "input \"\" 1×1"
       ],
       "applyLinks": 10,
-      "pageWeightHint": 318706,
+      "pageWeightHint": 309648,
       "axeViolations": [],
       "tabsKeyboard": "ok",
       "accordion": "ok",
@@ -55,12 +53,10 @@
         "input \"\" 1×1",
         "input \"\" 1×1",
         "input \"\" 1×1",
-        "input \"\" 1×1",
-        "input \"\" 19×19",
-        "input \"\" 19×19"
+        "input \"\" 1×1"
       ],
       "applyLinks": 10,
-      "pageWeightHint": 318687,
+      "pageWeightHint": 309641,
       "axeViolations": [],
       "tabsKeyboard": "ok",
       "accordion": "ok",

@@ -1,20 +1,17 @@
 ---
 // Interactive estimate: pick an option, length of stay and extras. Prices come from src/content/opencall.ts.
 // Progressive enhancement: hidden without JS (the option cards above already show every price).
-import { fees, feeExtras, payment, feeExcludes } from '../content/opencall';
+import { fees, payment, feeExcludes } from '../content/opencall';
 import { euro } from '../lib/format';
 import ApplyButton from './ApplyButton.astro';
 
-const GUEST_NIGHT = 15; // "€15 / night, min. 7 nights"
-const GUEST_MIN = 7;
-const unpriced = feeExtras.filter((e) => !e.name.startsWith('A guest'));
 ---
-<div class="est" id="estimate" data-estimator hidden
+<div class="est" id="estimate" data-estimator
   data-options={JSON.stringify(fees.map((f) => ({ id: f.id, title: f.title, price: f.price })))}
-  data-guest-night={GUEST_NIGHT} data-guest-min={GUEST_MIN} data-confirmation={payment.confirmationFee}>
+  data-confirmation={payment.confirmationFee}>
   <div class="est__head">
-    <p class="nr"><b>Your estimate</b><span>Compose your stay</span></p>
-    <h3>See what your residency would cost.</h3>
+    <p class="nr"><b>Packages &amp; estimate</b><span>Five studio + housing options</span></p>
+    <h3>Pick a package, see what your stay costs.</h3>
   </div>
 
   <div class="est__grid">
@@ -26,12 +23,25 @@ const unpriced = feeExtras.filter((e) => !e.name.startsWith('A guest'));
             <label class="est__opt">
               <input type="radio" name="est-option" value={f.id} checked={i === 0} />
               <span class="est__opt-id">{f.id}</span>
-              <span class="est__opt-title">{f.title}</span>
+              <span class="est__opt-title">{f.title}<small>{f.bath} · Best for {f.bestFor.charAt(0).toLowerCase() + f.bestFor.slice(1)}</small></span>
               <span class="est__opt-price num">{euro(f.price)}<small>/mo</small></span>
             </label>
           ))}
         </div>
       </fieldset>
+
+      {fees.map((f, i) => (
+        <div class="est__pkg" data-pkg={f.id} hidden={i !== 0}>
+          <p class="est__pkg-title">Option {f.id} · {f.title}</p>
+          <dl class="est__pkg-specs">
+            <div><dt>Studio</dt><dd>{f.studio}</dd></div>
+            <div><dt>Sleep</dt><dd>{f.sleep}</dd></div>
+            <div><dt>Bathroom</dt><dd>{f.bath}</dd></div>
+            <div><dt>Best for</dt><dd>{f.bestFor}</dd></div>
+          </dl>
+          <p class="small">{f.detail}</p>
+        </div>
+      ))}
 
       <fieldset class="est__field">
         <legend>2 · Length of stay</legend>
@@ -42,39 +52,17 @@ const unpriced = feeExtras.filter((e) => !e.name.startsWith('A guest'));
         </div>
       </fieldset>
 
-      <fieldset class="est__field">
-        <legend>3 · Extras <span class="est__hint">optional</span></legend>
-        <label class="est__check">
-          <input type="checkbox" name="est-guest" />
-          <span><strong>A guest in your room</strong> €{GUEST_NIGHT} / night, min. {GUEST_MIN} nights</span>
-        </label>
-        <div class="est__nights" data-nights hidden>
-          <label for="est-nights">Guest nights</label>
-          <div class="est__stepper">
-            <button type="button" data-step="-1" aria-label="Fewer nights">−</button>
-            <input id="est-nights" type="number" inputmode="numeric" min={GUEST_MIN} max="90" value={GUEST_MIN} />
-            <button type="button" data-step="1" aria-label="More nights">+</button>
-          </div>
-        </div>
-        {unpriced.map((e) => (
-          <label class="est__check">
-            <input type="checkbox" name="est-extra" value={e.name} />
-            <span><strong>{e.name}</strong> {e.price.toLowerCase()}, quoted separately</span>
-          </label>
-        ))}
-      </fieldset>
     </form>
 
     <aside class="est__sum" aria-live="polite" aria-label="Estimate summary">
       <p class="est__sum-label">Estimated total</p>
-      <p class="est__total num" data-total>—</p>
-      <ul class="est__lines" role="list" data-lines></ul>
+      <p class="est__total num" data-total>{euro(fees[0].price)}</p>
+      <ul class="est__lines" role="list" data-lines><li><span>Option {fees[0].id} · {fees[0].title}<br /><small>{euro(fees[0].price)} × 1 month</small></span><strong>{euro(fees[0].price)}</strong></li></ul>
       <div class="est__pay">
         <p><span>Confirmation fee, within 2 weeks of selection</span><strong class="num" data-confirm>{euro(payment.confirmationFee)}</strong></p>
-        <p><span>Remaining residency fee, 12 weeks before you start</span><strong class="num" data-balance>—</strong></p>
+        <p><span>Remaining residency fee, 12 weeks before you start</span><strong class="num" data-balance>{euro(fees[0].price - payment.confirmationFee)}</strong></p>
       </div>
-      <p class="est__quote small" data-quoted hidden></p>
-      <p class="est__note small">Indicative estimate. Not included: {feeExcludes.map((x) => x.split(' (')[0].toLowerCase()).join(', ')}. Final amounts are in your confirmation letter.</p>
+      <p class="est__note small">Indicative estimate. Not included: {feeExcludes.map((x) => x.split(' (')[0].toLowerCase()).join(', ')}. Optional extras (a guest in your room, meals, lessons…) are listed below. Final amounts are in your confirmation letter.</p>
       <ApplyButton location="estimate" block label="Apply with this plan" />
     </aside>
   </div>
@@ -85,92 +73,62 @@ const unpriced = feeExtras.filter((e) => !e.name.startsWith('A guest'));
   if (root) {
     root.hidden = false;
     const opts: { id: string; title: string; price: number }[] = JSON.parse(root.dataset.options || '[]');
-    const NIGHT = Number(root.dataset.guestNight), MIN = Number(root.dataset.guestMin), CONF = Number(root.dataset.confirmation);
+    const CONF = Number(root.dataset.confirmation);
     const eur = (n: number) => `€${n.toLocaleString('en-GB')}`;
     const $ = <T extends Element>(s: string) => root.querySelector<T>(s)!;
-    const nightsWrap = $<HTMLElement>('[data-nights]');
-    const nightsInput = $<HTMLInputElement>('#est-nights');
     let tTimer = 0;
 
     const render = (user = false) => {
       const id = $<HTMLInputElement>('input[name="est-option"]:checked').value;
       const months = Number($<HTMLInputElement>('input[name="est-months"]:checked').value);
       const opt = opts.find((o) => o.id === id)!;
-      const guest = $<HTMLInputElement>('input[name="est-guest"]').checked;
-      nightsWrap.hidden = !guest;
-      nightsInput.max = String(months * 31);
-      let nights = Math.round(Number(nightsInput.value) || MIN);
-      nights = Math.min(Math.max(nights, MIN), months * 31);
-      if (String(nights) !== nightsInput.value) nightsInput.value = String(nights);
+      root.querySelectorAll<HTMLElement>('[data-pkg]').forEach((d) => (d.hidden = d.dataset.pkg !== id));
       const residency = opt.price * months;
-      const guestFee = guest ? nights * NIGHT : 0;
-      const extras = [...root.querySelectorAll<HTMLInputElement>('input[name="est-extra"]:checked')].map((i) => i.value);
 
-      $<HTMLElement>('[data-total]').textContent = eur(residency + guestFee);
+      $<HTMLElement>('[data-total]').textContent = eur(residency);
       $<HTMLElement>('[data-lines]').innerHTML =
-        `<li><span>Option ${opt.id} · ${opt.title}<br><small>${eur(opt.price)} × ${months} month${months > 1 ? 's' : ''}</small></span><strong>${eur(residency)}</strong></li>` +
-        (guest ? `<li><span>Guest<br><small>${nights} nights × ${eur(NIGHT)}</small></span><strong>${eur(guestFee)}</strong></li>` : '');
+        `<li><span>Option ${opt.id} · ${opt.title}<br><small>${eur(opt.price)} × ${months} month${months > 1 ? 's' : ''}</small></span><strong>${eur(residency)}</strong></li>`;
       $<HTMLElement>('[data-balance]').textContent = eur(Math.max(0, residency - CONF));
-      const q = $<HTMLElement>('[data-quoted]');
-      q.hidden = !extras.length;
-      q.textContent = extras.length ? `Quoted separately: ${extras.join(', ')}.` : '';
       if (user) {
         clearTimeout(tTimer);
-        tTimer = window.setTimeout(() => window.nfTrack?.('estimate_change', { location: 'fees', option: id, months, guest_nights: guest ? nights : 0, extras: extras.length, total: residency + guestFee }), 600);
+        tTimer = window.setTimeout(() => window.nfTrack?.('estimate_change', { location: 'fees', option: id, months, total: residency }), 600);
       }
     };
     root.addEventListener('change', () => render(true));
-    nightsInput.addEventListener('input', () => render(true));
-    root.querySelectorAll<HTMLButtonElement>('[data-step]').forEach((b) =>
-      b.addEventListener('click', () => { nightsInput.value = String((Number(nightsInput.value) || MIN) + Number(b.dataset.step)); render(true); }),
-    );
-    // "Estimate with this option" buttons on the cards
-    document.querySelectorAll<HTMLButtonElement>('[data-estimate-option]').forEach((b) => {
-      b.hidden = false;
-      b.addEventListener('click', () => {
-        const r = root.querySelector<HTMLInputElement>(`input[name="est-option"][value="${b.dataset.estimateOption}"]`);
-        if (r) { r.checked = true; render(true); }
-        root.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-        r?.focus({ preventScroll: true });
-      });
-    });
     render();
   }
 </script>
 
 <style>
-  .est { margin-top: clamp(2.5rem, 2rem + 2vw, 4rem); padding: clamp(1.5rem, 1rem + 2.5vw, 3rem); background: var(--c-ochre-soft); border-radius: var(--radius); scroll-margin-top: calc(var(--header-h) + 1rem); }
-  .est[hidden] { display: none; }
+  .est { margin-top: 0; padding: clamp(1.5rem, 1rem + 2.5vw, 3rem); background: var(--c-ochre-soft); border-radius: var(--radius); scroll-margin-top: calc(var(--header-h) + 1rem); }
+  .est__pkg { margin: -0.75rem 0 1.5rem; padding: 1.1rem 1.25rem; background: var(--c-white); border-left: 3px solid var(--c-burgundy); border-radius: var(--radius); display: grid; gap: 0.75rem; }
+  .est__pkg[hidden] { display: none; }
+  .est__pkg-title { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
+  .est__pkg-specs { display: grid; gap: 0.45rem; }
+  .est__pkg-specs div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.75rem; }
+  .est__pkg-specs dt { font-family: var(--f-display); font-size: 0.8125rem; color: var(--c-muted); padding-top: 0.15em; }
+  .est__pkg-specs dd { margin: 0; font-size: 0.9375rem; line-height: 1.4; }
   .est__head { display: grid; gap: 0.5rem; margin-bottom: 1.75rem; }
   .est__head h3 { font-size: var(--fs-h3); }
   .est__grid { display: grid; gap: 1.5rem; }
   .est__field { border: 0; padding: 0; margin: 0 0 1.5rem; min-width: 0; }
   .est__field legend { font-family: var(--f-display); font-weight: 500; font-size: 1.0625rem; color: var(--c-burgundy); margin-bottom: 0.75rem; padding: 0; }
-  .est__hint { font-size: 0.8125rem; color: var(--c-muted); font-weight: 400; margin-left: 0.35rem; }
   .est__opts { display: grid; gap: 0.4rem; }
-  .est__opt { display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; align-items: center; gap: 0.75rem; min-height: 3.25rem; padding: 0.5rem 0.9rem; background: var(--c-white); border-radius: var(--radius); box-shadow: inset 0 0 0 1px var(--c-line); cursor: pointer; transition: box-shadow 0.2s; }
+  .est__opt { display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; align-items: center; gap: 0.75rem; min-height: 3.5rem; padding: 0.7rem 0.9rem; background: var(--c-white); border-radius: var(--radius); box-shadow: inset 0 0 0 1px var(--c-line); cursor: pointer; transition: box-shadow 0.2s; }
   .est__opt:hover { box-shadow: inset 0 0 0 1.5px var(--c-burgundy); }
   .est__opt:has(input:checked) { box-shadow: inset 0 0 0 2px var(--c-burgundy); }
   .est__opt input, .est__seg input { position: absolute; opacity: 0; width: 1px; height: 1px; }
   .est__opt:has(input:focus-visible), .est__seg label:has(input:focus-visible) { outline: 3px solid var(--c-burgundy); outline-offset: 2px; }
   .est__opt-id { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; font-family: var(--f-display); font-weight: 600; font-size: 0.875rem; color: var(--c-burgundy); box-shadow: inset 0 0 0 1.5px var(--c-line-strong); }
   .est__opt:has(input:checked) .est__opt-id { background: var(--c-burgundy); color: var(--c-paper); box-shadow: none; }
-  .est__opt-title { font-family: var(--f-display); font-size: 0.9375rem; line-height: 1.25; color: var(--c-ink); }
+  .est__opt-title { display: grid; gap: 0.2rem; font-family: var(--f-display); font-size: 0.9375rem; font-weight: 500; line-height: 1.25; color: var(--c-ink); }
+  .est__opt-title small { font-family: var(--f-text); font-weight: 400; font-size: 0.875rem; color: var(--c-muted); line-height: 1.35; }
   .est__opt-price { font-weight: 500; color: var(--c-burgundy); white-space: nowrap; }
   .est__opt-price small { font-size: 0.75rem; color: var(--c-muted); font-weight: 400; }
   .est__seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
   .est__seg label { position: relative; }
   .est__seg span { display: grid; place-items: center; min-height: 3rem; border-radius: var(--radius); background: var(--c-white); box-shadow: inset 0 0 0 1px var(--c-line); font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); cursor: pointer; }
   .est__seg input:checked + span { background: var(--c-burgundy); color: var(--c-paper); box-shadow: none; }
-  .est__check { display: grid; grid-template-columns: 1.25rem minmax(0, 1fr); gap: 0.75rem; align-items: start; padding: 0.6rem 0; border-bottom: 1px solid var(--c-line); font-size: var(--fs-small); line-height: 1.4; cursor: pointer; }
-  .est__check input { width: 1.2rem; height: 1.2rem; margin-top: 0.1rem; accent-color: var(--c-burgundy); }
-  .est__check strong { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); margin-right: 0.25rem; }
-  .est__nights { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.6rem 0 0.8rem 2rem; border-bottom: 1px solid var(--c-line); font-family: var(--f-display); font-size: 0.9375rem; }
-  .est__nights[hidden] { display: none; }
-  .est__stepper { display: flex; align-items: center; gap: 0.25rem; }
-  .est__stepper button { width: 2.75rem; height: 2.75rem; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--c-line-strong); color: var(--c-burgundy); font-size: 1.25rem; }
-  .est__stepper button:hover { box-shadow: inset 0 0 0 1.5px var(--c-burgundy); }
-  .est__stepper input { width: 3.5rem; height: 2.75rem; text-align: center; border: 0; border-radius: var(--radius); background: var(--c-white); font-family: var(--f-display); font-weight: 500; color: var(--c-ink); -moz-appearance: textfield; }
   .est__sum { align-self: start; display: grid; gap: 1rem; padding: clamp(1.25rem, 1rem + 1vw, 1.75rem); background: var(--c-burgundy); color: var(--c-paper); border-radius: var(--radius); }
   .est__sum :focus-visible { outline-color: var(--c-ochre); }
   .est__sum-label { font-family: var(--f-display); font-size: 0.875rem; color: rgb(246 241 231 / 0.8); }
@@ -182,7 +140,6 @@ const unpriced = feeExtras.filter((e) => !e.name.startsWith('A guest'));
   .est__pay { display: grid; gap: 0.5rem; }
   .est__pay p { display: flex; justify-content: space-between; gap: 1rem; font-family: var(--f-display); font-size: 0.875rem; line-height: 1.3; color: rgb(246 241 231 / 0.9); }
   .est__pay strong { font-weight: 500; color: var(--c-paper); white-space: nowrap; }
-  .est__quote { color: var(--c-ochre); font-family: var(--f-display); }
   .est__note { color: rgb(246 241 231 / 0.75); line-height: 1.45; }
   .est__sum :global(.btn) { --btn-bg: var(--c-ochre); --btn-fg: var(--c-ink); --btn-bg-hover: var(--c-paper); }
   @media (min-width: 60rem) {

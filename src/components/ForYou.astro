@@ -122,8 +122,13 @@ import { disciplines, loveIt, notForYou, tenWords, letter, links } from '../cont
     const wrap = () => { const h = half(); if (el.scrollLeft >= h) el.scrollLeft -= h; else if (el.scrollLeft <= 0) el.scrollLeft += h; };
     const tick = (t: number) => {
       const dt = last ? Math.min(t - last, 64) : 16; last = t;
-      if (!paused && !dragging && !reduce) { pos += dt * 0.045; el.scrollLeft = pos; wrap(); pos = el.scrollLeft; }
-      else pos = el.scrollLeft;
+      if (!paused && !dragging && !reduce) {
+        // keep a float accumulator: Safari rounds scrollLeft to whole pixels, so never read it back while auto-scrolling
+        pos += dt * 0.045;
+        const h = half();
+        if (pos >= h) pos -= h;
+        el.scrollLeft = pos;
+      } else pos = el.scrollLeft;
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
