@@ -1,6 +1,7 @@
 ---
 import SectionHead from './SectionHead.astro';
 import ApplyButton from './ApplyButton.astro';
+import FeeEstimator from './FeeEstimator.astro';
 import { Image } from 'astro:assets';
 import { fees, feeIncludes, feeExcludes, feeExtras, payment, links, funders } from '../content/opencall';
 import { img } from '../lib/images';
@@ -35,10 +36,13 @@ const timeline = [
             <summary>More about option {f.id}</summary>
             <p class="small">{f.detail}</p>
           </details>
+          <button type="button" class="option__est" data-estimate-option={f.id} hidden>Estimate with option {f.id} <span aria-hidden="true">↓</span></button>
         </li>
       ))}
     </ul>
     <p class="fees__guest small" data-reveal>All options include 24/7 access to your studio and to Casa Bagnolo’s communal spaces, plus the full programme. A guest can share your room for {feeExtras[1].price.replace(', min. 7 nights', '')} (minimum 7 nights).</p>
+
+    <FeeEstimator />
 
     <div class="incl">
       <div class="incl__col incl__col--yes" data-reveal>
@@ -124,6 +128,9 @@ const timeline = [
   .option__more summary::-webkit-details-marker { display: none; }
   .option__more summary::after { content: '+'; font-size: 1.25rem; line-height: 1; }
   .option__more[open] summary::after { content: '–'; }
+  .option__est { justify-self: start; align-self: start; min-height: 2.75rem; padding: 0 0.9rem; border-radius: 999px; background: var(--c-ochre); color: var(--c-ink); font-family: var(--f-display); font-weight: 500; font-size: 0.875rem; transition: background-color 0.2s; }
+  .option__est:hover { background: var(--c-burgundy); color: var(--c-paper); }
+  .option__est[hidden] { display: none; }
   .fees__guest { margin-top: 1.25rem; max-width: 60ch; color: var(--c-muted); }
 
   .incl { display: grid; gap: var(--gap); margin-top: clamp(3rem, 2rem + 3vw, 4.5rem); }
