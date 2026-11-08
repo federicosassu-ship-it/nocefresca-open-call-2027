@@ -1,26 +1,23 @@
 ---
-// Interactive estimate: pick an option, length of stay and extras. Prices come from src/content/opencall.ts.
-// Progressive enhancement: hidden without JS (the option cards above already show every price).
+// Package explorer: pick (or hover) a studio + housing option to see its details and what you pay.
+// Prices come from src/content/opencall.ts. Works without JS (option A shown, all radios usable as a list).
 import { fees, payment, feeExcludes } from '../content/opencall';
 import { euro } from '../lib/format';
 import ApplyButton from './ApplyButton.astro';
-
 ---
-<div class="est" id="estimate" data-estimator
-  data-options={JSON.stringify(fees.map((f) => ({ id: f.id, title: f.title, price: f.price })))}
-  data-confirmation={payment.confirmationFee}>
+<div class="est" id="estimate" data-estimator data-confirmation={payment.confirmationFee}>
   <div class="est__head">
-    <p class="nr"><b>Packages &amp; estimate</b><span>Five studio + housing options</span></p>
+    <p class="nr"><b>Packages</b><span>Five studio + housing options</span></p>
     <h3>Pick a package, see what your stay costs.</h3>
   </div>
 
   <div class="est__grid">
-    <form class="est__controls" onsubmit="return false" aria-label="Estimate options">
+    <form class="est__controls" onsubmit="return false" aria-label="Choose a package">
       <fieldset class="est__field">
-        <legend>1 · Studio + housing</legend>
+        <legend class="visually-hidden">Studio + housing package</legend>
         <div class="est__opts">
           {fees.map((f, i) => (
-            <label class="est__opt">
+            <label class="est__opt" data-opt={f.id}>
               <input type="radio" name="est-option" value={f.id} checked={i === 0} />
               <span class="est__opt-id">{f.id}</span>
               <span class="est__opt-title">{f.title}<small>{f.bath} · Best for {f.bestFor.charAt(0).toLowerCase() + f.bestFor.slice(1)}</small></span>
@@ -29,41 +26,29 @@ import ApplyButton from './ApplyButton.astro';
           ))}
         </div>
       </fieldset>
+    </form>
 
+    <aside class="est__sum" aria-live="polite" aria-label="Selected package">
       {fees.map((f, i) => (
         <div class="est__pkg" data-pkg={f.id} hidden={i !== 0}>
-          <p class="est__pkg-title">Option {f.id} · {f.title}</p>
+          <p class="est__sum-label">Option {f.id}</p>
+          <p class="est__pkg-title">{f.title}</p>
+          <p class="est__total num">{euro(f.price)}<span>per month</span></p>
           <dl class="est__pkg-specs">
             <div><dt>Studio</dt><dd>{f.studio}</dd></div>
             <div><dt>Sleep</dt><dd>{f.sleep}</dd></div>
             <div><dt>Bathroom</dt><dd>{f.bath}</dd></div>
             <div><dt>Best for</dt><dd>{f.bestFor}</dd></div>
           </dl>
-          <p class="small">{f.detail}</p>
+          <p class="est__pkg-detail">{f.detail}</p>
+          <div class="est__pay">
+            <p><span>Confirmation fee, within 2 weeks of selection</span><strong class="num">{euro(payment.confirmationFee)}</strong></p>
+            <p><span>Remaining fee for a one-month stay, 12 weeks before you start</span><strong class="num">{euro(f.price - payment.confirmationFee)}</strong></p>
+          </div>
         </div>
       ))}
-
-      <fieldset class="est__field">
-        <legend>2 · Length of stay</legend>
-        <div class="est__seg">
-          {[1, 2, 3].map((m) => (
-            <label><input type="radio" name="est-months" value={m} checked={m === 1} /><span>{m} month{m > 1 ? 's' : ''}</span></label>
-          ))}
-        </div>
-      </fieldset>
-
-    </form>
-
-    <aside class="est__sum" aria-live="polite" aria-label="Estimate summary">
-      <p class="est__sum-label">Estimated total</p>
-      <p class="est__total num" data-total>{euro(fees[0].price)}</p>
-      <ul class="est__lines" role="list" data-lines><li><span>Option {fees[0].id} · {fees[0].title}<br /><small>{euro(fees[0].price)} × 1 month</small></span><strong>{euro(fees[0].price)}</strong></li></ul>
-      <div class="est__pay">
-        <p><span>Confirmation fee, within 2 weeks of selection</span><strong class="num" data-confirm>{euro(payment.confirmationFee)}</strong></p>
-        <p><span>Remaining residency fee, 12 weeks before you start</span><strong class="num" data-balance>{euro(fees[0].price - payment.confirmationFee)}</strong></p>
-      </div>
-      <p class="est__note small">Indicative estimate. Not included: {feeExcludes.map((x) => x.split(' (')[0].toLowerCase()).join(', ')}. Optional extras (a guest in your room, meals, lessons…) are listed below. Final amounts are in your confirmation letter.</p>
-      <ApplyButton location="estimate" block label="Apply with this plan" />
+      <p class="est__note small">Staying two or three months? Multiply the monthly fee. Not included: {feeExcludes.map((x) => x.split(' (')[0].toLowerCase()).join(', ')}. Optional extras are listed below; final amounts are in your confirmation letter.</p>
+      <ApplyButton location="estimate" block label="Apply with this package" />
     </aside>
   </div>
 </div>
@@ -71,79 +56,75 @@ import ApplyButton from './ApplyButton.astro';
 <script>
   const root = document.querySelector<HTMLElement>('[data-estimator]');
   if (root) {
-    root.hidden = false;
-    const opts: { id: string; title: string; price: number }[] = JSON.parse(root.dataset.options || '[]');
-    const CONF = Number(root.dataset.confirmation);
-    const eur = (n: number) => `€${n.toLocaleString('en-GB')}`;
-    const $ = <T extends Element>(s: string) => root.querySelector<T>(s)!;
-    let tTimer = 0;
-
-    const render = (user = false) => {
-      const id = $<HTMLInputElement>('input[name="est-option"]:checked').value;
-      const months = Number($<HTMLInputElement>('input[name="est-months"]:checked').value);
-      const opt = opts.find((o) => o.id === id)!;
-      root.querySelectorAll<HTMLElement>('[data-pkg]').forEach((d) => (d.hidden = d.dataset.pkg !== id));
-      const residency = opt.price * months;
-
-      $<HTMLElement>('[data-total]').textContent = eur(residency);
-      $<HTMLElement>('[data-lines]').innerHTML =
-        `<li><span>Option ${opt.id} · ${opt.title}<br><small>${eur(opt.price)} × ${months} month${months > 1 ? 's' : ''}</small></span><strong>${eur(residency)}</strong></li>`;
-      $<HTMLElement>('[data-balance]').textContent = eur(Math.max(0, residency - CONF));
-      if (user) {
-        clearTimeout(tTimer);
-        tTimer = window.setTimeout(() => window.nfTrack?.('estimate_change', { location: 'fees', option: id, months, total: residency }), 600);
-      }
+    const pkgs = [...root.querySelectorAll<HTMLElement>('[data-pkg]')];
+    const opts = [...root.querySelectorAll<HTMLElement>('[data-opt]')];
+    const selected = () => root.querySelector<HTMLInputElement>('input[name="est-option"]:checked')!.value;
+    // the card describes the hovered option while exploring, otherwise the selected one
+    const show = (id: string) => {
+      pkgs.forEach((p) => (p.hidden = p.dataset.pkg !== id));
+      opts.forEach((o) => o.classList.toggle('is-previewing', o.dataset.opt === id && id !== selected()));
     };
-    root.addEventListener('change', () => render(true));
-    render();
+    let tTimer = 0;
+    root.addEventListener('change', () => {
+      const id = selected();
+      show(id);
+      clearTimeout(tTimer);
+      tTimer = window.setTimeout(() => window.nfTrack?.('package_select', { location: 'fees', option: id }), 300);
+    });
+    if (matchMedia('(hover: hover)').matches) {
+      opts.forEach((o) => o.addEventListener('mouseenter', () => show(o.dataset.opt!)));
+      root.querySelector('.est__opts')!.addEventListener('mouseleave', () => show(selected()));
+    }
+    show(selected());
   }
 </script>
 
 <style>
-  .est { margin-top: 0; padding: clamp(1.5rem, 1rem + 2.5vw, 3rem); background: var(--c-ochre-soft); border-radius: var(--radius); scroll-margin-top: calc(var(--header-h) + 1rem); }
-  .est__pkg { margin: -0.75rem 0 1.5rem; padding: 1.1rem 1.25rem; background: var(--c-white); border-left: 3px solid var(--c-burgundy); border-radius: var(--radius); display: grid; gap: 0.75rem; }
-  .est__pkg[hidden] { display: none; }
-  .est__pkg-title { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
-  .est__pkg-specs { display: grid; gap: 0.45rem; }
-  .est__pkg-specs div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.75rem; }
-  .est__pkg-specs dt { font-family: var(--f-display); font-size: 0.8125rem; color: var(--c-muted); padding-top: 0.15em; }
-  .est__pkg-specs dd { margin: 0; font-size: 0.9375rem; line-height: 1.4; }
+  .est { padding: clamp(1.5rem, 1rem + 2.5vw, 3rem); background: var(--c-ochre-soft); border-radius: var(--radius); scroll-margin-top: calc(var(--header-h) + 1rem); }
   .est__head { display: grid; gap: 0.5rem; margin-bottom: 1.75rem; }
   .est__head h3 { font-size: var(--fs-h3); }
   .est__grid { display: grid; gap: 1.5rem; }
-  .est__field { border: 0; padding: 0; margin: 0 0 1.5rem; min-width: 0; }
-  .est__field legend { font-family: var(--f-display); font-weight: 500; font-size: 1.0625rem; color: var(--c-burgundy); margin-bottom: 0.75rem; padding: 0; }
-  .est__opts { display: grid; gap: 0.4rem; }
-  .est__opt { display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; align-items: center; gap: 0.75rem; min-height: 3.5rem; padding: 0.7rem 0.9rem; background: var(--c-white); border-radius: var(--radius); box-shadow: inset 0 0 0 1px var(--c-line); cursor: pointer; transition: box-shadow 0.2s; }
-  .est__opt:hover { box-shadow: inset 0 0 0 1.5px var(--c-burgundy); }
-  .est__opt:has(input:checked) { box-shadow: inset 0 0 0 2px var(--c-burgundy); }
-  .est__opt input, .est__seg input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-  .est__opt:has(input:focus-visible), .est__seg label:has(input:focus-visible) { outline: 3px solid var(--c-burgundy); outline-offset: 2px; }
-  .est__opt-id { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; font-family: var(--f-display); font-weight: 600; font-size: 0.875rem; color: var(--c-burgundy); box-shadow: inset 0 0 0 1.5px var(--c-line-strong); }
+  .est__field { border: 0; padding: 0; margin: 0; min-width: 0; }
+  .est__opts { display: grid; gap: 0.5rem; }
+  .est__opt { position: relative; display: grid; grid-template-columns: 2.25rem minmax(0, 1fr) auto; align-items: center; gap: 0.9rem; min-height: 4rem; padding: 0.85rem 1rem; background: var(--c-white); border-radius: var(--radius); box-shadow: inset 0 0 0 1px var(--c-line); cursor: pointer; transition: background-color 0.2s var(--ease), box-shadow 0.2s var(--ease); }
+  /* exploring (hover) → soft coral; selected → ochre with burgundy outline */
+  @media (hover: hover) { .est__opt:hover { background: var(--c-coral-soft); box-shadow: inset 0 0 0 1.5px var(--c-coral); } }
+  .est__opt.is-previewing { background: var(--c-coral-soft); box-shadow: inset 0 0 0 1.5px var(--c-coral); }
+  .est__opt:has(input:checked) { background: var(--c-ochre); box-shadow: inset 0 0 0 2px var(--c-burgundy); }
+  .est__opt input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .est__opt:has(input:focus-visible) { outline: 3px solid var(--c-burgundy); outline-offset: 2px; }
+  .est__opt-id { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; font-family: var(--f-display); font-weight: 600; font-size: 0.9375rem; color: var(--c-burgundy); box-shadow: inset 0 0 0 1.5px var(--c-line-strong); transition: background-color 0.2s, color 0.2s; }
   .est__opt:has(input:checked) .est__opt-id { background: var(--c-burgundy); color: var(--c-paper); box-shadow: none; }
-  .est__opt-title { display: grid; gap: 0.2rem; font-family: var(--f-display); font-size: 0.9375rem; font-weight: 500; line-height: 1.25; color: var(--c-ink); }
+  .est__opt-title { display: grid; gap: 0.2rem; font-family: var(--f-display); font-size: 1rem; font-weight: 500; line-height: 1.25; color: var(--c-ink); }
   .est__opt-title small { font-family: var(--f-text); font-weight: 400; font-size: 0.875rem; color: var(--c-muted); line-height: 1.35; }
-  .est__opt-price { font-weight: 500; color: var(--c-burgundy); white-space: nowrap; }
+  .est__opt:has(input:checked) .est__opt-title small, .est__opt:has(input:checked) .est__opt-price small { color: var(--c-ink); }
+  .est__opt-price { font-weight: 500; font-size: 1.125rem; color: var(--c-burgundy); white-space: nowrap; }
   .est__opt-price small { font-size: 0.75rem; color: var(--c-muted); font-weight: 400; }
-  .est__seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
-  .est__seg label { position: relative; }
-  .est__seg span { display: grid; place-items: center; min-height: 3rem; border-radius: var(--radius); background: var(--c-white); box-shadow: inset 0 0 0 1px var(--c-line); font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); cursor: pointer; }
-  .est__seg input:checked + span { background: var(--c-burgundy); color: var(--c-paper); box-shadow: none; }
-  .est__sum { align-self: start; display: grid; gap: 1rem; padding: clamp(1.25rem, 1rem + 1vw, 1.75rem); background: var(--c-burgundy); color: var(--c-paper); border-radius: var(--radius); }
+
+  .est__sum { align-self: start; display: grid; gap: 1.1rem; padding: clamp(1.25rem, 1rem + 1vw, 1.9rem); background: var(--c-burgundy); color: var(--c-paper); border-radius: var(--radius); }
   .est__sum :focus-visible { outline-color: var(--c-ochre); }
+  .est__pkg { display: grid; gap: 0.9rem; }
+  .est__pkg[hidden] { display: none; }
   .est__sum-label { font-family: var(--f-display); font-size: 0.875rem; color: rgb(246 241 231 / 0.8); }
-  .est__total { font-size: clamp(2.5rem, 2rem + 2vw, 3.5rem); font-weight: 500; letter-spacing: -0.035em; line-height: 1; color: var(--c-ochre); margin-top: -0.5rem; }
-  .est__lines { display: grid; gap: 0.6rem; padding-block: 0.9rem; border-block: 1px solid rgb(246 241 231 / 0.25); }
-  .est__lines :global(li) { display: flex; justify-content: space-between; gap: 1rem; font-family: var(--f-display); font-size: 0.9375rem; line-height: 1.3; }
-  .est__lines :global(small) { color: rgb(246 241 231 / 0.75); font-size: 0.8125rem; }
-  .est__lines :global(strong) { font-weight: 500; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .est__pay { display: grid; gap: 0.5rem; }
+  .est__pkg-title { font-family: var(--f-display); font-weight: 500; font-size: 1.375rem; line-height: 1.2; color: var(--c-paper); margin-top: -0.6rem; }
+  .est__total { display: flex; align-items: baseline; gap: 0.5rem; font-size: clamp(2.5rem, 2rem + 2vw, 3.5rem); font-weight: 500; letter-spacing: -0.035em; line-height: 1; color: var(--c-ochre); }
+  .est__total span { font-size: 0.9375rem; letter-spacing: 0; font-weight: 400; color: rgb(246 241 231 / 0.8); }
+  .est__pkg-specs { display: grid; gap: 0.5rem; padding-block: 0.9rem; border-block: 1px solid rgb(246 241 231 / 0.25); }
+  .est__pkg-specs div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.75rem; }
+  .est__pkg-specs dt { font-family: var(--f-display); font-size: 0.8125rem; color: rgb(246 241 231 / 0.75); padding-top: 0.15em; }
+  .est__pkg-specs dd { margin: 0; font-size: 0.9375rem; line-height: 1.4; color: var(--c-paper); }
+  .est__pkg-detail { font-size: 0.9375rem; line-height: 1.5; color: rgb(246 241 231 / 0.92); }
+  .est__pay { display: grid; gap: 0.5rem; padding-top: 0.9rem; border-top: 1px solid rgb(246 241 231 / 0.25); }
   .est__pay p { display: flex; justify-content: space-between; gap: 1rem; font-family: var(--f-display); font-size: 0.875rem; line-height: 1.3; color: rgb(246 241 231 / 0.9); }
   .est__pay strong { font-weight: 500; color: var(--c-paper); white-space: nowrap; }
   .est__note { color: rgb(246 241 231 / 0.75); line-height: 1.45; }
   .est__sum :global(.btn) { --btn-bg: var(--c-ochre); --btn-fg: var(--c-ink); --btn-bg-hover: var(--c-paper); }
+  @media (max-width: 39.99rem) {
+    .est__opt { grid-template-columns: 2.25rem minmax(0, 1fr); align-items: start; }
+    .est__opt-price { grid-column: 2; }
+  }
   @media (min-width: 60rem) {
-    .est__grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(2rem, 3vw, 3.5rem); }
+    .est__grid { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(2rem, 3vw, 3.5rem); }
     .est__sum { position: sticky; top: calc(var(--header-h) + 1.5rem); }
   }
 </style>
