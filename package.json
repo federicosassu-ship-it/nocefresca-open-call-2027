@@ -6,7 +6,7 @@
   "description": "Nocefresca Artist Residency — Open Call 2027 landing page",
   "scripts": {
     "dev": "astro dev",
-    "generate": "node scripts/build-map.mjs && node scripts/build-contours.mjs",
+    "generate": "node scripts/build-map.mjs && node scripts/build-contours.mjs && node scripts/build-wordmark.mjs",
     "build": "npm run generate && astro build",
     "preview": "astro preview",
     "og": "node scripts/og-image.mjs",
@@ -26,6 +26,7 @@
     "@axe-core/playwright": "4.13.0",
     "d3-contour": "4.0.2",
     "d3-geo": "3.1.1",
+    "potrace": "2.1.8",
     "simplex-noise": "4.0.3",
     "topojson-client": "3.1.0",
     "world-atlas": "2.0.2"
