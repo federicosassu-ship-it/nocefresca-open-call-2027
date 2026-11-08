@@ -1,6 +1,6 @@
 {
   "url": "http://127.0.0.1:4321/",
-  "date": "2026-11-08T17:55:54.502Z",
+  "date": "2026-11-08T17:58:09.824Z",
   "runs": {
     "mobile": {
       "consoleErrors": [],
@@ -14,7 +14,7 @@
       "imagesNotLoaded": [],
       "smallTargets": [],
       "applyLinks": 9,
-      "pageWeightHint": 298224,
+      "pageWeightHint": 298236,
       "axeViolations": [],
       "tabsKeyboard": "ok",
       "accordion": "ok",
