@@ -1,5 +1,4 @@
 ---
-const { nr = '02' } = Astro.props;
 import { Picture } from 'astro:assets';
 import SectionHead from './SectionHead.astro';
 import Arrow from './Arrow.astro';
@@ -19,7 +18,7 @@ const moments = [
 ---
 <section class="section month" id="month" aria-labelledby="month-title">
   <div class="container">
-    <SectionHead nr={nr} kicker="A month here" id="month-title" split
+    <SectionHead nr="02" kicker="A month here" id="month-title" split
       title="Picture your month in Milis."
       lead="Your days are yours to shape. The village is small, the landscape is wide, and everyone around you is making something too." />
 

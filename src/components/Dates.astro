@@ -1,5 +1,4 @@
 ---
-const { nr = '01' } = Astro.props;
 import SectionHead from './SectionHead.astro';
 import StatusBadge from './StatusBadge.astro';
 import ApplyButton from './ApplyButton.astro';
@@ -15,7 +14,7 @@ const autumn = periods.filter((p) => p.arrive >= '2027-07-01');
 <section class="section section--ochre dates" id="dates" aria-labelledby="dates-title">
   <span class="contours" style={`background-image:url(${contoursLight})`} aria-hidden="true"></span>
   <div class="container dates__inner">
-    <SectionHead nr={nr} kicker="Dates & availability" id="dates-title" split
+    <SectionHead nr="10" kicker="Dates & availability" id="dates-title" split
       title="Six periods in 2027. Stay one, two or three months."
       lead="Each period lasts four weeks. The residency follows the seasons and closes in January, February, July and August." />
 

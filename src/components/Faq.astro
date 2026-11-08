@@ -1,5 +1,4 @@
 ---
-const { nr = '09' } = Astro.props;
 import { Image } from 'astro:assets';
 import SectionHead from './SectionHead.astro';
 import Arrow from './Arrow.astro';
@@ -11,7 +10,7 @@ const groups = ['Applying', 'The residency', 'Practical'] as const;
 <section class="section faq" id="faq" aria-labelledby="faq-title">
   <div class="container faq__grid">
     <div class="faq__aside">
-      <SectionHead nr={nr} kicker="FAQ" id="faq-title" title="Questions, answered." />
+      <SectionHead nr="13" kicker="FAQ" id="faq-title" title="Questions, answered." />
       <div class="talk" data-reveal>
         <Image src={img('people/francesca-sassu.jpg')} alt="Portrait of Francesca Sassu" width={96} height={96} densities={[1, 2]} format="webp" class="talk__face" loading="lazy" />
         <div>

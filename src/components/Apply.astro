@@ -1,12 +1,11 @@
 ---
-const { nr = '08' } = Astro.props;
 import SectionHead from './SectionHead.astro';
 import ApplyButton from './ApplyButton.astro';
 import { prepareChecklist, selectionCriteria, formQuestions, payment, links } from '../content/opencall';
 import { euro } from '../lib/format';
 
 const steps = [
-  { t: 'Read the open call', d: 'You’re doing it. The form asks about dates, studios and fees — each has its own page linked above.' },
+  { t: 'Read the open call', d: 'You’re doing it. Check the dates, studios and fees above — the form asks about all three.' },
   { t: 'Prepare your material', d: 'Use the checklist below. Drafting your answers first makes the form quick.' },
   { t: 'Fill in the online form', d: 'Eight short steps on nocefresca.it. Allow at least 20 minutes. Nothing is sent until you press Submit on the summary page.' },
   { t: 'Selection & confirmation', d: `We select a harmonious group. If you’re selected, you sign a confirmation letter and pay the ${euro(payment.confirmationFee)} confirmation fee within 2 weeks.` },
@@ -14,7 +13,7 @@ const steps = [
 ---
 <section class="section section--sand apply" id="apply" aria-labelledby="apply-title">
   <div class="container">
-    <SectionHead nr={nr} kicker="How to apply" id="apply-title" split
+    <SectionHead nr="12" kicker="How to apply" id="apply-title" split
       title="Four steps to your application."
       lead="One online form in eight short sections. It takes at least 20 minutes — less if you prepare with the list below." />
 

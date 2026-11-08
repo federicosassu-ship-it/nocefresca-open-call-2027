@@ -3,27 +3,25 @@ import { Image } from 'astro:assets';
 import ApplyButton from './ApplyButton.astro';
 import StatusBadge from './StatusBadge.astro';
 import { img } from '../lib/images';
-import { anchor, page } from '../lib/paths';
-const { current = '' } = Astro.props;
 
 const nav = [
-  { href: anchor('glance'), label: 'The residency', key: 'glance' },
-  { href: anchor('milis'), label: 'Milis', key: 'milis' },
-  { href: page('studios'), label: 'Studios', key: 'studios' },
-  { href: page('homes'), label: 'Homes', key: 'homes' },
-  { href: page('datesFees'), label: 'Dates & fees', key: 'datesFees' },
-  { href: anchor('faq'), label: 'FAQ', key: 'faq' },
+  { href: '#glance', label: 'The residency' },
+  { href: '#milis', label: 'Milis' },
+  { href: '#studios', label: 'Studios' },
+  { href: '#dates', label: 'Dates' },
+  { href: '#fees', label: 'Fees' },
+  { href: '#faq', label: 'FAQ' },
 ];
 ---
 <header class="site-header" data-header>
   <div class="container site-header__inner">
-    <a class="brand" href={anchor('top')} data-track="nav_click" data-location="logo">
+    <a class="brand" href="#top" data-track="nav_click" data-location="logo">
       <Image src={img('brand/logo.png')} alt="Nocefresca — artist residency in Sardinia" width={176} densities={[1, 2]} format="webp" loading="eager" />
     </a>
 
     <nav class="site-nav" aria-label="Page sections">
       <ul role="list">
-        {nav.map((n) => <li><a href={n.href} aria-current={current === n.key ? 'page' : undefined} data-track="nav_click" data-location={n.key}>{n.label}</a></li>)}
+        {nav.map((n) => <li><a href={n.href} data-track="nav_click" data-location={n.href.slice(1)}>{n.label}</a></li>)}
       </ul>
     </nav>
 
@@ -39,7 +37,7 @@ const nav = [
   <div class="mobile-menu" id="mobile-menu" hidden data-menu>
     <nav class="container" aria-label="Page sections (mobile)">
       <ul role="list">
-        {nav.map((n) => <li><a href={n.href} aria-current={current === n.key ? 'page' : undefined} data-menu-link data-track="nav_click" data-location={n.key}>{n.label}</a></li>)}
+        {nav.map((n) => <li><a href={n.href} data-menu-link data-track="nav_click" data-location={n.href.slice(1)}>{n.label}</a></li>)}
       </ul>
       <StatusBadge variant="chip" />
       <ApplyButton location="mobile_menu" block size="lg" />
@@ -76,8 +74,8 @@ const nav = [
     .site-nav ul { display: flex; gap: clamp(0.75rem, 1.6vw, 2rem); }
     .site-nav a { position: relative; display: inline-flex; align-items: center; min-height: 2.75rem; font-family: var(--f-display); font-size: 0.9375rem; font-weight: 500; color: var(--c-ink); text-decoration: none; }
     .site-nav a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0.55rem; height: 1.5px; background: var(--c-burgundy); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease); }
-    .site-nav a:hover::after, .site-nav a[aria-current='true']::after, .site-nav a[aria-current='page']::after { transform: scaleX(1); }
-    .site-nav a[aria-current='true'], .site-nav a[aria-current='page'] { color: var(--c-burgundy); }
+    .site-nav a:hover::after, .site-nav a[aria-current='true']::after { transform: scaleX(1); }
+    .site-nav a[aria-current='true'] { color: var(--c-burgundy); }
     .mobile-menu { display: none !important; }
   }
 </style>

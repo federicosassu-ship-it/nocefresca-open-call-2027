@@ -1,5 +1,4 @@
 ---
-const { nr = '06' } = Astro.props;
 import { Picture, Image } from 'astro:assets';
 import SectionHead from './SectionHead.astro';
 import Rail from './Rail.astro';
@@ -17,7 +16,7 @@ const network = [
 ---
 <section class="section artists" id="artists" aria-labelledby="artists-title">
   <div class="container">
-    <SectionHead nr={nr} kicker="Artists" id="artists-title" split
+    <SectionHead nr="08" kicker="Artists" id="artists-title" split
       title="In the words of past residents."
       lead="Writers, painters, composers, filmmakers, designers — from 30+ countries. Here is what they say, in their own words." />
 

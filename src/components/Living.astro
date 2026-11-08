@@ -1,5 +1,4 @@
 ---
-const { nr = '01', hideHead = false } = Astro.props;
 import { Picture, Image } from 'astro:assets';
 import SectionHead from './SectionHead.astro';
 import Rail from './Rail.astro';
@@ -27,11 +26,11 @@ const facilities = [
   ['Insurance', 'Buildings carry liability insurance for accidental damage to third parties. Personal health insurance is not included: arrange your own cover for the whole stay.'],
 ];
 ---
-<section class:list={["section section--sand living", { "section--flush": hideHead }]} id="living" aria-labelledby="living-title">
+<section class="section section--sand living" id="living" aria-labelledby="living-title">
   <div class="container">
-    {hideHead ? <h2 class="visually-hidden" id="living-title">Homes and daily life in detail</h2> : (<SectionHead nr={nr} kicker="Living at Nocefresca" id="living-title" split
+    <SectionHead nr="07" kicker="Living at Nocefresca" id="living-title" split
       title="A home in the village, not a hotel room."
-      lead="Local families open their vacant homes to the residency in the quieter months. For a month or three, you become a temporary inhabitant of a Sardinian village." />)}
+      lead="Local families open their vacant homes to the residency in the quieter months. For a month or three, you become a temporary inhabitant of a Sardinian village." />
 
     <div class="living__grid">
       <div class="living__photos">

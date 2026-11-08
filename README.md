@@ -1,9 +1,7 @@
 # Nocefresca — Open Call 2027 landing page
 
 A conversion-focused, mobile-first landing page for paid social traffic (Instagram/Meta).
-It replaces the 12-sub-page Open Call with a lean, story-driven landing plus three deep-dive pages:
-`/` (overview: hero, a month here, is it for you, at a glance, Milis, artists, programme, how to apply, FAQ),
-`/studios/`, `/homes/` and `/dates-and-fees/`. The "At a glance" cards and the header link to the deep-dive pages.
+It replaces the 12-sub-page Open Call with one story-driven page.
 All content is verified against nocefresca.it (7 Nov 2026) and every image is an authentic Nocefresca photo.
 
 | | |
@@ -67,8 +65,6 @@ src/
   components/             ← one component per section (Hero, InfoStrip, Month, ForYou, Glance, Milis,
                             Studios, Living, Artists, Programme, Dates, Fees, Apply, Faq, FinalCta, Footer…)
   layouts/Base.astro      ← <head>: SEO, Open Graph, JSON-LD, fonts, Consent Mode defaults
-  layouts/Page.astro      ← shell of the deep-dive pages (header, Keep exploring, final CTA, footer)
-  pages/                  ← index (landing), studios/, homes/, dates-and-fees/
   scripts/main.ts         ← reveal, tabs, galleries, sticky CTA, menu, analytics, consent, UTM forwarding
   styles/global.css       ← design system
   generated/              ← map + topographic motifs (built by scripts/, do not edit)

@@ -1,5 +1,4 @@
 ---
-const { nr = '05' } = Astro.props;
 import { Picture } from 'astro:assets';
 import SectionHead from './SectionHead.astro';
 import MapSardinia from './MapSardinia.astro';
@@ -26,7 +25,7 @@ const photos = [
 ---
 <section class="section section--soft milis" id="milis" aria-labelledby="milis-title">
   <div class="container">
-    <SectionHead nr={nr} kicker="Milis, Sardinia" id="milis-title" split
+    <SectionHead nr="05" kicker="Milis, Sardinia" id="milis-title" split
       title="A citrus village at the foot of Montiferru."
       lead="Milis is an ancient village in the western part of central Sardinia — far from the tourist coasts, close to everything that matters. In spring, the orange blossom scents the whole town." />
 
