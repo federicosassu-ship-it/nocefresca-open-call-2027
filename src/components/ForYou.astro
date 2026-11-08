@@ -118,21 +118,31 @@ import { disciplines, loveIt, notForYou, tenWords, letter, links } from '../cont
     const track = el.firstElementChild as HTMLElement;
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const half = () => track.scrollWidth / 2;
-    let paused = false, dragging = false, startX = 0, startLeft = 0, last = 0, pos = el.scrollLeft;
+    let paused = false, dragging = false, startX = 0, startLeft = 0, last = 0, offset = 0, halfW = half();
+    const SPEED = 0.075; // px per ms ≈ 75 px/s
     const wrap = () => { const h = half(); if (el.scrollLeft >= h) el.scrollLeft -= h; else if (el.scrollLeft <= 0) el.scrollLeft += h; };
+    // Auto-scroll moves the track with a sub-pixel GPU transform (smooth everywhere, Safari included);
+    // when someone takes over, the offset is folded into the real scroll position.
+    const fold = () => {
+      if (!offset) return;
+      const h = half();
+      track.style.transform = '';
+      el.scrollLeft = (((el.scrollLeft + offset) % h) + h) % h;
+      offset = 0;
+    };
     const tick = (t: number) => {
-      const dt = last ? Math.min(t - last, 64) : 16; last = t;
+      const dt = last ? Math.min(t - last, 50) : 16; last = t;
       if (!paused && !dragging && !reduce) {
-        // keep a float accumulator: Safari rounds scrollLeft to whole pixels, so never read it back while auto-scrolling
-        pos += dt * 0.045;
-        const h = half();
-        if (pos >= h) pos -= h;
-        el.scrollLeft = pos;
-      } else pos = el.scrollLeft;
+        offset += dt * SPEED;
+        if (el.scrollLeft + offset >= halfW) offset -= halfW;
+        track.style.transform = `translate3d(${-offset}px,0,0)`;
+      }
       requestAnimationFrame(tick);
     };
+    track.style.willChange = 'transform';
+    new ResizeObserver(() => (halfW = half())).observe(track);
     requestAnimationFrame(tick);
-    const pause = () => (paused = true), resume = () => (paused = false);
+    const pause = () => { paused = true; fold(); }, resume = () => (paused = false);
     el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') pause(); });
     el.parentElement!.addEventListener('mouseleave', () => { if (!dragging) resume(); });
     el.addEventListener('focus', pause); el.addEventListener('blur', resume);
@@ -141,13 +151,13 @@ import { disciplines, loveIt, notForYou, tenWords, letter, links } from '../cont
     el.addEventListener('scroll', () => { if (paused || dragging) wrap(); }, { passive: true });
     // trackpads and Shift+wheel scroll the row natively; vertical wheel keeps scrolling the page
     // drag to scroll
-    el.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') return; dragging = true; startX = e.clientX; startLeft = el.scrollLeft; el.classList.add('is-dragging'); el.setPointerCapture(e.pointerId); });
+    el.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') return; fold(); dragging = true; startX = e.clientX; startLeft = el.scrollLeft; el.classList.add('is-dragging'); el.setPointerCapture(e.pointerId); });
     el.addEventListener('pointermove', (e) => { if (!dragging) return; el.scrollLeft = startLeft - (e.clientX - startX); wrap(); startLeft = el.scrollLeft + (e.clientX - startX); });
     const end = () => { dragging = false; el.classList.remove('is-dragging'); };
     el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
     el.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); el.scrollBy({ left: (e.key === 'ArrowRight' ? 1 : -1) * el.clientWidth * 0.5, behavior: 'smooth' }); } });
     el.parentElement!.querySelectorAll<HTMLButtonElement>('[data-marquee-step]').forEach((b) =>
-      b.addEventListener('click', () => el.scrollBy({ left: Number(b.dataset.marqueeStep) * el.clientWidth * 0.5, behavior: 'smooth' })),
+      b.addEventListener('click', () => (fold(), el.scrollBy({ left: Number(b.dataset.marqueeStep) * el.clientWidth * 0.5, behavior: 'smooth' }))),
     );
   });
 </script>
