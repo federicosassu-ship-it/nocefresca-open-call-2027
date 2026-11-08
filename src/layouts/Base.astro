@@ -99,7 +99,7 @@ const consentDefaults = `window.dataLayer=window.dataLayer||[];function gtag(){d
     <link rel="preload" href={vollkornLatin} as="font" type="font/woff2" crossorigin />
     <slot name="head" />
 
-    <script is:inline>(function(d){d.classList.add('js');try{var seen=sessionStorage.getItem('nf-intro-seen');}catch(e){}if(!seen&&!location.hash&&!window.scrollY&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&document.querySelector('meta[name=nf-intro]'))d.classList.add('has-intro');})(document.documentElement);</script>
+    <script is:inline>(function(d){d.classList.add('js');if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&document.querySelector('meta[name=nf-intro]'))d.classList.add('has-intro');})(document.documentElement);</script>
     <script is:inline set:html={consentDefaults} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>

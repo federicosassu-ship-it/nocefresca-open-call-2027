@@ -37,6 +37,7 @@ const clientConfig = {
     <link rel="preload" as="image" type="image/avif" media={DESKTOP_MQ} imagesrcset={hero.desktop.avif} imagesizes={hero.desktop.sizes} fetchpriority="high" />
   </Fragment>
   <Intro />
+  <div class="page">
   <Header />
   <main id="main">
     <Hero />
@@ -54,6 +55,7 @@ const clientConfig = {
     <FinalCta />
   </main>
   <Footer />
+  </div>
   <StickyApply />
   <ConsentBanner />
   <script type="application/json" id="nf-config" set:html={JSON.stringify(clientConfig)} />

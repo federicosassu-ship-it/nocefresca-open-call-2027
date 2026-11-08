@@ -284,3 +284,6 @@ figcaption, .caption { font-family: var(--f-display); font-size: 0.8125rem; line
 .hide-mobile { display: none; }
 @media (min-width: 60rem) { .hide-mobile { display: revert; } .hide-desktop { display: none !important; } }
 html { scrollbar-gutter: stable; }
+
+/* page wrapper: positioning context for the header, so it sits below the landing intro */
+.page { position: relative; }

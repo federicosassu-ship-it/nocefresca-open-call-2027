@@ -197,7 +197,7 @@ function applyConsent(c: Consent, persist = true) {
 {
   const bar = document.querySelector<HTMLElement>('[data-sticky-apply]');
   const hero = document.getElementById('top');
-  const blockers = ['final', 'footer', 'mobile-menu'].map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+  const blockers = ['intro', 'final', 'footer', 'mobile-menu'].map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
   if (bar && hero && 'IntersectionObserver' in window) {
     const state = new Map<Element, boolean>();
     const update = () => {
