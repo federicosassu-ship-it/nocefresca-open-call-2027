@@ -1,7 +1,9 @@
 ---
 import SectionHead from './SectionHead.astro';
 import ApplyButton from './ApplyButton.astro';
-import { fees, feeIncludes, feeExcludes, feeExtras, payment, links } from '../content/opencall';
+import { Image } from 'astro:assets';
+import { fees, feeIncludes, feeExcludes, feeExtras, payment, links, funders } from '../content/opencall';
+import { img } from '../lib/images';
 import { euro } from '../lib/format';
 
 const timeline = [
@@ -13,7 +15,7 @@ const timeline = [
 ---
 <section class="section fees" id="fees" aria-labelledby="fees-title">
   <div class="container">
-    <SectionHead nr="11" kicker="Fees & what’s included" id="fees-title" split
+    <SectionHead nr="09" kicker="Fees & what’s included" id="fees-title" split
       title="One monthly fee. Studio and home included."
       lead="Prices are per artist, per month. Pick the studio and housing combination that suits your practice — everything else in the programme is the same." />
 
@@ -53,6 +55,25 @@ const timeline = [
       </div>
     </div>
 
+    <div class="fund" data-reveal id="funding">
+      <div class="fund__text">
+        <p class="nr"><b>Funding</b><span>Your stay can be funded</span></p>
+        <h3>Apply for a grant to come to Nocefresca.</h3>
+        <p>Past residents have come to Milis with the support of embassies, arts councils and universities from around the world. Nocefresca can’t offer fellowships, but if you are selected you receive a <strong>formal invitation letter</strong> and, if needed, an <strong>official residency plan with a personalised budget</strong> for your funding applications.</p>
+        <p class="small">The open call is published a year ahead partly to give you time to find funding. In the form, you’ll say whether you are self-funded, already have a grant, or are applying for one.</p>
+      </div>
+      {funders.length > 0 && (
+        <div class="fund__wall">
+          <p class="label">Residents have been supported by</p>
+          <ul class="fund__logos" role="list">
+            {funders.map((f) => (
+              <li>{f.logo ? <Image src={img(f.logo)} alt={f.name} height={48} densities={[1, 2]} format="webp" loading="lazy" /> : <span class="fund__name">{f.name}{f.country && <small>{f.country}</small>}</span>}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+
     <div class="pay" data-reveal>
       <h3>How payment works</h3>
       <ol class="pay__steps" role="list">
@@ -73,13 +94,6 @@ const timeline = [
             <tbody>{payment.cancellation.map((c) => <tr><th scope="row">{c.when}</th><td>{c.refund}</td></tr>)}</tbody>
           </table>
           <p><strong>Rescheduling:</strong> {payment.rescheduling}</p>
-        </div>
-      </details>
-      <details data-track="fees_details_open" data-location="funding">
-        <summary>Funding your stay <span class="pm" aria-hidden="true"></span></summary>
-        <div class="acc__body">
-          <p>Nocefresca can’t provide fellowships at the moment. If you are selected, you receive a <strong>formal invitation letter</strong> and, if needed, an <strong>official residency plan with a personalised budget</strong> to support applications to grants, foundations or employers.</p>
-          <p>That’s also why the open call is published a year ahead: to give you time to find funding. In the form, you’ll say whether you are self-funded, already have a grant, or are applying for one.</p>
         </div>
       </details>
     </div>
@@ -122,6 +136,14 @@ const timeline = [
   .extras dt .num { font-weight: 400; color: var(--c-ink); font-size: 0.9375rem; }
   .extras dd { margin: 0.15rem 0 0; }
 
+  .fund { display: grid; gap: 2rem; margin-top: clamp(3rem, 2rem + 3vw, 4.5rem); padding: clamp(1.75rem, 1.2rem + 2.5vw, 3rem); background: var(--c-coral); border-radius: var(--radius); }
+  .fund__text { display: grid; gap: 0.9rem; max-width: 46rem; }
+  .fund__text .nr span { color: var(--c-ink); }
+  .fund__text h3 { font-size: var(--fs-h3); }
+  .fund__logos { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 2.25rem; margin-top: 0.75rem; }
+  .fund__logos img { width: auto; max-height: 3rem; mix-blend-mode: multiply; }
+  .fund__name { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); display: grid; }
+  .fund__name small { font-size: 0.8125rem; color: var(--c-ink); font-weight: 400; }
   .pay { margin-top: clamp(3rem, 2rem + 3vw, 4.5rem); }
   .pay h3 { margin-bottom: 1.25rem; }
   .pay__steps { list-style: none; padding: 0; display: grid; gap: 1.25rem; margin-bottom: 1rem; }

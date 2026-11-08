@@ -56,6 +56,12 @@ content file. A missing image fails the build loudly; it never ships silently.
 
 **Design tokens** (colours, type scale, spacing) are at the top of `src/styles/global.css`.
 
+## Funders logo wall
+
+Under the fees, the "Funding" block explains that residents can apply for grants. To show the institutions that funded past
+residents (embassies, arts councils, universities), add them to `funders` in `src/content/opencall.ts` and put each logo in
+`src/assets/img/funders/`. The logo wall stays hidden while the list is empty.
+
 ## Structure
 
 ```

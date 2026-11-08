@@ -3,7 +3,7 @@ import { Picture } from 'astro:assets';
 import SectionHead from './SectionHead.astro';
 import Arrow from './Arrow.astro';
 import { img } from '../lib/images';
-import { pastThemes, partners, links } from '../content/opencall';
+import { pastThemes, links } from '../content/opencall';
 
 const arc = [
   {
@@ -42,7 +42,7 @@ const arc = [
 ---
 <section class="section programme" id="programme" aria-labelledby="programme-title">
   <div class="container">
-    <SectionHead nr="09" kicker="Programme" id="programme-title" split
+    <SectionHead nr="07" kicker="Programme" id="programme-title" split
       title="Self-directed, never alone."
       lead="The residency is primarily self-directed: you’re expected to be self-sufficient in your practice. Around your work, Nocefresca builds a light structure to feed it — and none of it is mandatory." />
 
@@ -83,14 +83,6 @@ const arc = [
           <p>The team is on site or on call for everything else — finding equipment or materials, talking to people who don’t speak English, connecting you with local collaborators, suggesting sites relevant to your research, scouting locations for site-specific work and handling permits.</p>
         </div>
       </details>
-      <details data-track="programme_details_open" data-location="partners">
-        <summary>Partners &amp; network <span class="pm" aria-hidden="true"></span></summary>
-        <div class="acc__body">
-          <p>Through a network of cultural associations, exhibition spaces and local art collectives, artists can expand their professional network and discover opportunities during and after their stay.</p>
-          <dl class="partners">{partners.map((p) => <div><dt>{p.name}</dt><dd>{p.text}</dd></div>)}</dl>
-          <p class="small"><a class="link" href={links.partners} data-track="outbound_click" data-location="partners_source">All partners</a></p>
-        </div>
-      </details>
     </div>
   </div>
 </section>
@@ -110,11 +102,7 @@ const arc = [
   .themes__list li { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
   .themes__list .num { display: inline-block; width: 3.25rem; color: var(--c-muted); font-weight: 400; }
   .prog__acc { margin-top: clamp(2.5rem, 2rem + 2vw, 4rem); }
-  .partners { display: grid; gap: 0.9rem 2rem; }
-  .partners dt { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
-  .partners dd { margin: 0.1rem 0 0; font-size: var(--fs-small); }
   .prog__acc .acc__body { max-width: 60rem; }
-  @media (min-width: 40rem) { .partners { grid-template-columns: 1fr 1fr; } }
   @media (min-width: 60rem) {
     .arc { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .arc::before { content: ''; position: absolute; left: 0; right: 0; top: calc((100% - 0px) * 0); height: 0; }

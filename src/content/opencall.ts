@@ -75,7 +75,6 @@ export const links = {
   artists: src('artists'),
   about: src('about'),
   press: src('press'),
-  partners: src('partner'),
   studios: src('open_call&ocpag=studios'),
   equipment: src('open_call&ocpag=equipment_and_gears'),
   housing: src('open_call&ocpag=housing'),
@@ -478,17 +477,12 @@ export const pastThemes = [
   { year: 2026, title: 'Unofficial Cartographies — second edition' },
 ];
 
-export const partners = [
-  { name: 'Vivaio I Campi', text: 'Nursery and garden-laboratory of landscape designers Leo Minniti and Italo Vacca.' },
-  { name: 'Gruppo Folk Milis Pizzinnu', text: 'Milis’ folk group since 1982, organisers of the La Vega international folklore festival.' },
-  { name: 'Transhumanza', text: 'An itinerant collective connecting rural Sardinia with contemporary art research.' },
-  { name: 'Progetto Contemporaneo', text: 'Contemporary art association active across Sardinia since 2011.' },
-  { name: 'Noarte Paese Museo', text: 'International art and public space from San Sperate, the “Museum Village”.' },
-  { name: 'MANCASPAZIO', text: 'Exhibition space in the historic centre of Nuoro.' },
-  { name: 'Occhio', text: 'A space for photography, discussion and artistic education.' },
-  { name: 'Ottovolante Sulcis', text: 'Cultural association and home gallery in Sant’Antioco.' },
-  { name: 'Boynes Emerging Artist Award', text: 'Independent international award that offered its 6th-edition winner a residency at Nocefresca.' },
-];
+/**
+ * Institutions that have funded past residents' stays (embassies, arts councils, universities…).
+ * Shown as a logo wall under the fees. To be supplied by Nocefresca — the wall stays hidden while empty.
+ * Example: { name: 'Arts Council X', country: 'Country', logo: 'funders/arts-council-x.png' } (file in src/assets/img/funders/)
+ */
+export const funders: { name: string; country?: string; logo?: string }[] = [];
 
 export const press = [
   { outlet: 'Artribune', title: 'Nocefresca, il nuovo programma di residenze artistiche in Sardegna', url: 'https://www.artribune.com/professioni-e-professionisti/who-is-who/2021/10/nocefresca-nuovo-programma-residenze-artistiche-sardegna/' },
