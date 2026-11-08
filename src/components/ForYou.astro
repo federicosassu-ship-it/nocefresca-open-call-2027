@@ -11,9 +11,14 @@ import { disciplines, loveIt, notForYou, tenWords, letter, links } from '../cont
 
     <div class="foryou__disciplines" data-reveal>
       <p class="label">Nocefresca is perfect for — but not limited to —</p>
-      <ul class="disc" role="list">
-        {disciplines.map((d) => <li>{d}</li>)}
-      </ul>
+      <div class="marquee" data-marquee>
+        <ul class="disc" role="list">
+          {disciplines.map((d) => <li>{d}</li>)}
+        </ul>
+        <ul class="disc" role="list" aria-hidden="true">
+          {disciplines.map((d) => <li>{d}</li>)}
+        </ul>
+      </div>
       <p class="foryou__note">Solo artists, collectives and small groups. All ages can apply.</p>
     </div>
 
@@ -56,8 +61,19 @@ import { disciplines, loveIt, notForYou, tenWords, letter, links } from '../cont
 
 <style>
   .foryou__disciplines { margin-bottom: clamp(2.5rem, 1.5rem + 4vw, 5rem); }
-  .disc { display: flex; flex-wrap: wrap; gap: 0 0.35em; margin-top: 0.75rem; font-family: var(--f-display); font-weight: 500; font-size: clamp(1.625rem, 1.05rem + 2.6vw, 3.5rem); line-height: 1.12; letter-spacing: -0.025em; color: var(--c-burgundy); }
-  .disc li:not(:last-child)::after { content: ' /'; color: var(--c-terracotta); font-weight: 400; }
+  /* one-line marquee: two identical lists slide left; the copy is aria-hidden */
+  .marquee { display: flex; width: max-content; margin-top: 0.75rem; animation: marquee 48s linear infinite; will-change: transform; }
+  .foryou__disciplines { overflow: hidden; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); }
+  .marquee:hover, .marquee:focus-within { animation-play-state: paused; }
+  .disc { display: flex; flex: none; white-space: nowrap; font-family: var(--f-display); font-weight: 500; font-size: clamp(2rem, 1.3rem + 3vw, 4.25rem); line-height: 1.15; letter-spacing: -0.025em; color: var(--c-burgundy); }
+  .disc li::after { content: '/'; margin: 0 0.4em; color: var(--c-terracotta); font-weight: 400; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { width: auto; animation: none; margin-inline: 0; padding-inline: 0; }
+    .marquee .disc { white-space: normal; flex-wrap: wrap; flex: 1; }
+    .marquee .disc[aria-hidden] { display: none; }
+    .disc li:last-child::after { content: none; }
+  }
   .foryou__note { margin-top: 1rem; font-size: var(--fs-lead); color: var(--c-ink); }
 
   .foryou__cols { display: grid; gap: var(--gap); }
