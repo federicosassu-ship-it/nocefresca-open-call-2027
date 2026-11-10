@@ -42,9 +42,9 @@ export const statusCopy: Record<StatusState, { badge: string; line: string; deta
   },
   rolling: {
     badge: 'Remaining places',
-    line: 'Main deadline passed · you can still apply while places remain',
+    line: 'Main deadline passed · applications still welcome if places are available',
     detail:
-      'The main deadline (7 September 2026) has passed. If there are still places in the period you want, you can still apply — we confirm availability when we review your application. If not, you can wait for the next call or join a two-week short stay.',
+      'The main deadline (7 September 2026) has passed, but applications are still welcome if places are available. A green light here means there may still be availability for your chosen period. We’ll confirm this when reviewing your application. Otherwise, you can wait for the next open call or apply for a two-week short stay.',
     cta: 'Apply now',
   },
   closed: {
@@ -123,7 +123,7 @@ export const periods: {
   highlights: string;
   availability: Availability;
 }[] = [
-  { id: 'mar-apr', label: 'March – April', arrive: '2027-03-17', depart: '2027-04-13', weather: 'Mild, 12–22 °C', highlights: 'Wild asparagus, carnival masks, museum days and the first barefoot walks on the sand.', availability: 'unknown' },
+  { id: 'mar-apr', label: 'March – April', arrive: '2027-03-17', depart: '2027-04-13', weather: 'Mild, 12–22 °C', highlights: 'Wild asparagus, Holy Week traditions and the first barefoot walks on the sand.', availability: 'unknown' },
   { id: 'apr-may', label: 'April – May', arrive: '2027-04-15', depart: '2027-05-13', weather: '12–22 °C, warming up', highlights: 'Easter night choirs, bread-making rites, rural feasts — and Sant’Efisio in Cagliari on 1 May.', availability: 'unknown' },
   { id: 'may-jun', label: 'May – June', arrive: '2027-05-17', depart: '2027-06-14', weather: 'Warm, 20–30 °C', highlights: 'Green valleys, wild fennel, village festivals and the cherries of Montiferru.', availability: 'unknown' },
   { id: 'sep-oct', label: 'September – October', arrive: '2027-09-14', depart: '2027-10-12', weather: '20–30 °C, softening', highlights: 'Blackberries, quieter beaches, the equinox light at the Santa Cristina well, the grape harvest.', availability: 'unknown' },
@@ -140,10 +140,10 @@ export const fees = [
     id: 'A',
     price: 1650,
     title: 'Casa Bagnolo studio + private bedroom',
-    studio: 'Private studio in Casa Bagnolo',
+    studio: 'Private studio in Casa Bagnolo (Studio Ramiro, Nick or Marco)',
     sleep: 'Private bedroom, queen-size bed for single use',
     bath: 'Bathroom shared with one other bedroom',
-    bestFor: 'Painters, makers and anyone who wants to be at the heart of the residency',
+    bestFor: 'Anyone who wants to be at the heart of the residency',
     detail:
       'You sleep in one of the shared apartments (max 4 artists). Your private studio is in Casa Bagnolo, a 5-minute walk from the accommodation.',
   },
@@ -156,7 +156,7 @@ export const fees = [
     bath: 'Bathroom shared with one other bedroom',
     bestFor: 'Artists who want to work outdoors or with bulky materials',
     detail:
-      'You sleep in one of the shared apartments (max 4 people). Your studio is in Casa Oaxaca, a 5-minute walk away, with access to the Oaxaca Studio Garden: an 80 m² shaded outdoor workspace shared with up to three other artists.',
+      'You sleep in one of the shared apartments (max 4 people). Your studio is in Casa Oaxaca, a 5-minute walk away, with access to the Oaxaca Studio Garden: an 80 m² shaded outdoor workspace shared with up to three other artists. 24/7 access to the communal spaces at Casa Bagnolo.',
   },
   {
     id: 'C',
@@ -167,18 +167,18 @@ export const fees = [
     bath: 'En-suite bathroom',
     bestFor: 'Writers, digital artists and researchers',
     detail:
-      'You live and work in Casa Oaxaca (max 4 guests): a private suite with en-suite bathroom, a relaxation area with fireplace and a dedicated workstation, plus the Oaxaca Studio Garden.',
+      'You live and work in Casa Oaxaca (max 4 guests): a private suite with en-suite bathroom, a relaxation area with fireplace and a dedicated workstation, plus the Oaxaca Studio Garden. 24/7 access to the communal spaces at Casa Bagnolo.',
   },
   {
     id: 'D',
     price: 1850,
-    title: 'Casa Bagnolo studio + en-suite bedroom',
-    studio: 'Private studio in Casa Bagnolo + Oaxaca Studio Garden access',
+    title: 'Casa Oaxaca studio + en-suite bedroom',
+    studio: 'Private studio in Casa Oaxaca + Oaxaca Studio Garden access', // per founder's 2026-11 edits [TO CONFIRM]
     sleep: 'Private bedroom in Casa Oaxaca, French-size bed for single use',
     bath: 'En-suite bathroom',
-    bestFor: 'Artists who want the hub studio and a private bathroom',
+    bestFor: 'Artists who want a private bathroom and the Studio Garden',
     detail:
-      'You sleep in Casa Oaxaca (max 4 people) with an en-suite bathroom; your private studio is in Casa Bagnolo, a 5-minute walk away. Access to the Oaxaca Studio Garden is included.',
+      'You sleep in Casa Oaxaca (max 4 people) with an en-suite bathroom; your private studio is also in Casa Oaxaca, with access to the Oaxaca Studio Garden. 24/7 access to the communal spaces at Casa Bagnolo.',
   },
   {
     id: 'E',
@@ -199,10 +199,12 @@ export const feeIncludes = [
   'General cleaning at the start and end of your stay', // Housing page; FAQ adds "in the middle" [TO CONFIRM]
   'Guest curator: two group meetings, three one-to-one sessions and a written text on your practice',
   'Scheduled activities: open studio, workshops, public talks and trips in the calendar',
-  'Shared equipment, yoga mats and bikes',
+  'Shared equipment, yoga mats and bikes — plus a budget for durable equipment on request',
   '24/7 access to Casa Bagnolo’s communal areas, meeting/projection room and courtyard',
   'Invitation letter, pre-departure plan and help with materials, permits and local contacts',
+  'Open studios and public talks to show your work',
   'Your profile in the Nocefresca online archive',
+  'Liability insurance for the residency buildings',
 ];
 
 // src('open_call&ocpag=facilities_and_additional_services') — "Main facilities" included in the residency fee
@@ -234,7 +236,7 @@ export const payment = {
   confirmationFee: 450,
   confirmationWindow: 'within 2 weeks of the selection notice',
   balanceDue: '12 weeks before your start date at the latest',
-  methods: 'Bank transfer or online money transfer (Paysend, Wise, Western Union)',
+  methods: 'Bank transfer or online money transfer through Wise',
   cancellation: [
     { when: 'Up to 8 weeks before', refund: 'Full residency fee refunded, minus the confirmation fee' },
     { when: '8 to 4 weeks before', refund: '50% of the residency fee refunded, minus the confirmation fee' },
@@ -269,7 +271,7 @@ export const studios: Studio[] = [
     specs: ['Ground floor', 'Door', 'Fan', 'Courtyard sink', 'Wi-Fi'],
     bestFor: 'Large-scale work',
     text: 'A maxi table and wide walls to hang canvases or large pieces, steps from the courtyard sink for cleaning brushes. Generally cool, with a fan in summer; heating and cooling are shared with the communal areas on the same floor.',
-    options: ['A', 'D'],
+    options: ['A'],
     images: ['ramiro-1.jpg', 'ramiro-2.jpg', 'ramiro-3.jpg'],
   },
   {
@@ -281,7 +283,7 @@ export const studios: Studio[] = [
     bestFor: 'Large-scale work, afternoon light',
     text: 'A big table and a wooden board for canvases. A curtain instead of a door — perfect if you don’t like being closed in — and beautiful natural light in the afternoon.',
     note: 'You may hear the artist in the studio above through a small gap in the wooden ceiling.',
-    options: ['A', 'D'],
+    options: ['A'],
     images: ['marco-1.jpg', 'marco-2.jpg', 'marco-3.jpg'],
   },
   {
@@ -293,7 +295,7 @@ export const studios: Studio[] = [
     bestFor: 'Photographers, painters, textile artists',
     text: 'On the first floor, with a rooftop view and natural light. Chosen by many kinds of artists; AC inside and a toilet on the same floor.',
     note: 'You may hear the artist in the studio below through a small gap in the wooden floor.',
-    options: ['A', 'D'],
+    options: ['A'],
     images: ['nick-1.jpg', 'nick-2.jpg', 'nick-3.jpg'],
   },
   {
@@ -303,9 +305,8 @@ export const studios: Studio[] = [
     size: '13 m²',
     specs: ['Ground floor', 'Door', 'AC', 'Courtyard sink', 'Studio Garden'],
     bestFor: 'Photographers, painters, textile artists',
-    text: 'Ground floor with easy access to the internal courtyard, its sink and the 80 m² Oaxaca Studio Garden. A wooden panel can be installed on request.',
-    note: 'Photo not up to date: the new furniture matches the Casa Bagnolo studios (storage and work chairs).',
-    options: ['B'],
+    text: 'Located on the ground floor of Casa Oaxaca, with easy access to the internal courtyard, its sink and the 80 m² Oaxaca Studio Garden. A wooden panel can be installed on request.',
+    options: ['B', 'D'],
     images: ['italo-2.jpg', 'italo-3.jpg', 'italo-5.jpg'],
   },
   {
@@ -317,7 +318,7 @@ export const studios: Studio[] = [
     bestFor: 'Photographers, painters, textile artists',
     text: 'The largest indoor studio, on the ground floor next to the courtyard and the shared Oaxaca Studio Garden. A wooden panel can be installed on request.',
     note: 'Photo not up to date: the new furniture matches the Casa Bagnolo studios.',
-    options: ['B'],
+    options: ['B', 'D'],
     images: ['leo-1.jpg'],
   },
   {
@@ -424,14 +425,14 @@ export const residents2026 = [
 // Derived from the Artists archive on 7 Nov 2026: 169 entries in Milis 2021–2026 (some are duos), 36 countries/territories. [TO CONFIRM]
 export const stats = [
   { value: '7th', label: 'edition in 2027' },
-  { value: '160+', label: 'artists in Milis since 2021' },
+  { value: '170+', label: 'artists in Milis since 2021' },
   { value: '30+', label: 'countries' },
   { value: '7', label: 'residents at a time, at most' },
 ];
 
 // src('open_call&ocpag=housing') — hosts and their own words (verbatim excerpts)
 export const hosts = [
-  { name: 'Antonella', place: 'Casa Bagnolo', role: 'Her family owns Casa Bagnolo, home of the studios and the Pepebianco association. Your link to the village.', quote: 'Returning to Sardinia I rediscovered the pleasure of slow rhythms.', img: 'host-1-face.jpg' },
+  { name: 'Antonella', place: 'Casa Bagnolo', role: 'Her family owns Casa Bagnolo, one of the oldest houses in Milis and the headquarters of the residency. She is your link to the village.', quote: 'Returning to Sardinia I rediscovered the pleasure of slow rhythms.', img: 'host-1-face.jpg' },
   { name: 'Italo & Leo', place: 'Casa Oaxaca', role: 'Garden designers and nurserymen (I Campi). They met in Chicago and moved to Italo’s homeland.', quote: 'Innovation in landscape architecture in Sardinia must start from the existing reality.', img: 'host-2-face.jpg' },
   { name: 'The Mastinu family', place: 'A renovated family house', role: 'Augusto sings in Milis’ La Vega choir; his family hosts artists in a large house renovated for them.', quote: 'We adore meeting new people and sharing our time and experiences.', img: 'host-9-face.jpg' },
   { name: 'Maria', place: 'Orchard Studio Cottage', role: 'Keeper of an unofficial ethnographic museum and of the family orchard where the cottage stands.', quote: 'My philosophy? Laugh, have fun, and always look on the bright side of life.', img: 'host-10-face.jpg' },
@@ -449,18 +450,19 @@ export const curator = {
 /* ------------------------------------------------------------------ */
 
 export const disciplines = [
-  'Visual artists', 'Designers', 'Writers', 'Photographers', 'Composers', 'Mixed-media artists',
-  'Fashion designers', 'Videomakers', 'Architects', 'Illustrators', 'Social media artists', 'Community artists',
+  'Visual artists', 'Writers', 'Designers', 'Composers', 'Film-makers', 'Illustrators',
+  'Mixed-media artists', 'Architects', 'Fashion designers', 'Researchers', 'Community artists',
 ];
 
 // Home page "You will love it if you want to…"
 export const loveIt = [
-  { title: 'Have a detox period', text: 'You live in a congested city and need some quiet time.' },
-  { title: 'Have a studio space', text: 'You need to focus on producing a new work or editing an ongoing project.' },
-  { title: 'Connect with other artists', text: 'You want to expand your network and share new ideas.' },
-  { title: 'Experiment', text: 'You need dedicated time to find a new creative path.' },
-  { title: 'Deepen your interests', text: 'Nature, history, community, sustainability, the future — and much more.' },
-  { title: 'Taste a bit of Italy', text: 'Fresh food, local culture and the different pace of a rural village.' },
+  { title: 'Take a step back', text: 'You need some quiet time and space to reflect and recharge.' },
+  { title: 'Focus on your practice', text: 'You want to develop new work or bring an ongoing project forward.' },
+  { title: 'Explore a line of research', text: 'You are curious about a subject, a context or a question you want to investigate.' },
+  { title: 'Experiment', text: 'You are looking for the freedom to test ideas, work with unfamiliar approaches and discover new possibilities.' },
+  { title: 'Receive curatorial support', text: 'You value exchanging ideas and reflecting on your research and creative process.' },
+  { title: 'Be part of a small community', text: 'You enjoy sharing ideas, conversations and everyday moments with others.' },
+  { title: 'Experience a different side of Italy', text: 'Fresh food, local culture and the rhythms of a rural Sardinian village.' },
 ];
 
 // Honest filters — each grounded in the FAQ, Programme page or Location page.
@@ -496,7 +498,18 @@ export const pastThemes = [
  * Shown as a logo wall under the fees. To be supplied by Nocefresca — the wall stays hidden while empty.
  * Example: { name: 'Arts Council X', country: 'Country', logo: 'funders/arts-council-x.png' } (file in src/assets/img/funders/)
  */
-export const funders: { name: string; country?: string; logo?: string }[] = [];
+export const funders: { name: string; country?: string; logo?: string }[] = [
+  { name: 'Europe Moves Culture' },
+  { name: 'Swedish Arts Grants Committee' },
+  { name: 'Kingdom of the Netherlands' },
+  { name: 'Stroom Den Haag' },
+  { name: 'Jacksonville State University' },
+  { name: 'Boynes Emerging Artist Award' },
+  { name: 'American Academy in Rome' },
+  { name: 'Galleria MANCASPAZIO' },
+  { name: 'Ministero della Cultura – Soprintendenza Archivistica della Sardegna' },
+  { name: 'Regione Sardegna' },
+];
 
 export const press = [
   { outlet: 'Artribune', title: 'Nocefresca, il nuovo programma di residenze artistiche in Sardegna', url: 'https://www.artribune.com/professioni-e-professionisti/who-is-who/2021/10/nocefresca-nuovo-programma-residenze-artistiche-sardegna/' },
@@ -509,7 +522,7 @@ export const press = [
 /* ------------------------------------------------------------------ */
 
 export const selectionCriteria = [
-  'Artistic quality',
+  'Artistic quality <small>(<strong>the project proposal and the presentation of your artistic background and practice</strong>)</small>',
   'Feasibility of the project',
   'Length of stay',
   'Impact on the group and on the local community',
@@ -570,9 +583,9 @@ export const formQuestions = `NOCEFRESCA — OPEN CALL 2027 · APPLICATION FORM 
 /* ------------------------------------------------------------------ */
 
 export const faq: { id: string; group: 'Applying' | 'The residency' | 'Practical'; q: string; a: string }[] = [
-  { id: 'who', group: 'Applying', q: 'Who can apply?', a: 'Nocefresca is perfect for — but not limited to — visual artists, designers, writers, photographers, composers, mixed-media and fashion designers, videomakers, architects, illustrators, social media and community artists. Solo artists, collectives and small groups of all ages are welcome.' },
+  { id: 'who', group: 'Applying', q: 'Who can apply?', a: 'Nocefresca is perfect for — but not limited to — visual artists, writers, designers, composers, film-makers, illustrators, mixed-media artists, architects, fashion designers, researchers and community artists. Solo artists, collectives and small groups of all ages are welcome.' },
   { id: 'project', group: 'Applying', q: 'Do I need a specific project? Is a final outcome required?', a: 'There are no required outcomes: Nocefresca is a research-based residency focused on experimentation and exchange. Your project idea is still an important part of the application, because it helps us understand your practice, interests and research approach.' },
-  { id: 'deadline', group: 'Applying', q: 'Can I apply after the deadline?', a: 'Yes, if there are still places available. The main deadline for Open Call 2027 was 7 September 2026. If places remain in the period you want, you can still apply; if not, you can wait for the next call or join a two-week short stay (Nocefreschissima). It is also possible to apply at any time if you already have specific funds to cover your participation.' },
+  { id: 'deadline', group: 'Applying', q: 'Can I apply after the deadline?', a: 'Yes, if there are still places available. The main deadline for Open Call 2027 was 7 September 2026. If places remain in the period you want, you can still apply; if not, you can wait for the next call or join a <a href="https://www.nocefresca.it/?/shortstays">two-week short stay (Nocefreschissima)</a>. It is also possible to apply at any time if you already have specific funds to cover your participation.' },
   { id: 'selection', group: 'Applying', q: 'How does selection work?', a: 'The selection aims to create a harmonious group. Criteria are artistic quality, feasibility of the project, length of stay, impact on the group and on the local community, and secured budget.' },
   { id: 'funding', group: 'Applying', q: 'Do you offer fellowships or funding?', a: 'Not at the moment. If you are selected, we provide a formal invitation letter and, if needed, an official residency plan with a personalised budget to support your funding applications. The open call is published a year ahead partly to give artists time to find funding.' },
   { id: 'length', group: 'The residency', q: 'How long can I stay?', a: 'One, two or three months, in the periods between March and June and between September and December 2027. In the form you choose up to three preferred starting months; if selected we’ll do our best to meet your request, though periods may be changed with notice to design a balanced group.' },
@@ -580,7 +593,7 @@ export const faq: { id: string; group: 'Applying' | 'The residency' | 'Practical
   { id: 'group', group: 'The residency', q: 'How many artists are there at the same time?', a: 'Up to 7 residents, plus up to 2 short-stay guests.' },
   { id: 'mandatory', group: 'The residency', q: 'Are the group activities mandatory?', a: 'No. Whether you share a flat or live privately, you decide how much time to give to activities. We encourage them as a way to connect with each other and better understand the Sardinian context — the final open studio is optional too.' },
   { id: 'italian', group: 'Practical', q: 'Do I need to speak Italian?', a: 'Not essential. The staff at Casa Bagnolo and the other residents speak English. Milis is rural and not many people speak English, so some Italian helps — learn to order your cappuccino and vino rosso beforehand! Online lessons can be arranged.' },
-  { id: 'travel', group: 'Practical', q: 'How do I get there, and do I need a car?', a: 'Fly into Cagliari, take a train to Oristano, then a bus (about 30 minutes) or a pre-booked taxi with our trusted drivers. Olbia is possible but connections are more limited. Many artists stayed without a car; to explore the island, renting one (and sharing it) is strongly advised. Bikes are available for the village. You receive a pre-departure guide once confirmed.' },
+  { id: 'travel', group: 'Practical', q: 'How do I get there, and do I need a car?', a: 'Fly into Cagliari, take a train to Oristano, then a bus (about 30 minutes) or a pre-booked taxi with our trusted drivers. Olbia and Alghero airports are possible but connections are more limited. Many artists stayed without a car; to explore the island, renting one (and sharing it) is strongly advised. Bikes are available for the village. You receive a pre-departure guide once confirmed.' },
   { id: 'guests', group: 'Practical', q: 'Can I bring a guest, children or a pet?', a: 'One guest can share your room and bed (€15 per night, minimum one week). Children are welcome only if you request a private apartment, and cannot stay at the studio premises. Pets can’t be accommodated at the moment.' },
   { id: 'access', group: 'Practical', q: 'Are the studios and houses accessible?', a: 'On the ground floor of Casa Bagnolo, two studios and two desk spaces are accessible to wheelchair users and people with limited mobility, and so is the courtyard; the upper floor is not. Each house is different — write to us and we’ll tell you more.' },
   { id: 'payment', group: 'Practical', q: 'What are the payment, cancellation and rescheduling terms?', a: 'If selected, you sign a confirmation letter and pay a €450 confirmation fee within 2 weeks (non-refundable; it secures your place). The rest is due 12 weeks before you start. Cancel 8+ weeks before: full refund minus the confirmation fee; 8–4 weeks: 50% refund minus the confirmation fee; under 4 weeks: no refund. Rescheduling costs €80 with at least 8 weeks’ notice, within the same calendar year and subject to availability.' },

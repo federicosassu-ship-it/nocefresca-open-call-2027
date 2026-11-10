@@ -7,7 +7,7 @@ import { euro } from '../lib/format';
 const steps = [
   { t: 'Read the open call', d: 'You’re doing it. Check the dates, studios and fees above — the form asks about all three.' },
   { t: 'Prepare your material', d: 'Use the checklist below. Drafting your answers first makes the form quick.' },
-  { t: 'Fill in the online form', d: 'Eight short steps on nocefresca.it. Allow at least 20 minutes. Nothing is sent until you press Submit on the summary page.' },
+  { t: 'Fill in the online form', d: 'Eight short steps. Allow at least 20 minutes. Nothing is sent until you press Submit on the summary page.' },
   { t: 'Selection & confirmation', d: `We select a harmonious group. If you’re selected, you sign a confirmation letter and pay the ${euro(payment.confirmationFee)} confirmation fee within 2 weeks.` },
 ];
 ---
@@ -50,7 +50,7 @@ const steps = [
         </div>
         <div class="criteria">
           <h3>Selection criteria</h3>
-          <ol class="criteria__list" role="list">{selectionCriteria.map((c) => <li>{c}</li>)}</ol>
+          <ol class="criteria__list" role="list">{selectionCriteria.map((c) => <li set:html={c} />)}</ol>
           <p class="small muted">The selection aims to create a harmonious group.</p>
         </div>
       </aside>
@@ -58,7 +58,6 @@ const steps = [
 
     <div class="apply__cta" data-reveal>
       <ApplyButton location="apply_section" size="lg" label="Start your application" />
-      <p class="small muted">Opens the application form on nocefresca.it · <a class="link" href={links.applyInfo} data-track="outbound_click" data-location="apply_info">original application page</a></p>
     </div>
   </div>
 </section>
@@ -86,6 +85,8 @@ const steps = [
   .copybox__preview pre { white-space: pre-wrap; font-family: var(--f-display); font-size: 0.8125rem; line-height: 1.5; max-height: 18rem; overflow: auto; padding: 1rem; margin-top: 0.5rem; background: rgb(0 0 0 / 0.18); border-radius: var(--radius); }
   .criteria { padding: clamp(1.5rem, 1rem + 2vw, 2rem); box-shadow: inset 0 0 0 1.5px var(--c-line-strong); border-radius: var(--radius); }
   .criteria h3 { font-size: 1.375rem; margin-bottom: 0.9rem; }
+  .criteria__list :global(small) { display: block; font-family: var(--f-text); font-size: 0.875rem; color: var(--c-ink); }
+  .criteria__list :global(small strong) { font-weight: 650; }
   .criteria__list { padding-left: 1.25rem; display: grid; gap: 0.35rem; margin-bottom: 0.9rem; font-family: var(--f-display); color: var(--c-burgundy); }
   .criteria__list li::marker { color: var(--c-terracotta-ink); font-variant-numeric: tabular-nums; }
   .apply__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem); }

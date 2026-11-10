@@ -38,16 +38,10 @@ import ApplyButton from './ApplyButton.astro';
             <div><dt>Studio</dt><dd>{f.studio}</dd></div>
             <div><dt>Sleep</dt><dd>{f.sleep}</dd></div>
             <div><dt>Bathroom</dt><dd>{f.bath}</dd></div>
-            <div><dt>Best for</dt><dd>{f.bestFor}</dd></div>
           </dl>
-          <p class="est__pkg-detail">{f.detail}</p>
-          <div class="est__pay">
-            <p><span>Confirmation fee, within 2 weeks of selection</span><strong class="num">{euro(payment.confirmationFee)}</strong></p>
-            <p><span>Remaining fee for a one-month stay, 12 weeks before you start</span><strong class="num">{euro(f.price - payment.confirmationFee)}</strong></p>
-          </div>
+          <button type="button" class="est__more" data-fees-open={f.id} data-track="fees_details_open" data-location={`card_${f.id}`}>Full details, inclusions &amp; terms <span aria-hidden="true">→</span></button>
         </div>
       ))}
-      <p class="est__note small">Staying two or three months? Multiply the monthly fee. Not included: {feeExcludes.map((x) => x.split(' (')[0].toLowerCase()).join(', ')}. Optional extras are listed below; final amounts are in your confirmation letter.</p>
       <ApplyButton location="estimate" block label="Apply with this package" />
     </aside>
   </div>
@@ -117,6 +111,8 @@ import ApplyButton from './ApplyButton.astro';
   .est__pay { display: grid; gap: 0.5rem; padding-top: 0.9rem; border-top: 1px solid rgb(246 241 231 / 0.25); }
   .est__pay p { display: flex; justify-content: space-between; gap: 1rem; font-family: var(--f-display); font-size: 0.875rem; line-height: 1.3; color: rgb(246 241 231 / 0.9); }
   .est__pay strong { font-weight: 500; color: var(--c-paper); white-space: nowrap; }
+  .est__more { justify-self: start; display: inline-flex; gap: 0.4rem; align-items: center; min-height: 2.75rem; font-family: var(--f-display); font-weight: 500; font-size: 0.9375rem; color: var(--c-ochre); text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
+  .est__more:hover { color: var(--c-paper); }
   .est__note { color: rgb(246 241 231 / 0.75); line-height: 1.45; }
   .est__sum :global(.btn) { --btn-bg: var(--c-ochre); --btn-fg: var(--c-ink); --btn-bg-hover: var(--c-paper); }
   @media (max-width: 39.99rem) {

@@ -9,7 +9,7 @@ const sharp = require('sharp');
 const root = new URL('../', import.meta.url);
 // Inline every asset as a data URI (pages created with setContent cannot load file:// resources)
 const dataUri = async (p, mime) => `data:${mime};base64,${(await readFile(new URL(p, root))).toString('base64')}`;
-const photo = `data:image/jpeg;base64,${(await sharp(fileURLToPath(new URL('src/assets/img/hero/artist-shoreline.jpg', root))).resize({ width: 1040 }).jpeg({ quality: 82 }).toBuffer()).toString('base64')}`;
+const photo = `data:image/jpeg;base64,${(await sharp(fileURLToPath(new URL('src/assets/img/hero/courtyard.jpg', root))).resize({ width: 1280 }).jpeg({ quality: 82 }).toBuffer()).toString('base64')}`;
 const sgFont = await dataUri('node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2', 'font/woff2');
 const vkFont = await dataUri('node_modules/@fontsource-variable/vollkorn/files/vollkorn-latin-wght-normal.woff2', 'font/woff2');
 const logo = await dataUri('src/assets/img/brand/logo.png', 'image/png');
@@ -20,7 +20,7 @@ const html = `<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face{font-family:VK;src:url(${vkFont}) format('woff2');font-weight:400 900}
 *{margin:0;box-sizing:border-box}
 body{width:1200px;height:630px;display:grid;grid-template-columns:520px 1fr;background:#edc77d;font-family:SG;color:#682b33;overflow:hidden}
-.photo{background:url(${photo}) 50% 62%/cover}
+.photo{background:url(${photo}) 45% 50%/cover}
 .panel{position:relative;padding:56px 60px;display:flex;flex-direction:column;justify-content:space-between}
 .contours{position:absolute;inset:0;opacity:.75}
 .contours svg{width:100%;height:100%}
@@ -33,7 +33,7 @@ img{height:54px}
 </style></head><body>
 <div class="photo"></div>
 <div class="panel"><div class="contours">${contours}</div>
-<div class="top"><span class="pill">Open Call 2027 · Edition Nr. 7</span><h1>Your rural artist’s studio in the heart of the Mediterranean.</h1></div>
+<div class="top"><span class="pill">Open Call 2027 · Edition Nr. 7</span><h1>An open call for artists on the island of Sardinia.</h1></div>
 <div class="bottom"><div>Milis, Sardinia · Mar–Dec 2027<span>Private studio, housing and a guest curator · 1–3 months</span></div><img src="${logo}" alt=""></div>
 </div></body></html>`;
 

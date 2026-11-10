@@ -1,9 +1,11 @@
 ---
+// Fees: the landing shows only the package picker (minimal details) and funding;
+// everything else (full package details, inclusions, extras, payment, cancellation) opens in a side panel.
 import SectionHead from './SectionHead.astro';
 import ApplyButton from './ApplyButton.astro';
 import FeeEstimator from './FeeEstimator.astro';
 import { Image } from 'astro:assets';
-import { fees, feeIncludes, feeExcludes, feeExtras, payment, links, funders, facilities } from '../content/opencall';
+import { fees, feeIncludes, feeExcludes, feeExtras, payment, funders } from '../content/opencall';
 import { img } from '../lib/images';
 import { euro } from '../lib/format';
 
@@ -21,128 +23,187 @@ const timeline = [
       lead="Prices are per artist, per month. Pick the studio and housing combination that suits your practice — everything else in the programme is the same." />
 
     <FeeEstimator />
-    <p class="fees__guest small">All options include 24/7 access to your studio and to Casa Bagnolo’s communal spaces, plus the full programme. A guest can share your room for {feeExtras[1].price.replace(', min. 7 nights', '')} (minimum 7 nights).</p>
-
-
-
-    <div class="incl">
-      <div class="incl__col incl__col--yes" data-reveal>
-        <h3>Included</h3>
-        <ul class="ticks small" role="list">{feeIncludes.map((x) => <li>{x}</li>)}</ul>
-      </div>
-      <div class="incl__col" data-reveal style="--d:70ms">
-        <h3>Not included</h3>
-        <ul class="dashes small" role="list">{feeExcludes.map((x) => <li>{x}</li>)}</ul>
-        <h3 class="incl__h-extras">Optional extras</h3>
-        <dl class="extras">
-          {feeExtras.map((e) => <div><dt>{e.name} <span class="num">{e.price}</span></dt><dd class="small">{e.detail}</dd></div>)}
-        </dl>
-      </div>
-    </div>
 
     <div class="fund" data-reveal id="funding">
       <div class="fund__text">
         <p class="nr"><b>Funding</b><span>Your stay can be funded</span></p>
         <h3>Apply for a grant to come to Nocefresca.</h3>
         <p>Past residents have come to Milis with the support of embassies, arts councils and universities from around the world. Nocefresca can’t offer fellowships, but if you are selected you receive a <strong>formal invitation letter</strong> and, if needed, an <strong>official residency plan with a personalised budget</strong> for your funding applications.</p>
-        <p class="small">The open call is published a year ahead partly to give you time to find funding. In the form, you’ll say whether you are self-funded, already have a grant, or are applying for one.</p>
       </div>
       {funders.length > 0 && (
         <div class="fund__wall">
-          <p class="label">Residents have been supported by</p>
+          <p class="label">Here are some of the institutions that have funded our past residents:</p>
           <ul class="fund__logos" role="list">
             {funders.map((f) => (
-              <li>{f.logo ? <Image src={img(f.logo)} alt={f.name} height={48} densities={[1, 2]} format="webp" loading="lazy" /> : <span class="fund__name">{f.name}{f.country && <small>{f.country}</small>}</span>}</li>
+              <li>{f.logo ? <Image src={img(f.logo)} alt={f.name} height={48} densities={[1, 2]} format="webp" loading="lazy" /> : <span class="fund__name">{f.name}</span>}</li>
             ))}
           </ul>
         </div>
       )}
     </div>
 
-    <div class="pay" data-reveal>
-      <h3>How payment works</h3>
-      <ol class="pay__steps" role="list">
-        {timeline.map((s, i) => (
-          <li><span class="pay__n num">{String(i + 1).padStart(2, '0')}</span><strong>{s.t}</strong><span class="small">{s.d}</span></li>
-        ))}
-      </ol>
-      <p class="small muted">{payment.methods}.</p>
-    </div>
-
-    <div class="acc fees__acc" data-reveal>
-      <details data-track="fees_details_open" data-location="facilities">
-        <summary>Facilities included in the fee <span class="pm" aria-hidden="true"></span></summary>
-        <div class="acc__body">
-          <dl class="fac">{facilities.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
-          <p class="small"><a class="link" href={links.facilities} data-track="outbound_click" data-location="facilities_source">Facilities on the original Open Call page</a></p>
-        </div>
-      </details>
-      <details data-track="fees_details_open" data-location="cancellation">
-        <summary>Cancellation &amp; rescheduling <span class="pm" aria-hidden="true"></span></summary>
-        <div class="acc__body">
-          <table class="cancel">
-            <caption class="visually-hidden">Refunds if you cancel</caption>
-            <thead><tr><th scope="col">If you cancel…</th><th scope="col">Refund</th></tr></thead>
-            <tbody>{payment.cancellation.map((c) => <tr><th scope="row">{c.when}</th><td>{c.refund}</td></tr>)}</tbody>
-          </table>
-          <p><strong>Rescheduling:</strong> {payment.rescheduling}</p>
-        </div>
-      </details>
-    </div>
-
     <div class="fees__cta" data-reveal>
       <ApplyButton location="fees" size="lg" />
-      <p class="small muted">Full details on the <a class="link" href={links.fees} data-track="outbound_click" data-location="fees_source">original fees page</a>.</p>
+      <button type="button" class="text-link" data-fees-open data-track="fees_details_open" data-location="cta">What’s included, payment &amp; terms <span aria-hidden="true">→</span></button>
     </div>
   </div>
 </section>
 
-<style>
-  .option { display: flex; flex-direction: column; gap: 0.6rem; padding: 1.4rem; background: var(--c-white); border-radius: var(--radius); box-shadow: inset 0 0 0 1px var(--c-line); }
-  .fees__guest { margin-top: 1.25rem; max-width: 60ch; color: var(--c-muted); }
+<!-- side panel: full details, outside the landing flow -->
+<dialog class="drawer" id="fees-drawer" aria-labelledby="drawer-title" data-fees-drawer>
+  <div class="drawer__inner">
+    <header class="drawer__head">
+      <p class="nr"><b>Fees</b><span>Details &amp; terms</span></p>
+      <h2 id="drawer-title">Packages, inclusions and terms</h2>
+      <button type="button" class="drawer__close" data-fees-close aria-label="Close">✕</button>
+    </header>
 
-  .incl { display: grid; gap: var(--gap); margin-top: clamp(3rem, 2rem + 3vw, 4.5rem); }
-  .incl__col { padding: clamp(1.5rem, 1rem + 2vw, 2.25rem); border-radius: var(--radius); box-shadow: inset 0 0 0 1.5px var(--c-line-strong); }
-  .incl__col--yes { background: var(--c-ochre-soft); box-shadow: none; }
-  .incl h3 { font-size: 1.375rem; margin-bottom: 1rem; }
-  .incl__h-extras { margin-top: 1.75rem; }
+    <div class="drawer__body">
+      <section aria-labelledby="dr-pkg">
+        <h3 id="dr-pkg">Package details</h3>
+        <div class="acc">
+          {fees.map((f) => (
+            <details data-pkg-detail={f.id}>
+              <summary><span>Option {f.id} · {f.title} <span class="num drawer__price">{euro(f.price)}/mo</span></span><span class="pm" aria-hidden="true"></span></summary>
+              <div class="acc__body">
+                <dl class="drawer__specs">
+                  <div><dt>Studio</dt><dd>{f.studio}</dd></div>
+                  <div><dt>Sleep</dt><dd>{f.sleep}</dd></div>
+                  <div><dt>Bathroom</dt><dd>{f.bath}</dd></div>
+                  <div><dt>Best for</dt><dd>{f.bestFor}</dd></div>
+                </dl>
+                <p class="small">{f.detail}</p>
+                <p class="small muted">For a one-month stay: {euro(payment.confirmationFee)} confirmation fee, then {euro(f.price - payment.confirmationFee)} 12 weeks before you start.</p>
+              </div>
+            </details>
+          ))}
+        </div>
+        <p class="small muted drawer__note">All options include 24/7 access to your studio and to Casa Bagnolo’s communal spaces, plus the full programme. Staying two or three months? Multiply the monthly fee.</p>
+      </section>
+
+      <section aria-labelledby="dr-incl">
+        <h3 id="dr-incl">What’s included</h3>
+        <div class="acc">
+          <details>
+            <summary>Included in the fee <span class="pm" aria-hidden="true"></span></summary>
+            <div class="acc__body"><ul class="ticks small" role="list">{feeIncludes.map((x) => <li>{x}</li>)}</ul></div>
+          </details>
+          <details>
+            <summary>Not included <span class="pm" aria-hidden="true"></span></summary>
+            <div class="acc__body"><ul class="dashes small" role="list">{feeExcludes.map((x) => <li>{x}</li>)}</ul></div>
+          </details>
+          <details>
+            <summary>Optional extras <span class="pm" aria-hidden="true"></span></summary>
+            <div class="acc__body">
+              <dl class="extras">{feeExtras.map((e) => <div><dt>{e.name} <span class="num">{e.price}</span></dt><dd class="small">{e.detail}</dd></div>)}</dl>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section aria-labelledby="dr-pay">
+        <h3 id="dr-pay">How payment works</h3>
+        <ol class="pay__steps" role="list">
+          {timeline.map((s, i) => (
+            <li><span class="pay__n num">{String(i + 1).padStart(2, '0')}</span><strong>{s.t}</strong><span class="small">{s.d}</span></li>
+          ))}
+        </ol>
+        <p class="small muted">{payment.methods}.</p>
+        <div class="acc">
+          <details>
+            <summary>Cancellation &amp; rescheduling <span class="pm" aria-hidden="true"></span></summary>
+            <div class="acc__body">
+              <table class="cancel">
+                <caption class="visually-hidden">Refunds if you cancel</caption>
+                <thead><tr><th scope="col">If you cancel…</th><th scope="col">Refund</th></tr></thead>
+                <tbody>{payment.cancellation.map((c) => <tr><th scope="row">{c.when}</th><td>{c.refund}</td></tr>)}</tbody>
+              </table>
+              <p class="small"><strong>Rescheduling:</strong> {payment.rescheduling}</p>
+            </div>
+          </details>
+        </div>
+      </section>
+    </div>
+
+    <footer class="drawer__foot">
+      <ApplyButton location="fees_drawer" block />
+    </footer>
+  </div>
+</dialog>
+
+<script>
+  const dlg = document.querySelector<HTMLDialogElement>('[data-fees-drawer]');
+  if (dlg) {
+    const open = (pkg?: string) => {
+      if (pkg) dlg.querySelectorAll<HTMLDetailsElement>('[data-pkg-detail]').forEach((d) => (d.open = d.dataset.pkgDetail === pkg));
+      dlg.showModal();
+      document.documentElement.classList.add('drawer-open');
+      const target = pkg ? dlg.querySelector<HTMLElement>(`[data-pkg-detail="${pkg}"]`) : null;
+      (target?.querySelector('summary') ?? dlg.querySelector<HTMLElement>('[data-fees-close]'))?.focus();
+      target?.scrollIntoView({ block: 'start' });
+    };
+    const close = () => dlg.close();
+    dlg.addEventListener('close', () => document.documentElement.classList.remove('drawer-open'));
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); }); // click on the backdrop
+    dlg.querySelector('[data-fees-close]')?.addEventListener('click', close);
+    document.addEventListener('click', (e) => {
+      const b = (e.target as Element).closest<HTMLElement>('[data-fees-open]');
+      if (!b) return;
+      e.preventDefault();
+      open(b.dataset.feesOpen || undefined);
+    });
+    dlg.querySelectorAll<HTMLDetailsElement>('details').forEach((d) =>
+      d.addEventListener('toggle', () => { if (d.open) window.nfTrack?.('fees_details_open', { location: `drawer_${d.dataset.pkgDetail ?? d.querySelector('summary')?.textContent?.trim().slice(0, 24)}` }); }),
+    );
+  }
+</script>
+
+<style>
+  .fund { display: grid; gap: 1.5rem; margin-top: clamp(2rem, 1.5rem + 2vw, 3rem); padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); background: var(--c-coral); border-radius: var(--radius); }
+  .fund__text { display: grid; gap: 0.75rem; max-width: 46rem; }
+  .fund__text .nr span { color: var(--c-ink); }
+  .fund__text h3 { font-size: var(--fs-h3); }
+  .fund__wall .label { color: var(--c-ink); }
+  .fund__logos { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.75rem; }
+  .fund__logos img { width: auto; max-height: 3rem; mix-blend-mode: multiply; }
+  .fund__name { display: inline-flex; padding: 0.35rem 0.75rem; border-radius: 999px; background: rgb(246 241 231 / 0.7); font-family: var(--f-display); font-weight: 500; font-size: 0.875rem; color: var(--c-burgundy); }
+  .fees__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; margin-top: clamp(1.75rem, 1.5rem + 1vw, 2.5rem); }
+  .fees__cta .text-link { cursor: pointer; }
+
+  /* ---- drawer ---- */
+  .drawer { position: fixed; inset: 0 0 0 auto; width: min(100%, 40rem); max-width: 100%; height: 100%; max-height: 100%; margin: 0 0 0 auto; padding: 0; border: 0; background: var(--c-paper); color: var(--c-ink); box-shadow: -24px 0 60px -30px rgb(62 31 34 / 0.6); }
+  .drawer::backdrop { background: rgb(46 18 14 / 0.45); }
+  .drawer[open] { animation: drawer-in 0.4s var(--ease); }
+  .drawer[open]::backdrop { animation: fade-in 0.4s var(--ease); }
+  @keyframes drawer-in { from { transform: translateX(100%); } to { transform: none; } }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  .drawer__inner { display: grid; grid-template-rows: auto 1fr auto; height: 100%; }
+  .drawer__head { position: relative; display: grid; gap: 0.4rem; padding: 1.25rem var(--gutter) 1rem; border-bottom: 1px solid var(--c-line); }
+  .drawer__head h2 { font-size: var(--fs-h3); padding-right: 3rem; }
+  .drawer__close { position: absolute; top: 1rem; right: 1rem; width: 2.75rem; height: 2.75rem; border-radius: 50%; color: var(--c-burgundy); box-shadow: inset 0 0 0 1.5px var(--c-line-strong); font-size: 1rem; }
+  .drawer__close:hover { background: rgb(104 43 51 / 0.08); }
+  .drawer__body { overflow-y: auto; overscroll-behavior: contain; padding: 1.25rem var(--gutter) 2rem; display: grid; gap: 2rem; align-content: start; }
+  .drawer__body h3 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+  .drawer__body .acc summary { font-size: 1.0625rem; min-height: 3.25rem; padding: 0.8rem 0; }
+  .drawer__price { margin-left: 0.4rem; color: var(--c-muted); font-weight: 400; }
+  .drawer__specs { display: grid; gap: 0.45rem; margin-bottom: 0.75rem; }
+  .drawer__specs div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.75rem; }
+  .drawer__specs dt { font-family: var(--f-display); font-size: 0.8125rem; color: var(--c-muted); padding-top: 0.15em; }
+  .drawer__specs dd { margin: 0; font-size: 0.9375rem; }
+  .drawer__note { margin-top: 0.75rem; }
+  .drawer__foot { padding: 0.9rem var(--gutter) calc(0.9rem + env(safe-area-inset-bottom)); border-top: 1px solid var(--c-line); background: var(--c-paper); }
   .extras { display: grid; gap: 0.9rem; }
   .extras dt { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; }
   .extras dt .num { font-weight: 400; color: var(--c-ink); font-size: 0.9375rem; }
   .extras dd { margin: 0.15rem 0 0; }
-
-  .fund { display: grid; gap: 2rem; margin-top: clamp(3rem, 2rem + 3vw, 4.5rem); padding: clamp(1.75rem, 1.2rem + 2.5vw, 3rem); background: var(--c-coral); border-radius: var(--radius); }
-  .fund__text { display: grid; gap: 0.9rem; max-width: 46rem; }
-  .fund__text .nr span { color: var(--c-ink); }
-  .fund__text h3 { font-size: var(--fs-h3); }
-  .fund__logos { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 2.25rem; margin-top: 0.75rem; }
-  .fund__logos img { width: auto; max-height: 3rem; mix-blend-mode: multiply; }
-  .fund__name { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); display: grid; }
-  .fund__name small { font-size: 0.8125rem; color: var(--c-ink); font-weight: 400; }
-  .pay { margin-top: clamp(3rem, 2rem + 3vw, 4.5rem); }
-  .pay h3 { margin-bottom: 1.25rem; }
-  .pay__steps { list-style: none; padding: 0; display: grid; gap: 1.25rem; margin-bottom: 1rem; }
-  .pay__steps li { display: grid; gap: 0.25rem; position: relative; padding-left: 3rem; }
-  .pay__n { position: absolute; left: 0; top: 0; width: 2.25rem; height: 2.25rem; display: grid; place-items: center; border-radius: 50%; background: var(--c-burgundy); color: var(--c-paper); font-size: 0.8125rem; }
-  .pay__steps strong { font-family: var(--f-display); font-weight: 500; font-size: 1.125rem; color: var(--c-burgundy); }
-  .fees__acc { margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem); }
-  .fees__acc .acc__body:has(.fac) { max-width: none; }
-  .fac { display: grid; gap: 1rem 2rem; }
-  .fac dt { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
-  .fac dd { margin: 0.15rem 0 0; font-size: var(--fs-small); }
-  @media (min-width: 40rem) { .fac { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 60rem) { .fac { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .cancel { width: 100%; border-collapse: collapse; font-size: var(--fs-small); }
-  .cancel th, .cancel td { text-align: left; padding: 0.7rem 0.75rem 0.7rem 0; border-bottom: 1px solid var(--c-line); vertical-align: top; }
+  .pay__steps { list-style: none; padding: 0; display: grid; gap: 1rem; margin: 0.5rem 0 0.75rem; }
+  .pay__steps li { display: grid; gap: 0.2rem; position: relative; padding-left: 2.75rem; }
+  .pay__n { position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; display: grid; place-items: center; border-radius: 50%; background: var(--c-burgundy); color: var(--c-paper); font-size: 0.75rem; }
+  .pay__steps strong { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
+  .cancel { width: 100%; border-collapse: collapse; font-size: var(--fs-small); margin-bottom: 0.75rem; }
+  .cancel th, .cancel td { text-align: left; padding: 0.6rem 0.75rem 0.6rem 0; border-bottom: 1px solid var(--c-line); vertical-align: top; }
   .cancel thead th { font-family: var(--f-display); font-size: 0.8125rem; font-weight: 500; color: var(--c-muted); }
   .cancel tbody th { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); width: 40%; }
-  .fees__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: clamp(2rem, 1.5rem + 2vw, 3rem); }
-
-  @media (min-width: 60rem) {
-    .incl { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-    .pay__steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
-    .pay__steps li { padding-left: 0; padding-top: 3.25rem; }
-    .pay__steps li::before { content: ''; position: absolute; left: 3rem; right: 0.5rem; top: 1.05rem; height: 2px; background-image: radial-gradient(circle, var(--c-terracotta) 1.4px, transparent 1.6px); background-size: 9px 2px; background-repeat: repeat-x; }
-    .pay__steps li:last-child::before { display: none; }
-  }
+  :global(html.drawer-open) { overflow: hidden; }
+  @media (prefers-reduced-motion: reduce) { .drawer[open], .drawer[open]::backdrop { animation: none; } }
 </style>

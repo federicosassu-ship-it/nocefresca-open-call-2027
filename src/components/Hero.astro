@@ -22,7 +22,7 @@ const h = await heroSources();
       <span class="hero__card-kicker">Open Call {status.year}</span>
       <span class="hero__card-nr">Edition Nr. {status.edition}</span>
     </div>
-    <p class="hero__caption hide-mobile">Gathering material on the shore</p>
+    <p class="hero__caption hide-mobile">The courtyard of Casa Bagnolo</p>
   </div>
 
   <div class="hero__body">
@@ -32,7 +32,7 @@ const h = await heroSources();
         <span class="pill">Open Call {status.year}</span>
         <span class="hero__eyebrow-text">Nocefresca Artist Residency · Milis, Sardinia</span>
       </p>
-      <h1 id="hero-title">Your rural artist’s studio in the heart of the Mediterranean.</h1>
+      <h1 id="hero-title">An open call for artists on the island of Sardinia.</h1>
     </div>
     <div class="hero__bottom">
       <p class="hero__lead">
@@ -56,7 +56,7 @@ const h = await heroSources();
   .hero__top { grid-row: 1; grid-column: 1; position: relative; z-index: 1; padding: calc(var(--header-h) + 0.5rem) var(--gutter) 0.75rem; }
   .hero__media { grid-row: 2; grid-column: 1; position: relative; overflow: hidden; background: var(--c-sand); }
   .hero__media :global(picture), .hero__media :global(img) { width: 100%; height: 100%; }
-  .hero__media :global(img) { position: absolute; inset: 0; object-fit: cover; object-position: 50% 45%; animation: hero-in 1.6s var(--ease) both; }
+  .hero__media :global(img) { position: absolute; inset: 0; object-fit: cover; object-position: 50% 60%; animation: hero-in 1.6s var(--ease) both; }
   @keyframes hero-in { from { transform: scale(1.06); } to { transform: none; } }
   .hero__media::after { content: ''; position: absolute; inset: 0; background:
       linear-gradient(to bottom, var(--c-paper) 0%, rgb(246 241 231 / 0) 16%),
@@ -78,11 +78,11 @@ const h = await heroSources();
     .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); grid-template-rows: 1fr; min-height: clamp(38rem, calc(100svh - var(--header-h)), 54rem); }
     .hero__media { grid-column: 2; grid-row: 1; }
     .hero__media::after { display: none; }
-    .hero__media :global(img) { object-position: 50% 64%; }
+    .hero__media :global(img) { object-position: 50% 55%; }
     .hero__body { grid-column: 1; grid-row: 1; position: relative; display: flex; flex-direction: column; justify-content: center; gap: 2rem; padding: 2.5rem clamp(2rem, 4vw, 4.5rem) 2.5rem max(var(--gutter), calc((100vw - var(--max)) / 2)); }
     .hero__top, .hero__bottom { position: relative; padding: 0; grid-row: auto; }
     .hero__contours { opacity: 0.9; mask-image: linear-gradient(to right, black 0%, transparent 85%); }
-    .hero h1 { max-width: 12.5ch; }
+    .hero h1 { max-width: 13ch; }
     .hero__lead { font-size: 1.3125rem; max-width: 38ch; }
     .hero__eyebrow-text { display: inline; }
     .hero__card { display: grid; position: absolute; left: 1.5rem; bottom: 1.5rem; min-width: 13.5rem; padding: 1rem 1.25rem 1.1rem; gap: 0.35rem; background: var(--c-ochre); color: var(--c-burgundy); border-radius: var(--radius); overflow: hidden; font-family: var(--f-display); }

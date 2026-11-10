@@ -12,14 +12,10 @@ const groups = ['Applying', 'The residency', 'Practical'] as const;
     <div class="faq__aside">
       <SectionHead nr="11" kicker="FAQ" id="faq-title" title="Questions, answered." />
       <div class="talk" data-reveal>
-        <Image src={img('people/francesca-sassu.jpg')} alt="Portrait of Francesca Sassu" width={96} height={96} densities={[1, 2]} format="webp" class="talk__face" loading="lazy" />
-        <div>
-          <p class="talk__name">Still unsure? Talk to {curator.name.split(' ')[0]}.</p>
-          <p class="talk__role small">{curator.name} — {curator.role.toLowerCase()}</p>
-        </div>
-        <p class="talk__quote quote">{curator.quote}</p>
+        <Image src={img('brand/logo-orbit.png')} alt="Nocefresca" width={96} densities={[1, 2]} format="webp" class="talk__logo" loading="lazy" />
+        <p class="talk__name">Still unsure? Talk to us.</p>
+        <p class="talk__quote quote">Please feel free to contact us anytime to discuss your interest in Nocefresca and how Sardinia can accommodate your unique artist discipline and goals.</p>
         <div class="talk__actions">
-          <a class="btn btn--ghost" href={links.whatsapp} data-track="contact_click" data-location="faq_whatsapp" rel="noopener">WhatsApp <span class="visually-hidden">{links.whatsappDisplay}</span></a>
           <a class="btn btn--ghost" href={`mailto:${links.email}?subject=Open%20Call%202027`} data-track="contact_click" data-location="faq_email">Email</a>
         </div>
       </div>
@@ -32,7 +28,7 @@ const groups = ['Applying', 'The residency', 'Practical'] as const;
             {faq.filter((f) => f.group === g).map((f) => (
               <details id={`faq-${f.id}`} data-track="faq_open" data-location={f.id}>
                 <summary>{f.q} <span class="pm" aria-hidden="true"></span></summary>
-                <div class="acc__body"><p>{f.a}</p></div>
+                <div class="acc__body"><p set:html={f.a} /></div>
               </details>
             ))}
           </div>
@@ -47,7 +43,7 @@ const groups = ['Applying', 'The residency', 'Practical'] as const;
   .faq__grid { display: grid; gap: clamp(2rem, 1.5rem + 3vw, 4rem); }
   .faq__aside :global(.section-head) { margin-bottom: 2rem; }
   .talk { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 1rem; align-items: center; padding: 1.5rem; background: var(--c-coral-soft); border-radius: var(--radius); }
-  .talk__face { width: 4.5rem; height: 4.5rem; border-radius: 50%; object-fit: cover; object-position: 50% 20%; }
+  .talk__logo { width: 4.5rem; height: auto; mix-blend-mode: multiply; }
   .talk__name { font-family: var(--f-display); font-weight: 500; font-size: 1.125rem; color: var(--c-burgundy); line-height: 1.25; }
   .talk__role { margin-top: 0.2rem; color: var(--c-muted); }
   .talk__quote { grid-column: 1 / -1; font-size: 1.0625rem; }

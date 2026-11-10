@@ -6,7 +6,6 @@ import { img } from '../lib/images';
 import { hosts, links } from '../content/opencall';
 
 const homes = [
-  { src: 'living/housing-2.jpg', alt: 'A living room with a fireplace, vintage armchairs and a striped sofa.' },
   { src: 'living/housing-3.jpg', alt: 'A long table under a pergola in a lush garden.' },
   { src: 'living/housing-4.jpg', alt: 'A two-storey village house behind a garden of orange trees.' },
   { src: 'living/housing-7.jpg', alt: 'A whitewashed room with terracotta floor, a fireplace and a small round table.' },
@@ -17,13 +16,13 @@ const homes = [
 <section class="section section--sand living" id="living" aria-labelledby="living-title">
   <div class="container">
     <SectionHead nr="05" kicker="Living at Nocefresca" id="living-title" split
-      title="A home in the village, not a hotel room."
+      title="A home within the village."
       lead="Local families open their vacant homes to the residency in the quieter months. For a month or three, you become a temporary inhabitant of a Sardinian village." />
 
     <div class="living__grid">
       <div class="living__photos">
         <figure class="living__p1 media media--zoom" data-reveal><Picture src={img('living/housing-1.jpg')} formats={['webp']} widths={[480, 800, 1200]} sizes="(min-width: 60rem) 36vw, 92vw" quality={70} alt="A vintage kitchen with blue cabinets, patterned tiles, copper pots and green glass demijohns." /></figure>
-        <figure class="living__p2 media media--zoom" data-reveal style="--d:90ms"><Picture src={img('living/housing-8.jpg')} formats={['webp']} widths={[400, 640, 960]} sizes="(min-width: 60rem) 22vw, 60vw" quality={70} alt="A whitewashed bedroom with a red bedspread and a striped Sardinian rug." /></figure>
+        <figure class="living__p2 media media--zoom" data-reveal style="--d:90ms"><Picture src={img('living/housing-2.jpg')} formats={['webp']} widths={[400, 640, 960]} sizes="(min-width: 60rem) 22vw, 60vw" quality={70} alt="A living room with a fireplace, vintage armchairs and a striped sofa." /></figure>
       </div>
       <div class="living__text">
         <blockquote class="living__quote" data-reveal>
