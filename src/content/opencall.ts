@@ -205,6 +205,20 @@ export const feeIncludes = [
   'Your profile in the Nocefresca online archive',
 ];
 
+// src('open_call&ocpag=facilities_and_additional_services') — "Main facilities" included in the residency fee
+export const facilities: [string, string][] = [
+  ['Housing', 'Private bedroom in a shared home with a fully equipped kitchen, washing machine, heating and cooling, bed linen and towels. Private apartments on request.'],
+  ['Studio & meeting room', '24/7 access to studios and meeting/projection areas with Wi-Fi in the historic centre of Milis.'],
+  ['Curatorial assistance', 'Invitation letter, pre-departure plan, inspirational hints, meetings with the guest curator, help sourcing materials, permits and licences, and support with the local community.'],
+  ['Equipment', 'A budget for durable equipment on request (consumables not included).'],
+  ['Planned activities', 'Workshops by other residents and trips in the calendar are covered; some partner activities may have an extra fee.'],
+  ['Outdoors', 'Free access to the courtyard of Casa Bagnolo for work and rest.'],
+  ['Events', 'Show work in progress or finished pieces at open studios and public talks.'],
+  ['Bikes', 'A set of bicycles for daily use, best for short distances.'],
+  ['Archive', 'Your artist profile published in the Nocefresca online archive.'],
+  ['Insurance', 'Buildings carry liability insurance for accidental damage to third parties. Personal health insurance is not included: arrange your own cover for the whole stay.'],
+];
+
 export const feeExcludes = ['Travel', 'Medical insurance (arrange your own cover for the whole stay)', 'Food', 'Production costs', 'Consumable materials', 'Extra services'];
 
 export const feeExtras = [

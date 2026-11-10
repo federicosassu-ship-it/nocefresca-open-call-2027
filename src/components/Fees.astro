@@ -3,7 +3,7 @@ import SectionHead from './SectionHead.astro';
 import ApplyButton from './ApplyButton.astro';
 import FeeEstimator from './FeeEstimator.astro';
 import { Image } from 'astro:assets';
-import { fees, feeIncludes, feeExcludes, feeExtras, payment, links, funders } from '../content/opencall';
+import { fees, feeIncludes, feeExcludes, feeExtras, payment, links, funders, facilities } from '../content/opencall';
 import { img } from '../lib/images';
 import { euro } from '../lib/format';
 
@@ -70,6 +70,13 @@ const timeline = [
     </div>
 
     <div class="acc fees__acc" data-reveal>
+      <details data-track="fees_details_open" data-location="facilities">
+        <summary>Facilities included in the fee <span class="pm" aria-hidden="true"></span></summary>
+        <div class="acc__body">
+          <dl class="fac">{facilities.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+          <p class="small"><a class="link" href={links.facilities} data-track="outbound_click" data-location="facilities_source">Facilities on the original Open Call page</a></p>
+        </div>
+      </details>
       <details data-track="fees_details_open" data-location="cancellation">
         <summary>Cancellation &amp; rescheduling <span class="pm" aria-hidden="true"></span></summary>
         <div class="acc__body">
@@ -119,6 +126,12 @@ const timeline = [
   .pay__n { position: absolute; left: 0; top: 0; width: 2.25rem; height: 2.25rem; display: grid; place-items: center; border-radius: 50%; background: var(--c-burgundy); color: var(--c-paper); font-size: 0.8125rem; }
   .pay__steps strong { font-family: var(--f-display); font-weight: 500; font-size: 1.125rem; color: var(--c-burgundy); }
   .fees__acc { margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem); }
+  .fees__acc .acc__body:has(.fac) { max-width: none; }
+  .fac { display: grid; gap: 1rem 2rem; }
+  .fac dt { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
+  .fac dd { margin: 0.15rem 0 0; font-size: var(--fs-small); }
+  @media (min-width: 40rem) { .fac { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 60rem) { .fac { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   .cancel { width: 100%; border-collapse: collapse; font-size: var(--fs-small); }
   .cancel th, .cancel td { text-align: left; padding: 0.7rem 0.75rem 0.7rem 0; border-bottom: 1px solid var(--c-line); vertical-align: top; }
   .cancel thead th { font-family: var(--f-display); font-size: 0.8125rem; font-weight: 500; color: var(--c-muted); }

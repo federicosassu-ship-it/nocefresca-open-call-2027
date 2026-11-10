@@ -13,18 +13,6 @@ const homes = [
   { src: 'living/housing-5.jpg', alt: 'A bright bedroom with a wooden double bed.' },
   { src: 'living/housing-9.jpg', alt: 'A simple kitchen with wooden cabinets and a window onto greenery.' },
 ];
-const facilities = [
-  ['Housing', 'Private bedroom in a shared home with a fully equipped kitchen, washing machine, heating and cooling, bed linen and towels. Private apartments on request.'],
-  ['Studio & meeting room', '24/7 access to studios and meeting/projection areas with Wi-Fi in the historic centre of Milis.'],
-  ['Curatorial assistance', 'Invitation letter, pre-departure plan, inspirational hints, meetings with the guest curator, help sourcing materials, permits and licences, and support with the local community.'],
-  ['Equipment', 'A budget for durable equipment on request (consumables not included).'],
-  ['Planned activities', 'Workshops by other residents and trips in the calendar are covered; some partner activities may have an extra fee.'],
-  ['Outdoors', 'Free access to the courtyard of Casa Bagnolo for work and rest.'],
-  ['Events', 'Show work in progress or finished pieces at open studios and public talks.'],
-  ['Bikes', 'A set of bicycles for daily use, best for short distances.'],
-  ['Archive', 'Your artist profile published in the Nocefresca online archive.'],
-  ['Insurance', 'Buildings carry liability insurance for accidental damage to third parties. Personal health insurance is not included: arrange your own cover for the whole stay.'],
-];
 ---
 <section class="section section--sand living" id="living" aria-labelledby="living-title">
   <div class="container">
@@ -80,13 +68,6 @@ const facilities = [
     <p class="caption">A glimpse of some homes — availability changes throughout the year.</p>
 
     <div class="acc living__acc" data-reveal>
-      <details data-track="accordion_open" data-location="facilities">
-        <summary>Facilities included in the fee <span class="pm" aria-hidden="true"></span></summary>
-        <div class="acc__body">
-          <dl class="fac">{facilities.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
-          <p class="small"><a class="link" href={links.facilities} data-track="outbound_click" data-location="facilities_source">Facilities on the original Open Call page</a></p>
-        </div>
-      </details>
       <details data-track="accordion_open" data-location="accessibility">
         <summary>Accessibility <span class="pm" aria-hidden="true"></span></summary>
         <div class="acc__body">
@@ -121,15 +102,11 @@ const facilities = [
   .host__quote { margin-top: 0.6rem; font-size: 1.0625rem; }
   .home__slide { width: min(80vw, 30rem); aspect-ratio: 3 / 2; }
   .living__acc { margin-top: clamp(2.5rem, 2rem + 2vw, 4rem); }
-  .fac { display: grid; gap: 1rem 2rem; }
-  .fac dt { font-family: var(--f-display); font-weight: 500; color: var(--c-burgundy); }
-  .fac dd { margin: 0.15rem 0 0; font-size: var(--fs-small); }
   .living__acc .acc__body { max-width: none; }
-  @media (min-width: 40rem) { .hosts__list, .fac { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 40rem) { .hosts__list { grid-template-columns: 1fr 1fr; } }
   @media (min-width: 60rem) {
     .living__grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: center; }
     .hosts__list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .host { grid-template-columns: 1fr; }
-    .fac { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  }
+    }
 </style>
