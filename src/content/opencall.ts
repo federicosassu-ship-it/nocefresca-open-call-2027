@@ -84,6 +84,7 @@ export const links = {
   facilities: src('open_call&ocpag=facilities_and_additional_services'),
   dates: src('open_call&ocpag=dates'),
   calendarPdf: `${SITE}archivio/pdf/calendar_apr_may_2025.pdf`,
+  curator2026: 'https://www.instagram.com/p/DZck6lgiAU9/',
   pastTopic: src('news_show_one&qnews=87&titolo=Unofficial_Cartographies'),
   whichMonth: src('news_show_one&qnews=41'),
   milisGuide: src('news_show_one&qnews=14'),
@@ -406,6 +407,15 @@ export const diary = {
 };
 
 // Artists archive, 2026 edition "Unofficial Cartographies — Second Edition" (src('artists'))
+// Past residents on video (Instagram reels shared by Nocefresca); posters from the Artists archive
+export const residentVideos = [
+  { name: 'Aaron Billings', role: 'Mixed-media artist', from: 'Melbourne, Australia', img: '95.jpg', reel: 'C0g7qcXIlbg' },
+  { name: 'Izzy Morrison', role: 'Textile artist', from: 'Los Angeles, United States', img: '97.jpg', reel: 'Czyib6AobjN' },
+  { name: 'Ellen Sofie Lauritzen', role: 'Writer', from: 'Oslo, Norway', img: '81.jpg', reel: 'Cxx8gU_ogx8' },
+  { name: 'Guglielmo Cherchi', role: 'Photographer', from: 'Cagliari, Italy', img: '90.jpg', reel: 'CzvvwgzIOAN' },
+  { name: 'Thea Gregorius', role: 'Visual artist', from: 'New York, United States', img: '85.jpg', reel: 'CyGJjebo-XR' },
+];
+
 export const residents2026 = [
   { name: 'Richard Ballon', role: 'Poet, playwright', country: 'USA', img: '193.jpg' },
   { name: 'Phillipa Byrne', role: 'Ceramic artist', country: 'Australia', img: '199.jpg' },
