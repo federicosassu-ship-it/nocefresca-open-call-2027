@@ -1,89 +1,89 @@
-# Developer handoff — Nocefresca Open Call 2027 landing
+# Passaggio di consegne allo sviluppatore — Landing Open Call 2027 di Nocefresca
 
-A single-page, mobile-first landing for the Open Call, built as a **static site** (plain HTML/CSS/JS output).
-It needs no server, database or CMS: it can be hosted anywhere static files are served.
+Landing a pagina singola, pensata prima per il mobile, costruita come **sito statico** (l'output è HTML/CSS/JS semplice).
+Non servono server, database o CMS: si può pubblicare ovunque si possano caricare file statici.
 
-- Live preview: https://federicosassu-ship-it.github.io/nocefresca-open-call-2027/
-- Source: https://github.com/federicosassu-ship-it/nocefresca-open-call-2027
+- Anteprima online: https://federicosassu-ship-it.github.io/nocefresca-open-call-2027/
+- Codice sorgente: https://github.com/federicosassu-ship-it/nocefresca-open-call-2027
 
-## Stack
+## Tecnologie usate
 
 | | |
 |---|---|
-| Framework | [Astro](https://astro.build) 7 (static output, no client framework) |
-| Images | `astro:assets` + sharp → responsive AVIF/WebP, generated at build time |
-| Fonts | Space Grotesk + Vollkorn, self-hosted via `@fontsource-variable` |
-| Motion | GSAP 3 + ScrollTrigger (logo intro only), CSS for the rest; `prefers-reduced-motion` respected |
-| Build-time art | `scripts/build-map.mjs` (Sardinia map, d3-geo), `build-contours.mjs` (contour motifs), `build-wordmark.mjs` (logo vectorised with Potrace) |
-| QA | Playwright + axe-core (`npm run qa`) |
+| Framework | [Astro](https://astro.build) 7 (output statico, nessun framework lato client) |
+| Immagini | `astro:assets` + sharp → AVIF/WebP responsive, generate in fase di build |
+| Font | Space Grotesk + Vollkorn, ospitati in locale tramite `@fontsource-variable` |
+| Animazioni | GSAP 3 + ScrollTrigger (solo per l'intro del logo), CSS per il resto; rispetta `prefers-reduced-motion` |
+| Grafica generata in build | `scripts/build-map.mjs` (mappa della Sardegna, d3-geo), `build-contours.mjs` (motivi a curve di livello), `build-wordmark.mjs` (logo vettorializzato con Potrace) |
+| Controlli qualità | Playwright + axe-core (`npm run qa`) |
 
-Requires Node 22+.
+Richiede Node 22 o superiore.
 
 ```bash
 npm install
 npm run dev        # http://localhost:4321
 npm run build      # → dist/
-npm run preview    # serve dist/
-npm run qa         # needs `npm run preview` running
+npm run preview    # serve la cartella dist/
+npm run qa         # richiede `npm run preview` attivo
 ```
 
-## Where things are
+## Dove si trovano le cose
 
-- **All copy, prices, dates, links:** `src/content/opencall.ts` — single source of truth. Change text here, not in components.
-- **Settings** (application URL, GTM / Meta Pixel IDs, status): `src/config.ts`.
-- **Page order:** `src/pages/index.astro`.
-- **Layout, `<head>`, SEO, FAQ schema, consent defaults:** `src/layouts/Base.astro`.
-- **Global styles & design tokens:** `src/styles/` (colours as CSS custom properties on `:root`).
-- **Photos:** `src/assets/img/` (originals; the build makes the resized versions).
+- **Tutti i testi, prezzi, date e link:** `src/content/opencall.ts`, unica fonte dei contenuti. I testi si cambiano qui, non nei componenti.
+- **Impostazioni** (URL del modulo di candidatura, ID di GTM / Meta Pixel, stato delle candidature): `src/config.ts`.
+- **Ordine delle sezioni:** `src/pages/index.astro`.
+- **Layout, `<head>`, SEO, schema FAQ, impostazioni predefinite del consenso:** `src/layouts/Base.astro`.
+- **Stili globali e design token:** `src/styles/global.css` (colori come variabili CSS su `:root`).
+- **Foto:** `src/assets/img/` (originali; le versioni ridimensionate le crea la build).
 
-| # | Section | Component |
+| # | Sezione | Componente |
 |---|---|---|
-| – | Logo intro (scroll-driven) | `Intro.astro` |
+| – | Intro del logo (guidata dallo scroll) | `Intro.astro` |
 | – | Header / menu | `Header.astro` |
-| 01 | Hero + key facts strip | `Hero.astro`, `InfoStrip.astro` |
-| 02 | Who it's for | `ForYou.astro` |
-| 03 | Studios | `Studios.astro` |
-| 04 | Milis + map | `Milis.astro`, `MapSardinia.astro` |
-| 05 | Living / houses | `Living.astro` |
-| 06 | Artists, videos, network | `Artists.astro` |
-| 07 | Programme | `Programme.astro` |
-| 08 | Dates & status | `Dates.astro`, `StatusBadge.astro` |
-| 09 | Fees (estimator + details drawer + funding) | `Fees.astro`, `FeeEstimator.astro` |
-| 10 | How to apply | `Apply.astro` |
+| 01 | Hero + striscia con i dati chiave | `Hero.astro`, `InfoStrip.astro` |
+| 02 | A chi si rivolge | `ForYou.astro` |
+| 03 | Studi | `Studios.astro` |
+| 04 | Milis + mappa | `Milis.astro`, `MapSardinia.astro` |
+| 05 | Vivere qui / le case | `Living.astro` |
+| 06 | Artisti, video, network | `Artists.astro` |
+| 07 | Programma | `Programme.astro` |
+| 08 | Date e stato delle candidature | `Dates.astro`, `StatusBadge.astro` |
+| 09 | Costi (calcolatore + pannello dettagli + finanziamenti) | `Fees.astro`, `FeeEstimator.astro` |
+| 10 | Come candidarsi | `Apply.astro` |
 | 11 | FAQ | `Faq.astro` |
-| – | Final CTA, footer, sticky apply bar, cookie banner | `FinalCta.astro`, `Footer.astro`, `StickyApply.astro`, `ConsentBanner.astro` |
+| – | CTA finale, footer, barra "Apply" fissa, banner cookie | `FinalCta.astro`, `Footer.astro`, `StickyApply.astro`, `ConsentBanner.astro` |
 
-Shared pieces: `Rail.astro` (horizontal scrolling carousels), `SectionHead.astro`, `ApplyButton.astro`.
-`Glance.astro` and `Month.astro` are no longer on the page (removed at the founder's request) but kept in case they come back.
+Componenti condivisi: `Rail.astro` (caroselli orizzontali), `SectionHead.astro`, `ApplyButton.astro`.
+`Glance.astro` e `Month.astro` non sono più nella pagina (tolti su richiesta della fondatrice) ma restano nel codice nel caso servano di nuovo.
 
-## Behaviour worth knowing
+## Comportamenti da sapere
 
-- **Apply buttons** go to the existing form (`?/apply_now` on nocefresca.it) and forward UTM / `fbclid` parameters from the ad click.
-- **Application status** (open / rolling / closed) is one setting; badge, banners and copy follow it.
-- **Videos** load Instagram's embed only when someone presses play (nothing is contacted before that).
-- **Tracking:** `dataLayer` events are listed in `docs/TRACKING.md`. Consent Mode v2 defaults to *denied*; GTM and Pixel stay off until IDs are set in `src/config.ts` and the visitor accepts.
-- **Accessibility:** native `<details>` accordions and `<dialog>` modals, keyboard support, WCAG 2.2 AA contrast; see `docs/QA.md`.
+- **I pulsanti "Apply"** portano al modulo esistente (`?/apply_now` su nocefresca.it) e passano i parametri UTM / `fbclid` arrivati dal clic sull'inserzione.
+- **Lo stato delle candidature** (aperte / posti residui / chiuse) è una sola impostazione: badge, avvisi e testi si adeguano da soli.
+- **I video** caricano l'embed di Instagram solo quando qualcuno preme play (prima Instagram non viene contattato).
+- **Tracciamento:** gli eventi `dataLayer` sono elencati in `docs/TRACKING.md`. Il Consent Mode v2 parte da *negato*; GTM e Pixel restano spenti finché non si inseriscono gli ID in `src/config.ts` e il visitatore accetta.
+- **Accessibilità:** accordion con `<details>` e finestre con `<dialog>` nativi, navigazione da tastiera, contrasto WCAG 2.2 AA; dettagli in `docs/QA.md`.
 
-## Publishing on nocefresca.it
+## Pubblicazione su nocefresca.it
 
-Two straightforward options:
+Due strade semplici:
 
-1. **As a sub-folder** (recommended), e.g. `nocefresca.it/open-call/`: build with `BASE_PATH=/open-call/ SITE_URL=https://www.nocefresca.it npm run build` and upload the contents of `dist/` to that folder. Nothing else on the existing site changes.
-2. **Porting into the existing site's templates:** use the per-section HTML files (below) as the visual reference and `src/content/opencall.ts` for the text. Each component's `<style>` and `<script>` blocks are self-contained.
+1. **In una sottocartella** (consigliata), ad esempio `nocefresca.it/open-call/`: fare la build con `BASE_PATH=/open-call/ SITE_URL=https://www.nocefresca.it npm run build` e caricare il contenuto di `dist/` in quella cartella. Il resto del sito non cambia.
+2. **Riportarla nei template del sito esistente:** usare i file HTML delle singole sezioni (vedi sotto) come riferimento visivo e `src/content/opencall.ts` per i testi. I blocchi `<style>` e `<script>` di ogni componente sono autonomi.
 
-The repo also has a GitHub Pages workflow (`.github/workflows/`) used for the preview link.
+Nel repository c'è anche un workflow di GitHub Pages (`.github/workflows/pages.yml`) usato per il link di anteprima.
 
-## Per-section HTML export
+## Esportare l'HTML di ogni sezione
 
 ```bash
 npm run build && node scripts/export-sections.mjs
 ```
 
-Creates `handoff/` (not committed):
+Crea la cartella `handoff/` (non inclusa nel repository):
 
-- `handoff/site/` — the complete built page. Open it through a local server (e.g. `npx serve handoff/site`); browsers block its scripts if opened directly from disk.
-- `handoff/sections/NN-name.html` — one file per section with the final HTML and all the page CSS. They open directly in a browser and are for reference/porting: they are static (no scripts), so carousels, the estimator and dialogs only work on the full page.
+- `handoff/site/`: la pagina completa già compilata. Va aperta tramite un server locale (es. `npx serve handoff/site`); se aperta direttamente dal disco il browser blocca gli script.
+- `handoff/sections/NN-nome.html`: un file per sezione con l'HTML definitivo e tutto il CSS della pagina. Si aprono direttamente nel browser e servono come riferimento o per il porting: sono statici (senza script), quindi caroselli, calcolatore e finestre funzionano solo nella pagina completa.
 
-## Still to confirm with Nocefresca
+## Da confermare con Nocefresca
 
-Search the code for `[TO CONFIRM]`. Main points: Option D studio location (Casa Oaxaca vs Casa Bagnolo), cleaning frequency, funder names spelling, high-resolution logos for funders and TransArtists, and the GTM / Meta Pixel IDs.
+Cercare `[TO CONFIRM]` nel codice. Punti principali: posizione dello studio dell'Opzione D (Casa Oaxaca o Casa Bagnolo), frequenza delle pulizie, grafia dei nomi dei finanziatori, loghi ad alta risoluzione dei finanziatori e di TransArtists, e gli ID di GTM / Meta Pixel.
