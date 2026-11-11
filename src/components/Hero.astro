@@ -78,7 +78,7 @@ const h = await heroSources();
     .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); grid-template-rows: 1fr; min-height: clamp(38rem, calc(100svh - var(--header-h)), 54rem); }
     .hero__media { grid-column: 2; grid-row: 1; }
     .hero__media::after { display: none; }
-    .hero__media :global(img) { object-position: 50% 55%; }
+    .hero__media :global(img) { object-position: 50% 70%; }
     .hero__body { grid-column: 1; grid-row: 1; position: relative; display: flex; flex-direction: column; justify-content: center; gap: 2rem; padding: 2.5rem clamp(2rem, 4vw, 4.5rem) 2.5rem max(var(--gutter), calc((100vw - var(--max)) / 2)); }
     .hero__top, .hero__bottom { position: relative; padding: 0; grid-row: auto; }
     .hero__contours { opacity: 0.9; mask-image: linear-gradient(to right, black 0%, transparent 85%); }
