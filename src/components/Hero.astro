@@ -58,10 +58,7 @@ const h = await heroSources();
   .hero__media :global(picture), .hero__media :global(img) { width: 100%; height: 100%; }
   .hero__media :global(img) { position: absolute; inset: 0; object-fit: cover; object-position: 50% 60%; animation: hero-in 1.6s var(--ease) both; }
   @keyframes hero-in { from { transform: scale(1.06); } to { transform: none; } }
-  .hero__media::after { content: ''; position: absolute; inset: 0; background:
-      linear-gradient(to bottom, var(--c-paper) 0%, rgb(246 241 231 / 0) 16%),
-      linear-gradient(to top, var(--c-paper) 0%, rgb(246 241 231 / 0) 14%); }
-  .hero__bottom { grid-row: 3; grid-column: 1; position: relative; z-index: 1; padding: 0.25rem var(--gutter) 1.25rem; }
+  .hero__bottom { grid-row: 3; grid-column: 1; position: relative; z-index: 1; padding: 1rem var(--gutter) 1.25rem; }
   .hero__card { display: none; }
   .hero__eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.75rem; font-family: var(--f-display); font-size: 0.875rem; font-weight: 500; color: var(--c-burgundy); margin-bottom: 0.75rem; }
   .hero h1 { font-size: clamp(2.25rem, 1.1rem + 4.4vw, 4.75rem); max-width: 13ch; }
@@ -77,7 +74,6 @@ const h = await heroSources();
   @media (min-width: 60rem) {
     .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); grid-template-rows: 1fr; min-height: clamp(38rem, calc(100svh - var(--header-h)), 54rem); }
     .hero__media { grid-column: 2; grid-row: 1; }
-    .hero__media::after { display: none; }
     .hero__media :global(img) { object-position: 50% 70%; }
     .hero__body { grid-column: 1; grid-row: 1; position: relative; display: flex; flex-direction: column; justify-content: center; gap: 2rem; padding: 2.5rem clamp(2rem, 4vw, 4.5rem) 2.5rem max(var(--gutter), calc((100vw - var(--max)) / 2)); }
     .hero__top, .hero__bottom { position: relative; padding: 0; grid-row: auto; }

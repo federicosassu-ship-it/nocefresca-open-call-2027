@@ -114,7 +114,14 @@ for (const sp of subpaths) {
     if (heroImg) tl.fromTo(heroImg, { scale: 1.08 }, { scale: 1, duration: 1, ease: 'power1.out' }, 0);
 
     cue.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: section.offsetHeight, behavior: 'smooth' }); });
-    window.addEventListener('load', () => ScrollTrigger.refresh());
+    // Always open on the intro (no restored mid-page position); deep links (#section) land on their section
+    // once the scroll-driven layout has been measured.
+    window.addEventListener('load', () => {
+      ScrollTrigger.refresh();
+      const target = location.hash.length > 1 ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+      if (target) target.scrollIntoView();
+      else window.scrollTo(0, 0);
+    });
   }
 </script>
 
