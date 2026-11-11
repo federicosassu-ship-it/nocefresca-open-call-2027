@@ -1,11 +1,15 @@
 ---
+import { Picture } from 'astro:assets';
 import SectionHead from './SectionHead.astro';
 import Arrow from './Arrow.astro';
 import { pastThemes, links } from '../content/opencall';
+import { img } from '../lib/images';
 
 const arc = [
   {
     when: 'Before you arrive',
+    img: 'life/curator-session.jpg',
+    alt: 'Two artists review work together at a desk with a laptop and paint tubes.',
     items: [
       'An online pre-departure meeting with your group and the Nocefresca team, to share interests and shape the residency',
       'Practical needs sorted in advance: studio, housing, equipment',
@@ -14,6 +18,8 @@ const arc = [
   },
   {
     when: 'During the month',
+    img: 'life/practice-presentation.jpg',
+    alt: 'A resident presents work pinned on a white wall to fellow artists.',
     items: [
       'Present your practice to the group',
       'Two group meetings and three one-to-one sessions with the guest curator',
@@ -24,6 +30,8 @@ const arc = [
   },
   {
     when: 'At the end',
+    img: 'life/open-studio.jpg',
+    alt: 'Visitors gather around framed photographs at an open studio event.',
     items: [
       'A final open studio, open to the public — often followed by drinks in the courtyard',
       'A text by the curator on your practice',
@@ -41,6 +49,7 @@ const arc = [
     <ol class="arc" role="list">
       {arc.map((a, i) => (
         <li class="arc__step" data-reveal style={`--d:${i * 90}ms`}>
+          <div class="arc__media media media--zoom"><Picture src={img(a.img)} formats={['webp']} widths={[400, 640, 900]} sizes="(min-width: 60rem) 30vw, 92vw" quality={68} alt={a.alt} loading="lazy" /></div>
           <p class="arc__n num">0{i + 1}</p>
           <h3 class="arc__when">{a.when}</h3>
           <ul class="dashes small" role="list">{a.items.map((t) => <li>{t}</li>)}</ul>
@@ -80,8 +89,9 @@ const arc = [
 </section>
 
 <style>
-  .arc { list-style: none; padding: 0; display: grid; gap: 1.75rem var(--gap); counter-reset: arc; position: relative; }
+  .arc { list-style: none; padding: 0; display: grid; gap: 2.5rem var(--gap); counter-reset: arc; position: relative; }
   .arc__step { position: relative; }
+  .arc__media { aspect-ratio: 4 / 3; margin-bottom: 1.25rem; }
   .arc__n { font-size: 0.875rem; color: var(--c-terracotta-ink); margin-bottom: 0.25rem; }
   .arc__when { margin-bottom: 0.9rem; }
   .prog__grid { display: grid; gap: var(--gap); margin-top: clamp(3rem, 2rem + 3vw, 5rem); }

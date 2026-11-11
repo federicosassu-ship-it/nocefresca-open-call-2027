@@ -1,6 +1,6 @@
 {
   "url": "http://127.0.0.1:4321/",
-  "date": "2026-11-11T14:06:46.135Z",
+  "date": "2026-11-11T14:14:32.723Z",
   "runs": {
     "mobile": {
       "consoleErrors": [],
@@ -9,7 +9,7 @@
       "h1Count": 1,
       "headingSkips": 0,
       "brokenAnchors": [],
-      "images": 71,
+      "images": 74,
       "imagesMissingAlt": 0,
       "imagesNotLoaded": [],
       "smallTargets": [
@@ -20,7 +20,7 @@
         "input \"\" 1×1"
       ],
       "applyLinks": 11,
-      "pageWeightHint": 345070,
+      "pageWeightHint": 347483,
       "axeViolations": [],
       "tabsKeyboard": "ok",
       "accordion": "ok",
@@ -39,7 +39,7 @@
       "h1Count": 1,
       "headingSkips": 0,
       "brokenAnchors": [],
-      "images": 71,
+      "images": 74,
       "imagesMissingAlt": 0,
       "imagesNotLoaded": [],
       "smallTargets": [
@@ -50,7 +50,7 @@
         "input \"\" 1×1"
       ],
       "applyLinks": 11,
-      "pageWeightHint": 345044,
+      "pageWeightHint": 347469,
       "axeViolations": [],
       "tabsKeyboard": "ok",
       "accordion": "ok",
