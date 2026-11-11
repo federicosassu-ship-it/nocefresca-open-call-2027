@@ -1,6 +1,6 @@
 {
   "url": "http://127.0.0.1:4321/",
-  "date": "2026-11-10T21:52:03.255Z",
+  "date": "2026-11-11T11:40:25.556Z",
   "runs": {
     "mobile": {
       "consoleErrors": [],
@@ -20,7 +20,7 @@
         "input \"\" 1×1"
       ],
       "applyLinks": 11,
-      "pageWeightHint": 344589,
+      "pageWeightHint": 344568,
       "axeViolations": [],
       "tabsKeyboard": "ok",
       "accordion": "ok",
@@ -50,7 +50,7 @@
         "input \"\" 1×1"
       ],
       "applyLinks": 11,
-      "pageWeightHint": 344563,
+      "pageWeightHint": 344554,
       "axeViolations": [],
       "tabsKeyboard": "ok",
       "accordion": "ok",
