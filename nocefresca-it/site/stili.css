@@ -1118,9 +1118,9 @@ to{transform:none}
 
 .fund__wall[data-astro-cid-kp3vv5de] .label[data-astro-cid-kp3vv5de]{color:var(--c-ink)}
 
-.fund__logos[data-astro-cid-kp3vv5de]{flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.75rem;display:flex}
+.fund__logos[data-astro-cid-kp3vv5de]{flex-wrap:wrap;align-items:center;gap:1.25rem 2rem;margin-top:.75rem;display:flex}
 
-.fund__logos[data-astro-cid-kp3vv5de] img[data-astro-cid-kp3vv5de]{mix-blend-mode:multiply;width:auto;max-height:3rem}
+.fund__logos[data-astro-cid-kp3vv5de] img[data-astro-cid-kp3vv5de]{mix-blend-mode:multiply;width:auto;max-height:4.25rem}
 
 .fund__name[data-astro-cid-kp3vv5de]{font-family:var(--f-display);color:var(--c-burgundy);background:#f6f1e7b3;border-radius:999px;padding:.35rem .75rem;font-size:.875rem;font-weight:500;display:inline-flex}
 

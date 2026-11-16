@@ -7,7 +7,7 @@
 
 Modifiche:
 1. `stili.css`: tolta la sfumatura sulla prima foto (visibile solo su mobile; su desktop era già disattivata).
-2. `index.html`, sezione grants: 8 nomi sostituiti dai loghi originali in `_assets/grants/` (stesso ordine; le voci senza logo restano testo).
+2. `index.html`, sezione grants: 8 nomi sostituiti dai loghi originali in `_assets/grants/` (stesso ordine); tolte le voci senza logo (Jacksonville State University, Boynes Emerging Artist Award, Ministero della Cultura). `stili.css`: loghi più grandi (altezza max 3rem → 4.25rem) e più distanziati (gap .5rem → 1.25rem 2rem).
 3. `index.html`, Studio Leo: 2 nuove foto (`_assets/studio-leo-*`) al posto dell'unica precedente.
 4. `index.html`, Research Studio: 3 nuove foto (`_assets/research-studio-*`) al posto delle 2 precedenti.
 
