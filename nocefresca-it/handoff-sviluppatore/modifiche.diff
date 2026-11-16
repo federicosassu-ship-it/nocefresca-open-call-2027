@@ -1,0 +1,82 @@
+diff -ru '--exclude=_assets' original/index.html site/index.html
+--- original/index.html	2026-11-16 17:11:27.109455151 +0000
++++ site/index.html	2026-11-16 18:52:06.313332715 +0000
+@@ -719,7 +719,10 @@
+ 						<div class="rail-wrap rail-wrap--bottom " data-rail="studio_leo" data-astro-cid-euxwtxot>
+ 							<div class="rail" id="rail-leo" role="region" aria-label="Photos of Studio Leo" tabindex="0" data-rail-track data-astro-cid-euxwtxot>
+ 								<div class="studio__slide media" data-astro-cid-z5gykqva>
+-									<picture data-astro-cid-z5gykqva="true"> <source srcset="./_assets/leo-1.Dj9aIAK1_jHY0c.webp 480w, ./_assets/leo-1.Dj9aIAK1_Z1GmXX7.webp 800w, ./_assets/leo-1.Dj9aIAK1_1ENS8G.webp 1200w" type="image/webp" sizes="(min-width: 60rem) 52vw, 92vw"> <img src="./_assets/leo-1.Dj9aIAK1_1eAyAY.jpg" srcset="./_assets/leo-1.Dj9aIAK1_MSyDo.jpg 480w, ./_assets/leo-1.Dj9aIAK1_Z1dcojU.jpg 800w, ./_assets/leo-1.Dj9aIAK1_1eAyAY.jpg 1200w" sizes="(min-width: 60rem) 52vw, 92vw" alt="Studio Leo, Casa Oaxaca &mdash; photo 1 of 1" loading="lazy" data-astro-cid-z5gykqva="true" decoding="async" width="1200" height="800"> </picture> 
++									<picture data-astro-cid-z5gykqva="true"> <source srcset="./_assets/studio-leo-1-480.webp 480w, ./_assets/studio-leo-1-800.webp 800w, ./_assets/studio-leo-1-1200.webp 1200w" type="image/webp" sizes="(min-width: 60rem) 52vw, 92vw"> <img src="./_assets/studio-leo-1-1200.jpg" srcset="./_assets/studio-leo-1-480.jpg 480w, ./_assets/studio-leo-1-800.jpg 800w, ./_assets/studio-leo-1-1200.jpg 1200w" sizes="(min-width: 60rem) 52vw, 92vw" alt="Studio Leo, Casa Oaxaca &mdash; photo 1 of 2" loading="lazy" data-astro-cid-z5gykqva="true" decoding="async" width="1200" height="800"> </picture> 
++								</div>
++								<div class="studio__slide media" data-astro-cid-z5gykqva>
++									<picture data-astro-cid-z5gykqva="true"> <source srcset="./_assets/studio-leo-2-480.webp 480w, ./_assets/studio-leo-2-800.webp 800w, ./_assets/studio-leo-2-1200.webp 1200w" type="image/webp" sizes="(min-width: 60rem) 52vw, 92vw"> <img src="./_assets/studio-leo-2-1200.jpg" srcset="./_assets/studio-leo-2-480.jpg 480w, ./_assets/studio-leo-2-800.jpg 800w, ./_assets/studio-leo-2-1200.jpg 1200w" sizes="(min-width: 60rem) 52vw, 92vw" alt="Studio Leo, Casa Oaxaca &mdash; photo 2 of 2" loading="lazy" data-astro-cid-z5gykqva="true" decoding="async" width="1200" height="800"> </picture> 
+ 								</div>
+ 							</div>
+ 							<div class="rail-controls" data-rail-controls hidden data-astro-cid-euxwtxot>
+@@ -761,10 +764,13 @@
+ 						<div class="rail-wrap rail-wrap--bottom " data-rail="studio_research" data-astro-cid-euxwtxot>
+ 							<div class="rail" id="rail-research" role="region" aria-label="Photos of Research Studio" tabindex="0" data-rail-track data-astro-cid-euxwtxot>
+ 								<div class="studio__slide media" data-astro-cid-z5gykqva>
+-									<picture data-astro-cid-z5gykqva="true"> <source srcset="./_assets/research-1.eMdKZM4l_Z2u4FVi.webp 480w, ./_assets/research-1.eMdKZM4l_17Wvtt.webp 800w, ./_assets/research-1.eMdKZM4l_1tRMEY.webp 1200w" type="image/webp" sizes="(min-width: 60rem) 52vw, 92vw"> <img src="./_assets/research-1.eMdKZM4l_1xH9SW.jpg" srcset="./_assets/research-1.eMdKZM4l_flNYu.jpg 480w, ./_assets/research-1.eMdKZM4l_Z1cN7oF.jpg 800w, ./_assets/research-1.eMdKZM4l_7X3Bu.jpg 1200w" sizes="(min-width: 60rem) 52vw, 92vw" alt="Research Studio, Casa Oaxaca &mdash; photo 1 of 2" loading="lazy" data-astro-cid-z5gykqva="true" decoding="async" width="1280" height="854"> </picture> 
++									<picture data-astro-cid-z5gykqva="true"> <source srcset="./_assets/research-studio-1-480.webp 480w, ./_assets/research-studio-1-800.webp 800w, ./_assets/research-studio-1-1200.webp 1200w" type="image/webp" sizes="(min-width: 60rem) 52vw, 92vw"> <img src="./_assets/research-studio-1-1200.jpg" srcset="./_assets/research-studio-1-480.jpg 480w, ./_assets/research-studio-1-800.jpg 800w, ./_assets/research-studio-1-1200.jpg 1200w" sizes="(min-width: 60rem) 52vw, 92vw" alt="Research Studio, Casa Oaxaca &mdash; photo 1 of 3" loading="lazy" data-astro-cid-z5gykqva="true" decoding="async" width="1200" height="800"> </picture> 
++								</div>
++								<div class="studio__slide media" data-astro-cid-z5gykqva>
++									<picture data-astro-cid-z5gykqva="true"> <source srcset="./_assets/research-studio-2-480.webp 480w, ./_assets/research-studio-2-800.webp 800w, ./_assets/research-studio-2-1200.webp 1200w" type="image/webp" sizes="(min-width: 60rem) 52vw, 92vw"> <img src="./_assets/research-studio-2-1200.jpg" srcset="./_assets/research-studio-2-480.jpg 480w, ./_assets/research-studio-2-800.jpg 800w, ./_assets/research-studio-2-1200.jpg 1200w" sizes="(min-width: 60rem) 52vw, 92vw" alt="Research Studio, Casa Oaxaca &mdash; photo 2 of 3" loading="lazy" data-astro-cid-z5gykqva="true" decoding="async" width="1200" height="800"> </picture> 
+ 								</div>
+ 								<div class="studio__slide media" data-astro-cid-z5gykqva>
+-									<picture data-astro-cid-z5gykqva="true"> <source srcset="./_assets/research-2.BZO5ByAm_Z19DmxO.webp 480w, ./_assets/research-2.BZO5ByAm_2snOQW.webp 800w, ./_assets/research-2.BZO5ByAm_2bEu3f.webp 1200w" type="image/webp" sizes="(min-width: 60rem) 52vw, 92vw"> <img src="./_assets/research-2.BZO5ByAm_2ftQhd.jpg" srcset="./_assets/research-2.BZO5ByAm_1zM8mX.jpg 480w, ./_assets/research-2.BZO5ByAm_7CbXN.jpg 800w, ./_assets/research-2.BZO5ByAm_OJJYK.jpg 1200w" sizes="(min-width: 60rem) 52vw, 92vw" alt="Research Studio, Casa Oaxaca &mdash; photo 2 of 2" loading="lazy" data-astro-cid-z5gykqva="true" decoding="async" width="1280" height="854"> </picture> 
++									<picture data-astro-cid-z5gykqva="true"> <source srcset="./_assets/research-studio-3-480.webp 480w, ./_assets/research-studio-3-800.webp 800w, ./_assets/research-studio-3-1200.webp 1200w" type="image/webp" sizes="(min-width: 60rem) 52vw, 92vw"> <img src="./_assets/research-studio-3-1200.jpg" srcset="./_assets/research-studio-3-480.jpg 480w, ./_assets/research-studio-3-800.jpg 800w, ./_assets/research-studio-3-1200.jpg 1200w" sizes="(min-width: 60rem) 52vw, 92vw" alt="Research Studio, Casa Oaxaca &mdash; photo 3 of 3" loading="lazy" data-astro-cid-z5gykqva="true" decoding="async" width="1200" height="800"> </picture> 
+ 								</div>
+ 							</div>
+ 							<div class="rail-controls" data-rail-controls hidden data-astro-cid-euxwtxot>
+@@ -1896,18 +1902,15 @@
+ 						Here are some of the institutions that have funded our past residents:
+ 					</p>
+ 					<ul class="fund__logos" role="list" data-astro-cid-kp3vv5de>
+-						<li data-astro-cid-kp3vv5de><span class="fund__name" data-astro-cid-kp3vv5de>European Union</span></li>
+-						<li data-astro-cid-kp3vv5de><span class="fund__name" data-astro-cid-kp3vv5de>Swedish Arts Grants Committee</span></li>
+-						<li data-astro-cid-kp3vv5de><span class="fund__name" data-astro-cid-kp3vv5de>Slovak Arts Council</span></li>
+-						<li data-astro-cid-kp3vv5de><span class="fund__name" data-astro-cid-kp3vv5de>Kingdom of the Netherlands</span></li>
+-						<li data-astro-cid-kp3vv5de><span class="fund__name" data-astro-cid-kp3vv5de>Stroom Den Haag</span></li>
+-						<li data-astro-cid-kp3vv5de><span class="fund__name" data-astro-cid-kp3vv5de>Helge Ax:son Johnsons</span></li>
+-						<li data-astro-cid-kp3vv5de><span class="fund__name" data-astro-cid-kp3vv5de>Jacksonville State University</span></li>
+-						<li data-astro-cid-kp3vv5de><span class="fund__name" data-astro-cid-kp3vv5de>Boynes Emerging Artist Award</span></li>
+-						<li data-astro-cid-kp3vv5de><span class="fund__name" data-astro-cid-kp3vv5de>American Academy in Rome</span></li>
++						<li data-astro-cid-kp3vv5de><img src="./_assets/grants/european-union.jpg" alt="European Union" width="600" height="401" loading="lazy" decoding="async" data-astro-cid-kp3vv5de></li>
++						<li data-astro-cid-kp3vv5de><img src="./_assets/grants/swedish-arts-grants-committee.png" alt="Swedish Arts Grants Committee" width="2382" height="908" loading="lazy" decoding="async" data-astro-cid-kp3vv5de></li>
++						<li data-astro-cid-kp3vv5de><img src="./_assets/grants/slovak-arts-council.jpg" alt="Slovak Arts Council" width="1024" height="768" loading="lazy" decoding="async" data-astro-cid-kp3vv5de></li>
++						<li data-astro-cid-kp3vv5de><img src="./_assets/grants/kingdom-of-the-netherlands.png" alt="Kingdom of the Netherlands" width="600" height="600" loading="lazy" decoding="async" data-astro-cid-kp3vv5de></li>
++						<li data-astro-cid-kp3vv5de><img src="./_assets/grants/stroom-den-haag.png" alt="Stroom Den Haag" width="206" height="123" loading="lazy" decoding="async" data-astro-cid-kp3vv5de></li>
++						<li data-astro-cid-kp3vv5de><img src="./_assets/grants/helge-axson-johnsons.jpg" alt="Helge Ax:son Johnsons" width="520" height="520" loading="lazy" decoding="async" data-astro-cid-kp3vv5de></li>
++						<li data-astro-cid-kp3vv5de><img src="./_assets/grants/american-academy-in-rome.jpg" alt="American Academy in Rome" width="750" height="340" loading="lazy" decoding="async" data-astro-cid-kp3vv5de></li>
+ 						<!-- <li data-astro-cid-kp3vv5de><span class="fund__name" data-astro-cid-kp3vv5de>Galleria MANCASPAZIO</span></li> -->
+-						<li data-astro-cid-kp3vv5de><span class="fund__name" data-astro-cid-kp3vv5de>Ministero della Cultura – Soprintendenza Archivistica della Sardegna</span></li>
+-						<li data-astro-cid-kp3vv5de><span class="fund__name" data-astro-cid-kp3vv5de>Regione Sardegna</span></li>
++						<li data-astro-cid-kp3vv5de><img src="./_assets/grants/regione-sardegna.webp" alt="Regione Sardegna" width="1280" height="1557" loading="lazy" decoding="async" data-astro-cid-kp3vv5de></li>
+ 					</ul>
+ 				</div>
+ 			</div>
+diff -ru '--exclude=_assets' original/stili.css site/stili.css
+--- original/stili.css	2026-11-16 17:11:27.110700282 +0000
++++ site/stili.css	2026-11-16 18:52:06.314595737 +0000
+@@ -412,7 +412,7 @@
+ 
+ }
+ 
+-.hero__media[data-astro-cid-ge2uvauf]:after{content:"";background:linear-gradient(to bottom, var(--c-paper) 0%, #f6f1e700 16%), linear-gradient(to top, var(--c-paper) 0%, #f6f1e700 14%);position:absolute;inset:0}
++
+ 
+ .hero__bottom[data-astro-cid-ge2uvauf]{z-index:1;padding:.25rem var(--gutter) 1.25rem;grid-area:3/1;position:relative}
+ 
+@@ -1118,9 +1118,9 @@
+ 
+ .fund__wall[data-astro-cid-kp3vv5de] .label[data-astro-cid-kp3vv5de]{color:var(--c-ink)}
+ 
+-.fund__logos[data-astro-cid-kp3vv5de]{flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.75rem;display:flex}
++.fund__logos[data-astro-cid-kp3vv5de]{flex-wrap:wrap;align-items:center;gap:1.25rem 2rem;margin-top:.75rem;display:flex}
+ 
+-.fund__logos[data-astro-cid-kp3vv5de] img[data-astro-cid-kp3vv5de]{mix-blend-mode:multiply;width:auto;max-height:3rem}
++.fund__logos[data-astro-cid-kp3vv5de] img[data-astro-cid-kp3vv5de]{mix-blend-mode:multiply;width:auto;max-height:4.25rem}
+ 
+ .fund__name[data-astro-cid-kp3vv5de]{font-family:var(--f-display);color:var(--c-burgundy);background:#f6f1e7b3;border-radius:999px;padding:.35rem .75rem;font-size:.875rem;font-weight:500;display:inline-flex}
+ 
