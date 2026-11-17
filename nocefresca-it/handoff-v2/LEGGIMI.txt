@@ -1,0 +1,26 @@
+NOCEFRESCA OPEN CALL 2027 — modifiche del 17 novembre
+Base: la versione online https://www.nocefresca.it/opencall_2027/site/ scaricata il 17/11
+(già con le tue modifiche alla sezione grants, che restano invariate).
+
+COME APPLICARLE
+Sostituire in opencall_2027/site/ i due file:
+  - index.html
+  - stili.css
+Nessun file nuovo in _assets/.
+
+COSA CAMBIA
+1. Tolta l'animazione iniziale con il logo "nocefresca" (index.html):
+   - rimosso <meta name="nf-intro" content="1">
+   - rimossi <section class="intro" id="intro">…</section>, il layer <div class="intro-mark">…</div>
+     e il relativo <script src="./_assets/Intro.astro_astro_type_script_index_0_lang.CeyQ3I4I.js">.
+   La pagina si apre direttamente sulla foto e sul titolo; il logo nell'header è visibile da subito.
+   (Lo script inline che aggiunge la classe has-intro resta, ma senza il meta non fa nulla.)
+2. Menu sempre visibile in alto su mobile (stili.css):
+   .site-header{z-index:50;position:absolute;inset:0 0 auto}
+   -> .site-header{z-index:50;background:var(--c-paper);position:fixed;inset:0 0 auto}
+   Su desktop resta com'era (sticky, da @media (width>=60rem)).
+
+Dettaglio riga per riga in v2-modifiche.diff.
+
+FACOLTATIVO
+Il file _assets/Intro.astro_astro_type_script_index_0_lang.CeyQ3I4I.js non è più usato e si può cancellare.
